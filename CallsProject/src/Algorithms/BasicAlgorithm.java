@@ -18,7 +18,7 @@ public class BasicAlgorithm {
     private List<Physician> physicians;
     private List<Shift> shifts;
     private int month, year;
-   
+    int PizzaTime;
     public BasicAlgorithm(int m, int y)
     {
         this.month = m;
