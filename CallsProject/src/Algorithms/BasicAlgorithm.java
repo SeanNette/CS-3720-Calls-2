@@ -21,8 +21,8 @@ public class BasicAlgorithm {
     
     public BasicAlgorithm(int m, int y)
     {
-   //    this.month = m;
-    //   this.year = y;
+        this.month = m;
+        this.year = y;
        
        //generate list of shifts for specified month and year
        
