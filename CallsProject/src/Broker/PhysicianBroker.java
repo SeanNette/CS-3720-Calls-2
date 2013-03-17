@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Dariusz
  */
 public class PhysicianBroker {
+    private int fuckyouman = 0;
 
     private static PhysicianBroker pBroker = null;
     DatabaseBroker connect = new DatabaseBroker();
