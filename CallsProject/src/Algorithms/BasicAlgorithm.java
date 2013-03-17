@@ -17,7 +17,7 @@ public class BasicAlgorithm {
     
     private List<Physician> physicians;
     private List<Shift> shifts;
-    private int month, year;
+    private int month;
    
     public BasicAlgorithm(int m, int y)
     {
