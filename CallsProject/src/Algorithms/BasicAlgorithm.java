@@ -19,7 +19,8 @@ public class BasicAlgorithm {
     private List<Shift> shifts;
     private int month, year;
     private int test;
-    
+    int test2;
+        
     public BasicAlgorithm(int m, int y)
     {
         this.month = m;
