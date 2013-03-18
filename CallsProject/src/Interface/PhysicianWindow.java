@@ -487,7 +487,6 @@ public class PhysicianWindow extends JPanel
                     choice = 1;
                     System.out.print("Hello");
                     done = phys.workPhysician(choice, fname, lname, bdate, sdate, edate, address, phone);
-                    System.out.print("true? " + done);
 
                     JOptionPane.showMessageDialog(null, done);
 

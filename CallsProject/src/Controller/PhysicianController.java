@@ -22,27 +22,33 @@ public class PhysicianController
         StringBuilder sb = new StringBuilder();
         firstName = firstName.trim();
         lastName = lastName.trim();
-
+        
         if (firstName.isEmpty())
         {
-            sb.append("Missing First Name");
-            return sb.toString();
+            sb.append("\nMissing First Name");
+            
         }
         if (lastName.isEmpty())
         {
-            sb.append("Missing Last Name");
-            return sb.toString();
+            sb.append("\nMissing Last Name");
+            
         }
         if (bDate.isEmpty())
         {
-            sb.append("Missing Date of Birth");
-            return sb.toString();
+            sb.append("\nMissing Date of Birth");
+            
         }
         if (sDate.isEmpty())
         {
-            sb.append("Missing Start E date");
-            return sb.toString();
-        } else
+            sb.append("\nMissing Start E date");
+            
+        }
+        if (Address.isEmpty())
+        {
+            sb.append("\nMissing Address");
+            
+        }
+        if (sb.toString().isEmpty())
         {
             PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
             // use connection from pool
@@ -55,7 +61,10 @@ public class PhysicianController
 
             return "Success";
         }
+        else
+            return sb.toString();
     }
+    
 
     public void workPhysician(int choice, int ID)
     {
