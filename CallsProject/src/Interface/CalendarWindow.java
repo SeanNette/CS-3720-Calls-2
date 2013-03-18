@@ -4,6 +4,8 @@
  */
 package Interface;
 
+import Calendar.CalendarMonth;
+import Calendar.MainPanel;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,7 +41,7 @@ public class CalendarWindow {
         
         GridBagConstraints c = new GridBagConstraints();
         
-        /** Table Panel location **********************************************/
+        /** Calendar Panel location *******************************************/
         c.anchor = GridBagConstraints.WEST;
         c.gridx = 0;
         c.gridy = 0;  
@@ -69,13 +71,13 @@ public class CalendarWindow {
         /**********************************************************************/
         
         return calendarWindow;
-        
-         
      }
      
      private JPanel calendarPanel(Border border) {
         JPanel calendarPanel = new JPanel();
+        MainPanel mp = new MainPanel();      
         calendarPanel.setBorder(border);
+        calendarPanel.add(mp.createMainCalendarPanel());
         return calendarPanel;         
      }
      
