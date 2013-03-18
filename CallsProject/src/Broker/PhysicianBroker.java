@@ -8,28 +8,35 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Dariusz
  */
-public class PhysicianBroker {
-    private int fuckyouman = 0;
+public class PhysicianBroker
+{
 
     private static PhysicianBroker pBroker = null;
-    DatabaseBroker connect = new DatabaseBroker();
+    DatabaseBroker connection = new DatabaseBroker();
 
-    private PhysicianBroker() {
+    private PhysicianBroker()
+    {
     }
 
-    public static PhysicianBroker getPhysicianBroker() {
-        if (pBroker == null) {
+    public static PhysicianBroker getPhysicianBroker()
+    {
+        if (pBroker == null)
+        {
             pBroker = new PhysicianBroker();
         }
         return pBroker;
     }
 
-    public void addPhysician(int choice, Object o, Connection connect) {
+    public void addPhysician(int choice, Object o)
+    {
+        Connection connect = connection.getConnectionFromPool();
         Physician p = (Physician) o;
         String SQL = null;
-        try {
+        try
+        {
 
-            switch (choice) {
+            switch (choice)
+            {
                 case 1:
                     SQL = "call addPhysician(?,?,?,?,?,?,?);";
                     CallableStatement cs = connect.prepareCall(SQL);
@@ -45,6 +52,8 @@ public class PhysicianBroker {
                     cs.execute();
 
                     cs.close();
+
+                    connection.returnConnectionToPool(connect);
                     break;
 
                 case 2:
@@ -63,6 +72,8 @@ public class PhysicianBroker {
                     csUp.execute();
 
                     csUp.close();
+
+                    connection.returnConnectionToPool(connect);
                     break;
 
                 case 3:
@@ -72,21 +83,27 @@ public class PhysicianBroker {
                     csDel.setInt(1, p.getEmployeeId());
                     csDel.execute();
                     csDel.close();
+
+                    connection.returnConnectionToPool(connect);
                     break;
                 default:
                     System.out.print("default");
             }
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             System.out.print("Error: " + e);
         }
     }
 
     // This one returns as P object.
-    public Physician objectPhysician(int pID, Connection connect) {
+    public Physician objectPhysician(int pID)
+    {
         Physician p = null;
 
-        try {
+        try
+        {
+            Connection connect = connection.getConnectionFromPool();
             String SQL = "call selectPhysician(?);";
             CallableStatement cs = connect.prepareCall(SQL);
 
@@ -104,39 +121,50 @@ public class PhysicianBroker {
 
             cs.close();
             System.out.println(p.getFirstName());
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Error: " + e);
         }
 
         return p;
 
     }
-    
+
     // returns the default table model with all the rows from the database
-    public DefaultTableModel getTableData(Connection connect) {
+    public DefaultTableModel getTableData()
+    {
         DefaultTableModel dm = new DefaultTableModel();
-        try {
+        try
+        {
+            Connection connect = connection.getConnectionFromPool();
             Statement stmt = connect.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM physician");
             ResultSetMetaData md = rs.getMetaData();
             int num_cols = md.getColumnCount();
             String c[] = new String[num_cols];
-            
-            for (int i = 0; i < num_cols; i ++) {                
-                c[i] = md.getColumnName(i+1);
+
+            for (int i = 0; i < num_cols; i++)
+            {
+                c[i] = md.getColumnName(i + 1);
                 dm.addColumn(c[i]);
             }
-           
+
             Object row[] = new Object[num_cols];
-            while(rs.next()) {                 
-                for (int i = 0; i < num_cols; i ++) {                    
-                    row[i] = rs.getString(i+1);                                       
+            while (rs.next())
+            {
+                for (int i = 0; i < num_cols; i++)
+                {
+                    row[i] = rs.getString(i + 1);
                 }
                 dm.addRow(row);
-           }   
-        } catch (SQLException err) {
+            }
+            
+        connection.returnConnectionToPool(connect);
+        } catch (SQLException err)
+        {
             System.out.println("ShowPhysician error: " + err);
         }
+        
         return dm;
     }
 }
