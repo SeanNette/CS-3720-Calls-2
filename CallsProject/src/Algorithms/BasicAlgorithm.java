@@ -7,6 +7,8 @@ package Algorithms;
 import Container.Physician;
 import Container.Shift;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * BasicAlgorithm - Generates a schedule for a specified month using limited
@@ -33,6 +35,8 @@ public class BasicAlgorithm
 
     public ArrayList<Shift> generateSchedule()
     {
+        Collections.sort(physicians, new PhysicianComparator());
+        
 
         return null;
     }

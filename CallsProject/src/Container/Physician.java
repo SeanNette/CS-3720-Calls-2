@@ -1,5 +1,7 @@
 package Container;
 
+import java.util.Comparator;
+
 
 /*
  * To change this template, choose Tools | Templates
@@ -10,7 +12,7 @@ package Container;
  *
  * @author Dariusz
  */
-public class Physician 
+public class Physician
 {
     private int employeeId;
     private String firstName;
@@ -54,6 +56,13 @@ public class Physician
         this.curHours = 0;
     }
 
+    public Physician(int employeeId, int previousHours, int currentHours)
+    {
+        this.employeeId = employeeId;
+        this.previousHours = previousHours;
+        this.curHours = currentHours;
+    }
+    
     public int getPreviousHours()
     {
         return previousHours;
@@ -137,7 +146,12 @@ public class Physician
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
+    @Override
+    public String toString()
+    {
+        return "Physician{" + "employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate + ", startDate=" + startDate + ", endDate=" + endDate + ", address=" + address + ", phoneNumber=" + phoneNumber + ", previousHours=" + previousHours + ", curHours=" + curHours + '}';
+    }    
     
     
 }

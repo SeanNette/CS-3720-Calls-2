@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Algorithms.BasicAlgorithm;
 import Container.Physician;
 import Container.Shift;
 import java.util.ArrayList;
@@ -26,11 +27,22 @@ public class Scheduler
         this.year = y;
         generatePhysicians();
         generateShifts();
+        BasicAlgorithm ba = new BasicAlgorithm(physicians, shifts);
+        ba.generateSchedule();
     }
     
     private void generatePhysicians()
     {
+        physicians = new ArrayList();
         //grab physicians from database
+        Physician p1 = new Physician(1, 5, 20);
+        Physician p2 = new Physician(2, 10, 0);
+        Physician p3 = new Physician(3, 0, 20);
+        Physician p4 = new Physician(4, 15, 0);
+        physicians.add(p1);
+        physicians.add(p2);
+        physicians.add(p3);
+        physicians.add(p4);
     }
     
     private void generateShifts()
