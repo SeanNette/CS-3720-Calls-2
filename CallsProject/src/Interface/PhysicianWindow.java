@@ -465,7 +465,8 @@ public class PhysicianWindow extends JPanel
 
         public void actionPerformed(ActionEvent e)
         {
-            String done;
+            String done = "";
+            String id = model.getValueAt(selectedRowIndex, 0).toString();
             int choice = 0; // 1 - Add, 2 - Del, 3 - Update
             String fname = textFieldFname.getText();
             String lname = textFieldLname.getText();
@@ -485,10 +486,7 @@ public class PhysicianWindow extends JPanel
                 try
                 {
                     choice = 1;
-                    System.out.print("Hello");
-                    done = phys.workPhysician(choice, fname, lname, bdate, sdate, edate, address, phone);
-
-                    JOptionPane.showMessageDialog(null, done);
+                    done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone);
 
                 } catch (Exception ex)
                 {
@@ -499,22 +497,18 @@ public class PhysicianWindow extends JPanel
 
                 try
                 {
-                    int id;
                     choice = 2;
-                    done = phys.workPhysician(choice, fname, lname, bdate, sdate, edate, address, phone);
-                    //  done = phys.workPhysician(choice,id);
-
+                    done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone);
 
                 } catch (Exception ex)
                 {
                 }
             } else if (e.getSource() == deleteButton)
             {
-                System.out.print("test if it works");
                 choice = 3;
-                int id = (int) model.getValueAt(selectedRowIndex, 0);
-                phys.workPhysician(choice, id);
+                done = phys.workPhysician(choice, Integer.parseInt(id));
             }
+            JOptionPane.showMessageDialog(null, done);
         }
     }
 }
