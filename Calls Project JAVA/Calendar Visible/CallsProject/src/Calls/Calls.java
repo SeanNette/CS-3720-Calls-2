@@ -4,11 +4,8 @@ package Calls;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import Controller.Scheduler;
 import Interface.Interface;
 import java.awt.Color;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.swing.JFrame;
 
 /**
@@ -31,8 +28,8 @@ public class Calls {
         
         frame.setContentPane(inter);
         frame.getContentPane().setBackground(new Color(102, 102, 102));
-        frame.setBounds(200, 200, 1000, 800);
+        frame.setSize(800, 800);
         frame.setVisible(true);
-        
+
     }
 }

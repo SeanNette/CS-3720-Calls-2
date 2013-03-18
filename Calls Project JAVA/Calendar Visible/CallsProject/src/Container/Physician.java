@@ -20,7 +20,6 @@ public class Physician
     private String endDate;
     private String address;
     private String phoneNumber;
-    private int previousHours, curHours;
     
     public Physician()
     {
@@ -40,40 +39,6 @@ public class Physician
         this.phoneNumber = phoneNumber;
     }
 
-    public Physician(int employeeId, String firstName, String lastName, String birthDate, String startDate,
-               String endDate, String address, String phoneNumber, int previousHours)
-    {
-        this.employeeId = employeeId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.address = address;
-        this.previousHours = previousHours;
-        this.curHours = 0;
-    }
-
-    public int getPreviousHours()
-    {
-        return previousHours;
-    }
-
-    public int getCurHours()
-    {
-        return curHours;
-    }
-
-    public void setPreviousHours(int previousHours)
-    {
-        this.previousHours = previousHours;
-    }
-
-    public void setCurHours(int curHours)
-    {
-        this.curHours = curHours;
-    }
-    
     public int getEmployeeId() {
         return employeeId;
     }
