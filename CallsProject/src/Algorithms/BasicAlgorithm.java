@@ -6,33 +6,34 @@ package Algorithms;
 
 import Container.Physician;
 import Container.Shift;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * BasicAlgorithm - Generates a schedule for a specified month using limited
  * backtracking.
+ *
  * @author Sean
  */
-public class BasicAlgorithm {
-    
-    private List<Physician> physicians;
-    private List<Shift> shifts;
+public class BasicAlgorithm
+{
 
-    private int month, year;
-    int PizzaTime;
+    private ArrayList<Physician> physicians;
+    private ArrayList<Shift> shifts;
     
-    public BasicAlgorithm(int m, int y)
+    /**
+     * 
+     * @param phys
+     * @param shifts 
+     */
+    public BasicAlgorithm(ArrayList<Physician> phys, ArrayList<Shift> shifts)
     {
-        this.month = m;
-        this.year = y;
-       
-       //generate list of shifts for specified month and year
-       
+        this.physicians = phys;
+        this.shifts = shifts;        
     }
-    
-    public List<Shift> generateSchedule()
+
+    public ArrayList<Shift> generateSchedule()
     {
-        
+
         return null;
     }
 }
