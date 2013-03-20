@@ -46,6 +46,8 @@ public class PhysicianWindow extends JPanel
 
     private DefaultTableModel model;
     private JTable table;
+    private JScrollPane scrollPane = new JScrollPane();
+    private JPanel tablePanel = new JPanel();
     private JLabel labelFname;
     private JTextField textFieldFname;
     private JLabel labelLname;
@@ -142,28 +144,27 @@ public class PhysicianWindow extends JPanel
 
         // create the upperpanel where the table will sit and set the layout to
         // BorderLayout - North,South,East,West,Center 
-        JPanel tablePanel = new JPanel();
+        //JPanel tablePanel = new JPanel();
 
         // create the table with the current model
         table = new JTable(model);
 
         // on edit of table cell returns data in clicked cell (may or may not be needed)
-        table.getModel().addTableModelListener(new TableModelListener()
-        {
-            @Override
-            public void tableChanged(TableModelEvent e)
-            {
-                int row = e.getFirstRow();
-                int col = e.getColumn();
-                TableModel model = (TableModel) e.getSource();
-                String colName = model.getColumnName(col);
-                Object data = model.getValueAt(row, col);
+        /*table.getModel().addTableModelListener(new TableModelListener()
+         {
+         @Override
+         public void tableChanged(TableModelEvent e)
+         {
+         int row = e.getFirstRow();
+         int col = e.getColumn();
+         TableModel model = (TableModel) e.getSource();
+         String colName = model.getColumnName(col);
+         Object data = model.getValueAt(row, col);
 
-                System.out.println(data.toString());
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
-
+         System.out.println(data.toString());
+         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }
+         });*/
         table.addMouseListener(new MouseListener()
         {
             // mouse click listener on table
@@ -178,7 +179,8 @@ public class PhysicianWindow extends JPanel
                 {
                     allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
                 }
-                System.out.println(model.getValueAt(selectedRowIndex, 0).toString());
+                System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
+
                 allButtons.get(0).setEnabled(false);
                 allButtons.get(1).setEnabled(true);
                 allButtons.get(2).setEnabled(true);
@@ -212,9 +214,10 @@ public class PhysicianWindow extends JPanel
             }
         });
 
+
         // make the table scrollable
-        JScrollPane scrollPane = new JScrollPane(table);
-        // set the size of the scroll pane       
+        scrollPane = new JScrollPane(table);
+        // set the size of the scroll pane
         scrollPane.setPreferredSize(new Dimension(720, 150));
         // add the scrollpane with the table to the upperpanel
         tablePanel.add(scrollPane);
@@ -460,13 +463,16 @@ public class PhysicianWindow extends JPanel
         return buttonPanel;
     }
 
+    private void reDraw()
+    {
+    }
+
     private class ButtonsListen implements ActionListener
     {
 
         public void actionPerformed(ActionEvent e)
         {
             String done = "";
-            String id = model.getValueAt(selectedRowIndex, 0).toString();
             int choice = 0; // 1 - Add, 2 - Del, 3 - Update
             String fname = textFieldFname.getText();
             String lname = textFieldLname.getText();
@@ -487,6 +493,7 @@ public class PhysicianWindow extends JPanel
                 {
                     choice = 1;
                     done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone);
+                    redraw();
 
                 } catch (Exception ex)
                 {
@@ -497,18 +504,45 @@ public class PhysicianWindow extends JPanel
 
                 try
                 {
+                    String id = table.getValueAt(selectedRowIndex, 0).toString();
                     choice = 2;
                     done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone);
-
+                    redraw();
                 } catch (Exception ex)
                 {
                 }
             } else if (e.getSource() == deleteButton)
             {
+                String id = table.getValueAt(selectedRowIndex, 0).toString();
                 choice = 3;
                 done = phys.workPhysician(choice, Integer.parseInt(id));
+                redraw();
+            } else if (e.getSource() == clearButton)
+            {
             }
+
+
             JOptionPane.showMessageDialog(null, done);
+        }
+
+        private void redraw()
+        {
+            PhysicianController phys = new PhysicianController();
+
+            tablePanel.remove(scrollPane);
+            model = phys.tableData();
+
+            table = new JTable(model);
+
+            scrollPane = new JScrollPane(table);
+            // set the size of the scroll pane
+
+            scrollPane.setPreferredSize(new Dimension(720, 150));
+            tablePanel.add(scrollPane);
+            tablePanel.validate();
+            tablePanel.repaint();
+
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
 }
