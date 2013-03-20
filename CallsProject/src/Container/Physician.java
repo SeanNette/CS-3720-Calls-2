@@ -22,7 +22,7 @@ public class Physician
     private String endDate;
     private String address;
     private String phoneNumber;
-    private int previousHours, curHours;
+    private int previousHours, curHours, totalHours;
     
     public Physician()
     {
@@ -40,6 +40,8 @@ public class Physician
         this.endDate = endDate;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.curHours = 0;
+        this.previousHours = 0;
     }
 
     public Physician(int employeeId, String firstName, String lastName, String birthDate, String startDate,
@@ -73,6 +75,11 @@ public class Physician
         return curHours;
     }
 
+    public void addHours(int hours)
+    {
+        this.curHours = curHours + hours;
+    }
+            
     public void setPreviousHours(int previousHours)
     {
         this.previousHours = previousHours;
@@ -147,11 +154,24 @@ public class Physician
         this.phoneNumber = phoneNumber;
     }
 
+    public int getTotalHours()
+    {
+        return totalHours;
+    }
+
+    public void setTotalHours(int totalHours)
+    {
+        this.totalHours = totalHours;
+    }
+
     @Override
     public String toString()
     {
-        return "Physician{" + "employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate + ", startDate=" + startDate + ", endDate=" + endDate + ", address=" + address + ", phoneNumber=" + phoneNumber + ", previousHours=" + previousHours + ", curHours=" + curHours + '}';
-    }    
+        return "Physician{" + "employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate + ", startDate=" + startDate + ", endDate=" + endDate + ", address=" + address + ", phoneNumber=" + phoneNumber + ", previousHours=" + previousHours + ", curHours=" + curHours + ", totalHours=" + totalHours + '}';
+    }
+
+    
+  
     
     
 }

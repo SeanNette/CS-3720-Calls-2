@@ -72,7 +72,7 @@ public class Shift {
     @Override
     public String toString()
     {
-        return "Shift{" + "date=" + date + ", employeeID=" + employeeID + ", comments=" + comments + ", type=" + type + '}';
+        return "Shift{" + "date=" + date + ", employeeID=" + employeeID + ", type=" + type + '}';
     }
     
     
