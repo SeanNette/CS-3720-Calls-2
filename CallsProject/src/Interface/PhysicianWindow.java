@@ -15,6 +15,7 @@ import java.awt.Insets;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
@@ -41,8 +42,7 @@ import javax.swing.table.TableModel;
  *
  * @author Wojg
  */
-public class PhysicianWindow extends JPanel
-{
+public class PhysicianWindow extends JPanel {
 
     private DefaultTableModel model;
     private JTable table;
@@ -70,12 +70,10 @@ public class PhysicianWindow extends JPanel
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
     private int selectedRowIndex;
 
-    public PhysicianWindow()
-    {
+    public PhysicianWindow() {
     }
 
-    public JPanel createPhysicianWindow()
-    {
+    public JPanel createPhysicianWindow() {
         // offset window by 10 pixels all around      //top,left,bottom,right
         Border paneEdge = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 
@@ -95,7 +93,7 @@ public class PhysicianWindow extends JPanel
         // initialize constraints for grid bag layout
         GridBagConstraints c = new GridBagConstraints();
 
-        /**
+        /*
          * Table Panel location *********************************************
          */
         c.anchor = GridBagConstraints.WEST;
@@ -105,10 +103,10 @@ public class PhysicianWindow extends JPanel
         c.weightx = 1.0;
         c.weighty = 1.0;
         physicianWindow.add(tablePanel(blackline), c);
-        /**
-         * *******************************************************************
+        /*
+         * ******************************************************************
          */
-        /**
+        /*
          * Field Panel location *********************************************
          */
         c.fill = GridBagConstraints.NONE;
@@ -118,10 +116,10 @@ public class PhysicianWindow extends JPanel
         c.weighty = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         physicianWindow.add(fieldPanel(fieldPanelBorder), c);
-        /**
+        /*
          * *******************************************************************
          */
-        /**
+        /*
          * Button Panel location ********************************************
          */
         c.gridx = 0;
@@ -129,14 +127,13 @@ public class PhysicianWindow extends JPanel
         c.anchor = GridBagConstraints.EAST;
         c.fill = GridBagConstraints.HORIZONTAL;
         physicianWindow.add(buttonPanel(empty), c);
-        /**
+        /*
          * *******************************************************************
          */
         return physicianWindow;
     }
 
-    private JPanel tablePanel(Border border)
-    {
+    private JPanel tablePanel(Border border) {
         PhysicianController phys = new PhysicianController();
 
         // create table model
@@ -165,54 +162,57 @@ public class PhysicianWindow extends JPanel
          //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
          }
          });*/
-        table.addMouseListener(new MouseListener()
-        {
-            // mouse click listener on table
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                selectedRowIndex = table.getSelectedRow();
+        table.addMouseListener(new MouseListen());
+        /*table.addMouseListener(
+                
+         new MouseListener()
+         {
+         // mouse click listener on table
+         @Override
+         public void mouseClicked(MouseEvent e)
+         {
+         selectedRowIndex = table.getSelectedRow();
 
-                int columnCount = table.getColumnCount();
-                System.out.println(columnCount);
-                for (int i = 0; i < columnCount - 1; i++)
-                {
-                    allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
-                }
-                System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
+         int columnCount = table.getColumnCount();
+         System.out.println(columnCount);
+         for (int i = 0; i < columnCount - 1; i++)
+         {
+         allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
+         }
+         System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
 
-                allButtons.get(0).setEnabled(false);
-                allButtons.get(1).setEnabled(true);
-                allButtons.get(2).setEnabled(true);
-                allButtons.get(3).setEnabled(true);
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+         allButtons.get(0).setEnabled(false);
+         allButtons.get(1).setEnabled(true);
+         allButtons.get(2).setEnabled(true);
+         allButtons.get(3).setEnabled(true);
+         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }
 
-            // added by netbeans
-            @Override
-            public void mousePressed(MouseEvent e)
-            {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+         // added by netbeans
+         @Override
+         public void mousePressed(MouseEvent e)
+         {
+         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }
 
-            @Override
-            public void mouseReleased(MouseEvent e)
-            {
-                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+         @Override
+         public void mouseReleased(MouseEvent e)
+         {
+         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }
 
-            @Override
-            public void mouseEntered(MouseEvent e)
-            {
-                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+         @Override
+         public void mouseEntered(MouseEvent e)
+         {
+         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }
 
-            @Override
-            public void mouseExited(MouseEvent e)
-            {
-                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
+         @Override
+         public void mouseExited(MouseEvent e)
+         {
+         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }
+         }); */
 
 
         // make the table scrollable
@@ -228,8 +228,7 @@ public class PhysicianWindow extends JPanel
         return tablePanel;
     }
 
-    private JPanel fieldPanel(Border border)
-    {
+    private JPanel fieldPanel(Border border) {
 
         JPanel fieldPanel = new JPanel(new GridBagLayout());
 
@@ -388,8 +387,7 @@ public class PhysicianWindow extends JPanel
         return fieldPanel;
     }
 
-    private JPanel buttonPanel(Border border)
-    {
+    private JPanel buttonPanel(Border border) {
         // create button panel and set align to right
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         // setborder 
@@ -446,13 +444,7 @@ public class PhysicianWindow extends JPanel
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
         c.insets = new Insets(0, 2, 0, 474);
-        clearButton.addActionListener(new ButtonsListen()
-        {
-            @Override
-            public void actionPerformed(ActionEvent event)
-            {
-            }
-        });
+        clearButton.addActionListener(new ButtonsListen());
         clearButton.setEnabled(false);
         allButtons.add(clearButton);
 
@@ -463,16 +455,31 @@ public class PhysicianWindow extends JPanel
         return buttonPanel;
     }
 
-    private void reDraw()
-    {
+    private class MouseListen extends MouseAdapter {
+
+        public void mouseClicked(MouseEvent e) {
+            selectedRowIndex = table.getSelectedRow();
+
+            int columnCount = table.getColumnCount();
+            System.out.println(columnCount);
+            for (int i = 0; i < columnCount - 1; i++) {
+                allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
+            }
+            System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
+
+            allButtons.get(0).setEnabled(false);
+            allButtons.get(1).setEnabled(true);
+            allButtons.get(2).setEnabled(true);
+            allButtons.get(3).setEnabled(true);
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
 
-    private class ButtonsListen implements ActionListener
-    {
+    private class ButtonsListen implements ActionListener {
 
-        public void actionPerformed(ActionEvent e)
-        {
+        public void actionPerformed(ActionEvent e) {
             String done = "";
+            String[] yn = {"Yes", "No"};
             int choice = 0; // 1 - Add, 2 - Del, 3 - Update
             String fname = textFieldFname.getText();
             String lname = textFieldLname.getText();
@@ -487,46 +494,64 @@ public class PhysicianWindow extends JPanel
             ShiftController shit = new ShiftController();
 
 
-            if (e.getSource() == addButton)
-            {
-                try
-                {
+            if (e.getSource() == addButton) {
+                try {
                     choice = 1;
                     done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone);
                     redraw();
 
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                 }
 
-            } else if (e.getSource() == saveButton)
-            {
+            } else if (e.getSource() == saveButton) {
 
-                try
-                {
+                try {
                     String id = table.getValueAt(selectedRowIndex, 0).toString();
                     choice = 2;
                     done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone);
                     redraw();
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                 }
-            } else if (e.getSource() == deleteButton)
-            {
+            } else if (e.getSource() == deleteButton) {
                 String id = table.getValueAt(selectedRowIndex, 0).toString();
                 choice = 3;
-                done = phys.workPhysician(choice, Integer.parseInt(id));
+                int resp = JOptionPane.showOptionDialog(
+                        null,
+                        "Are you sure you want to delete '" + fname + "'?",
+                        "Delete Physician",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        yn,
+                        "Quit");
+                if (resp == 0) {
+                    done = phys.workPhysician(choice, Integer.parseInt(id));
+                } else {
+                    done = "Cancelled";
+                    return;
+                }
                 redraw();
-            } else if (e.getSource() == clearButton)
-            {
-            }
 
+            } else if (e.getSource() == clearButton) {
+                textFieldFname.setText(null);
+                textFieldLname.setText(null);
+                textFieldAddress.setText(null);
+                textFieldBdate.setText(null);
+                textFieldEdate.setText(null);
+                textFieldPhone.setText(null);
+                textFieldSdate.setText(null);
+
+                allButtons.get(0).setEnabled(true);
+                allButtons.get(1).setEnabled(false);
+                allButtons.get(2).setEnabled(false);
+                allButtons.get(3).setEnabled(false);
+                return;
+            }
 
             JOptionPane.showMessageDialog(null, done);
         }
 
-        private void redraw()
-        {
+        private void redraw() {
             PhysicianController phys = new PhysicianController();
 
             tablePanel.remove(scrollPane);
@@ -534,6 +559,7 @@ public class PhysicianWindow extends JPanel
 
             table = new JTable(model);
 
+            table.addMouseListener(new MouseListen());
             scrollPane = new JScrollPane(table);
             // set the size of the scroll pane
 
@@ -542,7 +568,6 @@ public class PhysicianWindow extends JPanel
             tablePanel.validate();
             tablePanel.repaint();
 
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
 }
