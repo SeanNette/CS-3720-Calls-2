@@ -53,11 +53,8 @@ public class PhysicianController
             PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
             // use connection from pool
             // when done put connection back into pool 
-            Physician p = new Physician(0, firstName, lastName, bDate, sDate, eDate, Address, phoneNumber);
-
+            Physician p = new Physician(id, firstName, lastName, bDate, sDate, eDate, Address, phoneNumber);
             pBroker.addPhysician(choice, p);
-
-
 
             return "Success";
         } else

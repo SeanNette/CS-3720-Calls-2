@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,13 +35,10 @@ import javax.swing.border.Border;
  */
 public class CalendarWindow {
 
-    private JPanel mainCalendarPanel;
-    private JPanel topCalendarPanel;
-    private JPanel calendarPanel;
-    private JPanel headerPanel;
+    private JPanel mainCalendarPanel;    
     private JPanel[][] dayPanels = new JPanel[6][7];
     private JLabel[][] dayNums = new JLabel[6][7];
-    private JLabel[] header;
+    private JLabel[] header = new JLabel[7];
     private String str_date /*= ""*/;
     private JButton previous, next;
     private JLabel monthLabel = new JLabel();
@@ -124,46 +120,62 @@ public class CalendarWindow {
         return calendarWindow;
     }
 
-    private JPanel calendarPanel(Border border) {       
+    private JPanel calendarPanel(Border border) {     
+       
         mainCalendarPanel = new JPanel(new GridBagLayout());
         mainCalendarPanel.setBorder(border);
+        
         Border raisedBevel = BorderFactory.createRaisedBevelBorder();
         
-        GridBagConstraints c = new GridBagConstraints();
-       
-        String[] day_of_week = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-        headerPanel = new JPanel(new GridLayout(0, 7));
-        header = new JLabel[7];
-        for (int i = 0; i < day_of_week.length; i++) {
-            header[i] = new JLabel(day_of_week[i], JLabel.CENTER);
-            header[i].setBorder(raisedBevel);
-            header[i].setPreferredSize(new Dimension(90, 20));
-            headerPanel.add(header[i]);
-        }
-        c.gridx = 0;
-        c.gridy = 0;
-        mainCalendarPanel.add(headerPanel, c);
-
-        calendarPanel = new JPanel(new GridLayout(6, 7));
+        GridBagConstraints c = new GridBagConstraints();  
         
+        String[] day_of_week = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        
+        for (int i = 0; i < day_of_week.length; i++) {
+            header[i] = new JLabel(day_of_week[i], JLabel.CENTER);           
+            header[i].setBorder(raisedBevel);
+            header[i].setPreferredSize(new Dimension(90,20));
+            
+            c.fill = GridBagConstraints.BOTH;
+            c.anchor = GridBagConstraints.NORTHWEST;            
+            c.weightx = 1.0;
+            // sets width of label
+            c.weighty = 0.10;
+            c.gridx = i;
+            c.gridy = 0; 
+            
+            mainCalendarPanel.add(header[i],c);             
+        }
+    
+       // c.fill = GridBagConstraints.NONE;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
+                
+                // day panel
                 dayPanels[i][j] = new JPanel(new BorderLayout());
                 dayPanels[i][j].setBorder(raisedBevel);
                 dayPanels[i][j].setPreferredSize(new Dimension(90, 80));               
+                
+                // day label
                 dayNums[i][j] = new JLabel(); 
                 dayNums[i][j].setHorizontalAlignment(JLabel.RIGHT);
                 dayNums[i][j].setVerticalAlignment(JLabel.TOP);                
-                dayPanels[i][j].add(dayNums[i][j]);                
-                calendarPanel.add(dayPanels[i][j]);
-            }
+ 
+                dayPanels[i][j].add(dayNums[i][j]);  
+                
+                // constraints for each individual square
+                c.fill = GridBagConstraints.BOTH;
+                c.anchor = GridBagConstraints.CENTER; 
+                c.weightx = 1.0;
+                c.weighty = 1.0;
+                c.gridx = j;
+                c.gridy = i+1; 
+               
+                mainCalendarPanel.add(dayPanels[i][j], c);               
+            }           
         }
-             
-        c.gridx = 0;
-        c.gridy = 1;
         
-        recompute(0);   
-        mainCalendarPanel.add(calendarPanel, c);        
+        recompute(0);       
                 
         return mainCalendarPanel;
     }
