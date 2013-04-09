@@ -1,6 +1,7 @@
 package Broker;
 
 import Container.Physician;
+import Container.Shift;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -199,12 +200,26 @@ public class PhysicianBroker
             }
             for (int i = 0; i < physicians.size(); i++)
             {
-                rs = stmt.executeQuery("SELECT Hours_Worked FROM hours "
-                        + "WHERE Employee_ID = " + physicians.get(i).getEmployeeId()
-                        + " AND Year = " + y + " AND Month = " + m);
-                if (rs.next())
+                int tempM = m;
+                int tempY = y;
+                for(int j=0; j < 3; j++)
                 {
-                    physicians.get(i).setPreviousHours(rs.getInt(1));
+                    tempM = tempM - j;
+                    if(tempM > 1)
+                    tempM--;
+                    else
+                    {
+                        tempY--;
+                        tempM = 12;
+                    }
+                
+                    rs = stmt.executeQuery("SELECT Hours_Worked FROM hours "
+                            + "WHERE Employee_ID = " + physicians.get(i).getEmployeeId()
+                            + " AND Year = " + tempY + " AND Month = " + tempM);
+                    if (rs.next())
+                    {
+                        physicians.get(i).setPreviousHours(physicians.get(i).getPreviousHours() + rs.getInt(1));
+                    }
                 }
             }
             
@@ -243,6 +258,35 @@ public class PhysicianBroker
         } catch (SQLException ex)
         {
             System.out.println("Update hours error: " + ex);
+            return false;
+        }
+    }
+    
+    public boolean saveShifts(ArrayList<Shift> shifts)
+    {
+        try
+        {
+            Connection connect = connection.getConnectionFromPool();
+            String SQL = "call addShift(?,?,?,?);";
+            CallableStatement cs = connect.prepareCall(SQL);
+            
+            for(int i = 0; i < shifts.size(); i++)
+            {
+                cs.setInt(1, shifts.get(i).getEmployeeID());
+                cs.setString(2, shifts.get(i).getDate());
+                cs.setInt(3, shifts.get(i).getType());
+                cs.setString(4, shifts.get(i).getComments());
+                cs.execute();
+            }
+                    
+            cs.close();
+                    
+            connection.returnConnectionToPool(connect);
+            
+            return true;
+        } catch (SQLException ex)
+        {
+            System.out.println("Save shifts error: " + ex);
             return false;
         }
     }
