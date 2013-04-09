@@ -11,10 +11,10 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
+// import net.sf.jasperreports.engine.design.JasperDesign;
+// import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.data.JRXmlDataSource;
+// import net.sf.jasperreports.engine.data.JRXmlDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 
 /**
