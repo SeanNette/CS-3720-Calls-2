@@ -31,7 +31,6 @@ public class Scheduler
         BasicAlgorithm ba = new BasicAlgorithm(physicians, shifts);
         shifts = ba.generateSchedule(month, year);
         //update shifts in database
-        PhysicianBroker.getPhysicianBroker().saveShifts(shifts);
         
     }
     

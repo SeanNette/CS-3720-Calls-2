@@ -4,18 +4,16 @@
  */
 package Interface;
 
+import Controller.CalendarController;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -33,311 +31,220 @@ import javax.swing.border.Border;
  *
  * @author Dariusz
  */
-public class CalendarWindow {
-
-    private JPanel mainCalendarPanel;    
-    private JPanel[][] dayPanels = new JPanel[6][7];
-    private JLabel[][] dayNums = new JLabel[6][7];
-    private JLabel[] header = new JLabel[7];
-    private String str_date /*= ""*/;
-    private JButton previous, next;
-    private JLabel monthLabel = new JLabel();
-    private int i = 0;
-    private Calendar calendar;
-    
-    private JLabel currPhysLabel, newPhysLabel, no_of_hoursLabel;
+public class CalendarWindow 
+{    
+    private JPanel calendarWindow, fieldPanel, sidePanel, buttonPanel, legendPanel;
+    private JButton previous, next, change, generate, use;
+    private JLabel monthLabel;
+      
+    private JLabel currPhysLabel, newPhysLabel, no_of_hoursLabel, commentsLabel;
     private JTextField currPhysTextField, no_of_hoursTextField;
     
     private JComboBox newPhysCombo;
+    private JScrollPane scrollPane;
+    private JTextArea comments;
+        
+    private Border paneEdge, blackline, fieldPanelBorder, legendBorder, empty;
+    private GridBagConstraints c;    
     
-    public CalendarWindow() {
-    }
-
-    public JPanel createCalendarWindow() {
-        // offset window by 10 pixels all around      //top,left,bottom,right
-        Border paneEdge = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+    CalendarController cd;
+    
+    public CalendarWindow() 
+    {
+       // offset window by 10 pixels all around      //top,left,bottom,right
+        paneEdge = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 
         // regular black line border
-        Border blackline = BorderFactory.createLineBorder(Color.black);
+        blackline = BorderFactory.createLineBorder(Color.black);
 
         // field panel border
-        Border fieldPanelBorder = BorderFactory.createCompoundBorder(
+        fieldPanelBorder = BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Calendar Data Shit"),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
-        Border legendBorder = BorderFactory.createCompoundBorder(
+        legendBorder = BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Legend"),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        Border empty = null;
-
-        JPanel calendarWindow = new JPanel(/*new GridBagLayout()*/new BorderLayout());
-        calendarWindow.setBorder(paneEdge);
-
-        // GridBagConstraints c = new GridBagConstraints();
-
-        /**
-         * Calendar Panel location ******************************************
-         */
-        /* c.anchor = GridBagConstraints.WEST;
-         c.gridx = 0;
-         c.gridy = 0;  
-         c.fill = GridBagConstraints.BOTH;
-         c.weightx = 1.0;
-         c.weighty = 1.0;*/
-        calendarWindow.add(calendarPanel(blackline), BorderLayout.CENTER);
-        /**
-         * *******************************************************************
-         */
-        /**
-         * Field Panel location *********************************************
-         */
-        /*     c.fill = GridBagConstraints.NONE;
-         c.gridx = 0;
-         c.gridy = 1;
-         c.weightx = 0;
-         c.weighty = 0;
-         c.fill = GridBagConstraints.HORIZONTAL;*/
-        calendarWindow.add(fieldPanel(fieldPanelBorder), BorderLayout.SOUTH);
-        /**
-         * *******************************************************************
-         */
-        /**
-         * Button Panel location ********************************************
-         */
-        /*     c.gridx = 0;
-         c.gridy = 2;
-         c.anchor = GridBagConstraints.EAST;
-         c.fill = GridBagConstraints.HORIZONTAL;
-         // CHANGE BLACKLINE BORDER TO empty so the button panel does not have a border*/
-        calendarWindow.add(buttonPanel(blackline), BorderLayout.NORTH);
-        /**
-         * *******************************************************************
-         */
-        calendarWindow.add(legendPanel(legendBorder), BorderLayout.WEST);
+        empty = null;
         
-        calendarWindow.add(sidePanel(blackline),BorderLayout.EAST);
+        calendarWindow = new JPanel(new BorderLayout());
+        calendarWindow.setBorder(paneEdge);
+        
+        fieldPanel = new JPanel(new GridBagLayout()); 
+        fieldPanel.setBorder(fieldPanelBorder);  
+        
+        sidePanel = new JPanel();
+        sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
+        sidePanel.setBorder(paneEdge);
+        
+        buttonPanel = new JPanel();
+        buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBorder(blackline);
+        
+        legendPanel = new JPanel();
+        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
+        legendPanel.setBorder(legendBorder);
+        legendPanel.setPreferredSize(new Dimension(100, 500));
+        
+        cd = new CalendarController(2,2013);
+        c = new GridBagConstraints();
+        
+        monthLabel = new JLabel(cd.getMonth());
+        
+        currPhysLabel = new JLabel("Current Physician: ");
+        currPhysTextField = new JTextField(12);
+        newPhysLabel = new JLabel("New Physician: ");
+        newPhysCombo = new JComboBox();
+        no_of_hoursLabel = new JLabel("Hours: ");
+        no_of_hoursTextField = new JTextField(4);
+        comments = new JTextArea(5,18);
+        scrollPane = new JScrollPane(comments);
+        commentsLabel = new JLabel("Comments: ");
+        
+        change = new JButton("Change");
+        generate = new JButton("Generate");
+        use = new JButton("Use");
+        previous = new JButton("Previous");
+        next = new JButton("Next"); 
+    }
+        
+    public JPanel createCalendarWindow() 
+    {         
+        /**
+         * Calendar Panel location *********************************************
+         */          
+        calendarWindow.add(cd.calendarPanel(empty), BorderLayout.CENTER);
+        /**
+         * *********************************************************************
+         */
+        
+        /**
+         * Field Panel location ************************************************
+         */           
+        calendarWindow.add(fieldPanel(), BorderLayout.SOUTH);
+        /**
+         * *********************************************************************
+         */
+       
+        /**
+         * Button Panel location ***********************************************
+         */        
+   //     calendarWindow.add(cc.buttonPanel(), BorderLayout.NORTH);
+        /**
+         * *********************************************************************
+         */
+        
+        /**
+         * Legend Panel location ***********************************************
+         */
+        calendarWindow.add(legendPanel(), BorderLayout.WEST);
+        /**
+         * *********************************************************************
+         */
+        
+        /**
+         * SidePanel Panel location ********************************************
+         */
+        calendarWindow.add(sidePanel(),BorderLayout.EAST);
+        /**
+         * *********************************************************************
+         */
+        
         return calendarWindow;
     }
 
-    private JPanel calendarPanel(Border border) {     
-       
-        mainCalendarPanel = new JPanel(new GridBagLayout());
-        mainCalendarPanel.setBorder(border);
-        
-        Border raisedBevel = BorderFactory.createRaisedBevelBorder();
-        
-        GridBagConstraints c = new GridBagConstraints();  
-        
-        String[] day_of_week = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-        
-        for (int i = 0; i < day_of_week.length; i++) {
-            header[i] = new JLabel(day_of_week[i], JLabel.CENTER);           
-            header[i].setBorder(raisedBevel);
-            header[i].setPreferredSize(new Dimension(90,20));
-            
-            c.fill = GridBagConstraints.BOTH;
-            c.anchor = GridBagConstraints.NORTHWEST;            
-            c.weightx = 1.0;
-            // sets width of label
-            c.weighty = 0.10;
-            c.gridx = i;
-            c.gridy = 0; 
-            
-            mainCalendarPanel.add(header[i],c);             
-        }
-    
-       // c.fill = GridBagConstraints.NONE;
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                
-                // day panel
-                dayPanels[i][j] = new JPanel(new BorderLayout());
-                dayPanels[i][j].setBorder(raisedBevel);
-                dayPanels[i][j].setPreferredSize(new Dimension(90, 80));               
-                
-                // day label
-                dayNums[i][j] = new JLabel(); 
-                dayNums[i][j].setHorizontalAlignment(JLabel.RIGHT);
-                dayNums[i][j].setVerticalAlignment(JLabel.TOP);                
- 
-                dayPanels[i][j].add(dayNums[i][j]);  
-                
-                // constraints for each individual square
-                c.fill = GridBagConstraints.BOTH;
-                c.anchor = GridBagConstraints.CENTER; 
-                c.weightx = 1.0;
-                c.weighty = 1.0;
-                c.gridx = j;
-                c.gridy = i+1; 
-               
-                mainCalendarPanel.add(dayPanels[i][j], c);               
-            }           
-        }
-        
-        recompute(0);       
-                
-        return mainCalendarPanel;
-    }
-
-    private JPanel fieldPanel(Border border) {
-        JPanel fieldPanel = new JPanel();
-        fieldPanel.setBorder(border);
-        
-        GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-
+    private JPanel fieldPanel() 
+    {       
         // sets spaces between labels and textfields to 2 pixels
-        c.insets = new Insets(2, 2, 2, 2);
-        fieldPanel.setLayout(gridbag);
-
+        c.insets = new Insets(2, 2, 2, 2);        
+    
         /**
          * ** Current Physician ************************************************
-         */
-        currPhysLabel = new JLabel("Current Physician: ");
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        // sets 
-        c.anchor = GridBagConstraints.WEST;
-        c.fill = GridBagConstraints.BOTH;
-        fieldPanel.add(currPhysLabel, c);
-
-        currPhysTextField = new JTextField(16);
+         */        
+        addComponent(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,currPhysLabel);
         currPhysTextField.setEditable(false);
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-      //  currPhysTextField.add(currPhysTextField);
-        fieldPanel.add(currPhysTextField, c);
+        addComponent(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,currPhysTextField);       
         /**
          * *******************************************************************
          */
+        
         /**
          * ** New Physician ****************************************************
-         */
-        newPhysLabel = new JLabel("New Physician: ");
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        fieldPanel.add(newPhysLabel, c);
-        
-        newPhysCombo = new JComboBox();
-        // create function to show all physicians in db and populate combox box with their first names
-        c.gridx =0;
-        c.gridy = 3;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-       // allTextFields.add(textFieldLname);
-        fieldPanel.add(newPhysCombo, c);
+         */        
+        addComponent(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,newPhysLabel);        
+        addComponent(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,newPhysCombo);
         /*
          * *******************************************************************
          */
+        
         /*
          * ** Number of Hours **************************************************
-         */
-        no_of_hoursLabel = new JLabel("Number of Hours: ");
-        c.gridx = 2;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        fieldPanel.add(no_of_hoursLabel, c);
-
-        no_of_hoursTextField = new JTextField(16);
+         */        
+        addComponent(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,no_of_hoursLabel); 
         no_of_hoursTextField.setEditable(false);
-        c.gridx = 2;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-       // allTextFields.add(textFieldBdate);
-        fieldPanel.add(no_of_hoursTextField, c);
+        addComponent(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,no_of_hoursTextField);      
         /*
-         * *******************************************************************
+         * *********************************************************************
          */
         
         /*
          * ** Comments *********************************************************
-         */
-        JTextArea comments = new JTextArea(5,10);
-        JScrollPane scrollPane = new JScrollPane(comments);
-       // c.fill = GridBagConstraints.HORIZONTAL;
-        //c.weightx = 0.0;
-        c.gridwidth = 3;
-        c.gridx = 0;
-        c.gridy = 4;
-       
-        c.fill = GridBagConstraints.HORIZONTAL;
-        fieldPanel.add(scrollPane,c);
+         */  
+        addComponent(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,commentsLabel);
+        addComponent(0, 5, 2, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST,fieldPanel,scrollPane);       
         /*
-         * *******************************************************************
+         * *********************************************************************
          */
+        
+        /*
+         * ** Change Button ****************************************************
+         */        
+        addComponent(1, 6, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.EAST,fieldPanel,change);          
+        /*
+         * *********************************************************************
+         */
+   
         return fieldPanel;
     }
     
-    private JPanel sidePanel(Border border) {
+    private JPanel sidePanel()
+    {
         
-        JPanel sidePanel = new JPanel();
-        sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-        sidePanel.setBorder(border);
-        sidePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        sidePanel.add(generate);
+      //  generate.addActionListener(new ButtonListener()); 
         
-        JButton generateButton = new JButton("Generate");
-        JButton useButton = new JButton("Use");
-        
-        sidePanel.add(generateButton);
         sidePanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        sidePanel.add(useButton);
+        
+        sidePanel.add(use);
+      //  use.addActionListener(new ButtonListener());
+        
         return sidePanel;
     }
     
-    private JPanel buttonPanel(Border border) {
-        JPanel buttonPanel = new JPanel(new FlowLayout(/*FlowLayout.CENTER, 170, 5)*/));
-
-        buttonPanel.setBorder(border);
-
-        previous = new JButton("Previous");
-        previous.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                recompute(--i);
-            }
-        });
-
-        next = new JButton("Next");
-        next.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                recompute(++i);
-            }
-        });
-        
-        Calendar calendar = Calendar.getInstance();
-        long milli_month = calendar.getTimeInMillis();
-        
-        str_date = setDateText(milli_month);
-        monthLabel = new JLabel(str_date);
-
+    private JPanel buttonPanel() 
+    {
         buttonPanel.add(previous);
+   //     previous.addActionListener(new ButtonListener(cc,monthLabel));
+        
         buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
+       
         buttonPanel.add(monthLabel);
+        
         buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
+        
         buttonPanel.add(next);
+     //   next.addActionListener(new ButtonListener(cc,monthLabel));
 
         return buttonPanel;
-    }
-
-    private JPanel legendPanel(Border border) {
-        JPanel legendPanel = new JPanel();
-        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
-        legendPanel.setBorder(border);
-        legendPanel.setPreferredSize(new Dimension(100, 500));  
+    }   
+    
+    private JPanel legendPanel() 
+    {
         
         int no_of_phys = 5;
         for (int i = 0; i < no_of_phys; i++) 
-        {     
-            //JPanel physPanels = new JPanel();
+        {                 
             JLabel legendLabels = new JLabel("Physician " + i);
             legendLabels.setOpaque(true);
             
@@ -345,75 +252,27 @@ public class CalendarWindow {
             int r = rand.nextInt(256);
             int g = rand.nextInt(256);
             int b = rand.nextInt(256);
-           // System.out.println(r + " " + g + " " + " " + b);
-           // legendLabels.setBorder(border);
-            
-            //physPanels.add(legendLabels);
             legendLabels.setBackground(new Color(r, g, b));
-            //physPanels.setBackground(new Color(r, g, b));
             legendPanel.add(legendLabels);
         }
         
         return legendPanel;
     }
-
-    public void recompute(int value) {
-
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, value);
+    
+    private void addComponent(int x, int y , int gw, int gh, 
+                              double w, double h, int fill, int anchor, 
+                              Container cont, Component comp)
+    {
+        c.gridx = x;
+        c.gridy = y;
+        c.gridwidth = gw;
+        c.gridheight = gh;        
+        c.weightx = w;
+        c.weighty = h;
+        c.fill = fill;
+        c.anchor = anchor;
         
-        long milli_month = calendar.getTimeInMillis();
-        String test = setDateText(milli_month);
-                
-        monthLabel.setText(test);
-        
-        // number of days in the current month
-        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        // sets the calendar to today's month
-        calendar.set(Calendar.DAY_OF_MONTH, 0);
-
-        // calculates where the month begins - gapMonth equals the weekDay(0-Sun,etc)
-        int gapMonth = calendar.get(Calendar.DAY_OF_WEEK);
-
-        Border loweredBevel = BorderFactory.createLoweredBevelBorder();
-        Border raisedBevel = BorderFactory.createRaisedBevelBorder();
-
-        // assign all panels to have a raised bevel
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                dayPanels[i][j].setBorder(raisedBevel);
-            }
-        }
-
-        // get rid of any text in the beginning of the month
-        for (int i = 0; i < gapMonth; i++) {
-            dayPanels[0][i].setBorder(loweredBevel);
-            dayNums[0][i].setText("");
-        }
-
-        // set each label with corresponding day number
-        for (int i = 1; i <= daysInMonth; i++) {
-            JLabel l = dayNums[(gapMonth + i - 1) / 7][(gapMonth + i - 1) % 7];
-            l.setText(Integer.toString(i));
-        }
-
-        // remove text from label for the end of the month and have a lowered bevel
-        for (int i = gapMonth + daysInMonth; i < 6 * 7; i++) {
-            dayNums[(i) / 7][(i) % 7].setText("");
-            dayPanels[(i) / 7][(i) % 7].setBorder(loweredBevel);
-        }
+        cont.add(comp,c);        
     }
-
-    public String setDateText(long milli_month) {
-        
-        // creates a date object with converted date
-        Date d = new Date(milli_month);
-
-        // for converting date object to a readable format
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
-        str_date = sdf.format(d);
-        
-        return str_date;
-    }
+    
 }
