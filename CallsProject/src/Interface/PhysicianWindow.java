@@ -13,14 +13,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -38,15 +48,15 @@ public class PhysicianWindow extends JPanel
     private JLabel labelLname;
     private JTextField textFieldLname;
     private JLabel labelBdate;
-    private JTextField textFieldBdate;
+    private JFormattedTextField textFieldBdate;
     private JLabel labelSdate;
-    private JTextField textFieldSdate;
+    private JFormattedTextField textFieldSdate;
     private JLabel labelEdate;
-    private JTextField textFieldEdate;
+    private JFormattedTextField textFieldEdate;
     private JLabel labelAddress;
     private JTextField textFieldAddress;
     private JLabel labelPhone;
-    private JTextField textFieldPhone;
+    private JFormattedTextField textFieldPhone;
     
     private JButton addButton;
     private JButton saveButton;
@@ -61,7 +71,7 @@ public class PhysicianWindow extends JPanel
     public PhysicianWindow() 
     {        
         pmc = new PhysicianModelController();
-        cc = new CalendarController(2, 2013);
+        cc = new CalendarController(2, 2013, "Days Off", "small");
        
         labelFname = new JLabel("First Name: ");
         textFieldFname = new JTextField(16);
@@ -70,20 +80,56 @@ public class PhysicianWindow extends JPanel
         textFieldLname = new JTextField(16);
         
         labelBdate = new JLabel("Birth Date: ");
-        textFieldBdate = new JTextField(16);
         
+        
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        textFieldBdate = new JFormattedTextField(df);
+        textFieldBdate.setColumns(10);
+        try {
+            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
+            bdateFormat.setValidCharacters("0123456789");
+            bdateFormat.install(textFieldBdate);
+        } catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+      //  textFieldBdate = new JTextField(16);
         labelSdate = new JLabel("Start Date: ");
-        textFieldSdate = new JTextField(16);
+        MaskFormatter edateFormat;
+        try {
+            edateFormat = new MaskFormatter("####-##-##");
+            edateFormat.setValidCharacters("0123456789");
+            textFieldSdate = new JFormattedTextField(edateFormat);
+            textFieldSdate.setColumns(10);
+        } catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         labelEdate = new JLabel("End Date: ");
-        textFieldEdate = new JTextField(16);
+        MaskFormatter sdateFormat;
+        try {
+            sdateFormat = new MaskFormatter("####-##-##");
+            sdateFormat.setValidCharacters("0123456789");
+            textFieldEdate = new JFormattedTextField(sdateFormat);
+            textFieldEdate.setColumns(10);
+        } catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         labelAddress = new JLabel("Address: ");
         textFieldAddress = new JTextField(16);
         
         labelPhone = new JLabel("Phone: ");
-        textFieldPhone = new JTextField(16);
-        
+        MaskFormatter phoneNumberFormat;
+        try {
+            phoneNumberFormat = new MaskFormatter("(###) ###-####");
+            phoneNumberFormat.setValidCharacters("0123456789");
+            textFieldPhone = new JFormattedTextField(phoneNumberFormat);
+            textFieldPhone.setColumns(14);
+        } catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
         addButton = new JButton("Add");
         deleteButton = new JButton("Delete");
         saveButton = new JButton("Save");
@@ -92,7 +138,7 @@ public class PhysicianWindow extends JPanel
 
     public JPanel createPhysicianWindow() 
     {        
-        physicianWindow = new JPanel(new MigLayout("", "[]15[]15[grow,fill]15[]15[grow,fill]15[][grow,fill]"));
+        physicianWindow = new JPanel(new MigLayout("", "[]15[right]5[grow,fill]5[right]5[grow,fill]5[right]5[grow,fill]"));
         physicianWindow.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));   
  
         // create the table with the current model
@@ -106,7 +152,7 @@ public class PhysicianWindow extends JPanel
         // set the preferred size of the scroll pane
         scrollPane.setPreferredSize(new Dimension(450, 150));
         
-        physicianWindow.add(scrollPane, "spany, growy, wmin 150"); 
+        physicianWindow.add(scrollPane, "spany, growy, wmin 50"); 
         
         physicianWindow.add(labelFname);
         physicianWindow.add(textFieldFname);
@@ -123,10 +169,10 @@ public class PhysicianWindow extends JPanel
         physicianWindow.add(labelPhone);
         physicianWindow.add(textFieldPhone, "wrap");
         
-        physicianWindow.add(addButton, "tag add, span, split");
+        physicianWindow.add(addButton, "tag add, align right, span, split");
         physicianWindow.add(saveButton, "tag save");
         physicianWindow.add(deleteButton, "tag delete");
-        physicianWindow.add(clearButton, "tag clear, wrap push");  
+        physicianWindow.add(clearButton, "tag clear, wrap");  
         
         addButton.addActionListener(new ButtonsListen());
         saveButton.addActionListener(new ButtonsListen());
@@ -136,7 +182,7 @@ public class PhysicianWindow extends JPanel
         clearButton.addActionListener(new ButtonsListen());
         clearButton.setEnabled(false);        
        
-        physicianWindow.add(cc.calendarPanel(null),"spanx, spany,growx,growy");
+        physicianWindow.add(cc.calendarPanel(null),"align left, width 200:200, span");
         
         return physicianWindow;
     }
@@ -147,7 +193,7 @@ public class PhysicianWindow extends JPanel
         @Override
         public void mouseClicked(MouseEvent e) 
         {
-            selectedRowIndex = table.getSelectedRow();            
+            selectedRowIndex = table.getSelectedRow();  
             
             Physician p = pmc.getPhysicianObject(selectedRowIndex);
             
@@ -210,9 +256,12 @@ public class PhysicianWindow extends JPanel
             {
                 try 
                 {
-                    String id = table.getValueAt(selectedRowIndex, 0).toString();
-                    choice = 2;
+                    Physician p = pmc.getPhysicianObject(selectedRowIndex);
+                    String id = Integer.toString(p.getEmployeeId());
+                    //String id = table.getValueAt(selectedRowIndex, 0).toString();
+                    choice = 2;                    
                     done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone);
+                    pmc.setValueAt(fname,lname,bdate,sdate,edate,address,phone, selectedRowIndex);             
                 }                 
                 catch (Exception ex) 
                 {
@@ -238,6 +287,13 @@ public class PhysicianWindow extends JPanel
                     String id = Integer.toString(p.getEmployeeId());
                     done = phys.workPhysician(choice, Integer.parseInt(id));                    
                     pmc.deleteRow(p);
+                    textFieldFname.setText(null);
+                    textFieldLname.setText(null);
+                    textFieldAddress.setText(null);
+                    textFieldBdate.setText(null);
+                    textFieldEdate.setText(null);
+                    textFieldPhone.setText(null);
+                    textFieldSdate.setText(null);
                 }
                 else 
                 {

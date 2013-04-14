@@ -91,26 +91,22 @@ public class PhysicianModelController extends AbstractTableModel
         fireTableDataChanged();
     }
     
-    public void setValueAt(String val, int rowIndex, int columnIndex)
+    public void setValueAt(String fname, String lname, String bdate, 
+                           String sdate, String edate, String address, 
+                           String phone, int rowIndex)
     {
         Physician p = ph.get(rowIndex);
-        switch(columnIndex)
-        {
-            case 0:
-                p.setFirstName(val);
-            case 1:
-                p.setLastName(val);
-            case 2:
-                p.setBirthDate(val);
-            case 3:
-                p.setStartDate(val);
-            case 4:
-                p.setEndDate(val);
-            case 5:
-                p.setAddress(val);
-            case 6:
-                p.setPhoneNumber(val);
-        }
+        
+        p.setFirstName(fname);
+        p.setLastName(lname);
+        p.setBirthDate(bdate);
+        p.setStartDate(sdate);
+        p.setEndDate(edate);
+        p.setAddress(address);
+        p.setPhoneNumber(phone);
+        fireTableRowsUpdated(rowIndex, rowIndex);
+        fireTableDataChanged();
+        
     }
     
     @Override

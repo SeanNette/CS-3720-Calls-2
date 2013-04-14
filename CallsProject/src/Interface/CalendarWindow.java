@@ -87,7 +87,7 @@ public class CalendarWindow
         legendPanel.setBorder(legendBorder);
         legendPanel.setPreferredSize(new Dimension(100, 500));
         
-        cd = new CalendarController(2,2013);
+        cd = new CalendarController(2,2013, "Scheduling Calendar", "normal");
         c = new GridBagConstraints();
         
         monthLabel = new JLabel(cd.getMonth());
@@ -221,23 +221,6 @@ public class CalendarWindow
         
         return sidePanel;
     }
-    
-    private JPanel buttonPanel() 
-    {
-        buttonPanel.add(previous);
-   //     previous.addActionListener(new ButtonListener(cc,monthLabel));
-        
-        buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
-       
-        buttonPanel.add(monthLabel);
-        
-        buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
-        
-        buttonPanel.add(next);
-     //   next.addActionListener(new ButtonListener(cc,monthLabel));
-
-        return buttonPanel;
-    }   
     
     private JPanel legendPanel() 
     {
