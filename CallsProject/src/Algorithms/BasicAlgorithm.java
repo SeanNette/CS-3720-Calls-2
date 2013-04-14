@@ -90,57 +90,57 @@ public class BasicAlgorithm
             Collections.sort(physicians, new PhysicianComparator());
             //Figure out way to check start date and end date
 
-            /*for(int j = 0; j < physicians.size(); j++)
-             {
-             System.out.println(physicians.get(j).toString());
-             }*/
+            
             int counter = 0;
             while (!found)
             {
                 //TODO check if physician at counter has day off
-                //checking if shift is a weekday shift
-                if (shifts.get(i).getType() == 0)
+                if(!(ShiftBroker.getShiftBroker().isDayOff(shifts.get(i).getDate(), physicians.get(counter).getEmployeeId())))
                 {
-                    //put physician on shift
-                    shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
-
-                    //System.out.println(shifts.get(i).toString());
-
-                    physicians.get(counter).addHours(WEEKDAY);
-                    found = true;
-                }
-                else
-                {
-                    if (physicians.get(counter).getEmployeeId() != latestWeekend)
+                    //checking if shift is a weekday shift
+                    if (shifts.get(i).getType() == 0)
                     {
-                        latestWeekend = physicians.get(counter).getEmployeeId();
+                        //put physician on shift
                         shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
 
                         //System.out.println(shifts.get(i).toString());
 
-                        //checking if the friday is a holiday or regular friday
-                        if (shifts.get(i).getType() == 2)
+                        physicians.get(counter).addHours(WEEKDAY);
+                        found = true;
+                    }
+                    else
+                    {
+                        if (physicians.get(counter).getEmployeeId() != latestWeekend)
                         {
-                            physicians.get(counter).addHours(WEEKEND);
-                        }
-                        else
-                        {
-                            physicians.get(counter).addHours(WEEKDAY);
-                        }
-                        //moving to next shift of weekend
-                        i++;
-                        while (i < shifts.size() && shifts.get(i).getType() != 0)
-                        {
+                            latestWeekend = physicians.get(counter).getEmployeeId();
                             shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
 
                             //System.out.println(shifts.get(i).toString());
 
-                            physicians.get(counter).addHours(WEEKEND);
+                            //checking if the friday is a holiday or regular friday
+                            if (shifts.get(i).getType() == 2)
+                            {
+                                physicians.get(counter).addHours(WEEKEND);
+                            }
+                            else
+                            {
+                                physicians.get(counter).addHours(WEEKDAY);
+                            }
+                            //moving to next shift of weekend
                             i++;
+                            while (i < shifts.size() && shifts.get(i).getType() != 0)
+                            {
+                                shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
+
+                                //System.out.println(shifts.get(i).toString());
+
+                                physicians.get(counter).addHours(WEEKEND);
+                                i++;
+                            }
+                            //setting shift back to last day of weekend
+                            i--;
+                            found = true;
                         }
-                        //setting shift back to last day of weekend
-                        i--;
-                        found = true;
                     }
                 }
                 counter++;

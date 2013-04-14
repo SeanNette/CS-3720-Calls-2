@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Dariusz
+ * @author Dariusz, Sean, Wojeich
  */
 public class PhysicianBroker
 {
