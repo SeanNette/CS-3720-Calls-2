@@ -342,7 +342,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * ** Start Date *****************************************************
          */
-        labelSdate = new JLabel("Hire Date: ");
+        labelSdate = new JLabel("Start Employment Date: ");
         c.gridx = 0;
         c.gridy = 6;
         //     c.gridwidth = 1;
@@ -362,7 +362,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * ** End Date *******************************************************
          */
-        labelEdate = new JLabel("Fired Date: ");
+        labelEdate = new JLabel("End Employment Date: ");
         c.gridx = 1;
         c.gridy = 6;
         c.gridwidth = 1;
@@ -419,6 +419,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * *******************************************************************
          */
+        
         c.gridx = 0;
         c.gridy = 10;
         c.gridwidth = 2;
