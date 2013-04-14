@@ -86,10 +86,10 @@ public class PhysicianWindow extends JPanel
         textFieldBdate = new JFormattedTextField(df);
         textFieldBdate.setColumns(10);
         try {
-            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
+            MaskFormatter bdateFormat = new MaskFormatter();
             bdateFormat.setValidCharacters("0123456789");
             bdateFormat.install(textFieldBdate);
-        } catch (ParseException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         

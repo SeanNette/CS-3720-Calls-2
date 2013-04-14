@@ -30,7 +30,7 @@ public class PhysicianBroker
         return pBroker;
     }
     
-    public void addPhysician(int choice, Object o)
+    public void modifyPhysician(int choice, Object o)
     {
         Connection connect = connection.getConnectionFromPool();
         Physician p = (Physician) o;

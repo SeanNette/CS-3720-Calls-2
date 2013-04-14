@@ -38,11 +38,6 @@ public class PhysicianController
             sb.append("\nMissing Date of Birth");
 
         }
-        if (sDate.isEmpty())
-        {
-            sb.append("\nMissing Start E date");
-
-        }
         if (Address.isEmpty())
         {
             sb.append("\nMissing Address");
@@ -54,7 +49,7 @@ public class PhysicianController
             // use connection from pool
             // when done put connection back into pool 
             Physician p = new Physician(id, firstName, lastName, bDate, sDate, eDate, Address, phoneNumber);
-            pBroker.addPhysician(choice, p);
+            pBroker.modifyPhysician(choice, p);
 
             return "Success";
         } else
@@ -69,7 +64,7 @@ public class PhysicianController
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
         Physician p = new Physician(ID, null, null, null, null, null, null, null);
 
-        pBroker.addPhysician(choice, p);
+        pBroker.modifyPhysician(choice, p);
         
         return "Deleted";
     }
