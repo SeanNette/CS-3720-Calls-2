@@ -5,6 +5,7 @@
 package Algorithms;
 
 import Broker.PhysicianBroker;
+import Broker.ShiftBroker;
 import Container.Physician;
 import Container.Shift;
 import java.util.ArrayList;
@@ -46,29 +47,53 @@ public class BasicAlgorithm
         int j = 0;
         //check if previous month has a roll over
         //check if first day is a weekend day or holiday
-        if(shifts.get(0).getType() != 0)
+        if (shifts.get(0).getType() != 0)
         {
             //check if that is a friday and if so ignore and start schedule
             Calendar cal = new GregorianCalendar(y, m - 1, 1);
-            cal.set(Calendar.DAY_OF_MONTH, 1);            
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             //if not a friday, get physician from last month and schedule until weekend is done
-            if(cal.get(Calendar.DAY_OF_WEEK) != 6)
+            if (cal.get(Calendar.DAY_OF_WEEK) != 6)
             {
                 //get physician id from last month
-                
-            }            
+                int id = ShiftBroker.getShiftBroker().getLastPhysician(m, y);
+                if (id != -1)
+                {
+                    int k;
+                    for (k = 0; k < physicians.size(); k++)
+                    {
+                        if (physicians.get(k).getEmployeeId() == id)
+                        {
+                            break;
+                        }
+                    }
+                    latestWeekend = id;
+                    while (shifts.get(j).getType() != 0)
+                    {
+                        shifts.get(j).setEmployeeID(id);
+
+                        //find a way to update this physicians hours
+
+                        if (k != physicians.size())
+                        {
+                            physicians.get(k).addHours(WEEKEND);
+                        }
+                        j++;
+                    }
+                }
+            }
         }
-        
-        
+
+
         for (int i = j; i < shifts.size(); i++)
         {
             Collections.sort(physicians, new PhysicianComparator());
             //Figure out way to check start date and end date
-            
+
             /*for(int j = 0; j < physicians.size(); j++)
-            {
-                System.out.println(physicians.get(j).toString());
-            }*/
+             {
+             System.out.println(physicians.get(j).toString());
+             }*/
             int counter = 0;
             while (!found)
             {
@@ -78,9 +103,9 @@ public class BasicAlgorithm
                 {
                     //put physician on shift
                     shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
-                    
+
                     //System.out.println(shifts.get(i).toString());
-                    
+
                     physicians.get(counter).addHours(WEEKDAY);
                     found = true;
                 }
@@ -90,22 +115,26 @@ public class BasicAlgorithm
                     {
                         latestWeekend = physicians.get(counter).getEmployeeId();
                         shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
-                        
+
                         //System.out.println(shifts.get(i).toString());
-                        
+
                         //checking if the friday is a holiday or regular friday
-                        if(shifts.get(i).getType() == 2)
+                        if (shifts.get(i).getType() == 2)
+                        {
                             physicians.get(counter).addHours(WEEKEND);
+                        }
                         else
+                        {
                             physicians.get(counter).addHours(WEEKDAY);
+                        }
                         //moving to next shift of weekend
                         i++;
                         while (i < shifts.size() && shifts.get(i).getType() != 0)
                         {
                             shifts.get(i).setEmployeeID(physicians.get(counter).getEmployeeId());
-                            
+
                             //System.out.println(shifts.get(i).toString());
-                            
+
                             physicians.get(counter).addHours(WEEKEND);
                             i++;
                         }
@@ -117,28 +146,8 @@ public class BasicAlgorithm
                 counter++;
             }
             found = false;
-            
+
         }
-        /*for(int j = 0; j < physicians.size(); j++)
-        {
-            System.out.println(physicians.get(j).toString());
-            physicians.get(j).setPreviousHours(physicians.get(j).getCurHours());
-            physicians.get(j).setTotalHours(physicians.get(j).getCurHours() + physicians.get(j).getTotalHours());
-            physicians.get(j).setCurHours(0);
-        }*/
-        /*for(int k = 0; k < shifts.size(); k++)
-        {
-            System.out.println(shifts.get(k).toString());
-        }*/
-        
-        //}
-        /*System.out.println("Testing");
-        for(int j = 0; j < physicians.size(); j++)
-            {
-                System.out.println(physicians.get(j).toString());
-            }*/
-        
-        //update database for physician's hours worked
         PhysicianBroker.getPhysicianBroker().updatePhysicianHours(m, y, physicians);
         return shifts;
     }
