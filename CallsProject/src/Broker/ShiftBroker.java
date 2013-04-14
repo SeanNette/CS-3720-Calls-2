@@ -7,19 +7,23 @@ package Broker;
 import Container.Shift;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
  * @author Dariusz
  */
-public class ShiftBroker {
+public class ShiftBroker
+{
+
     private static ShiftBroker sBroker = null;
     DatabaseBroker connection = new DatabaseBroker();
-    
+
     private ShiftBroker()
     {
     }
-    
+
     public static ShiftBroker getShiftBroker()
     {
         if (sBroker == null)
@@ -28,7 +32,7 @@ public class ShiftBroker {
         }
         return sBroker;
     }
-    
+
     /**
      *
      * @param shifts
@@ -36,13 +40,13 @@ public class ShiftBroker {
      */
     public boolean saveShifts(ArrayList<Shift> shifts)
     {
-       try
-       {
+        try
+        {
             Connection connect = connection.getConnectionFromPool();
             String SQL = "call addShift(?,?,?,?);";
             CallableStatement cs = connect.prepareCall(SQL);
-            
-            for(int i = 0; i < shifts.size(); i++)
+
+            for (int i = 0; i < shifts.size(); i++)
             {
                 cs.setInt(1, shifts.get(i).getEmployeeID());
                 cs.setString(2, shifts.get(i).getDate());
@@ -50,11 +54,11 @@ public class ShiftBroker {
                 cs.setString(4, shifts.get(i).getComments());
                 cs.execute();
             }
-                    
+
             cs.close();
-                    
+
             connection.returnConnectionToPool(connect);
-            
+
             return true;
         } catch (SQLException ex)
         {
@@ -63,4 +67,51 @@ public class ShiftBroker {
         }
     }
 
+    public int getLastPhysician(int m, int y)
+    {
+        int id = -1;
+        if (m > 1)
+        {
+            m--;
+        }
+        else
+        {
+            y--;
+            m = 12;
+        }
+        Calendar cal = new GregorianCalendar(y, m - 1, 1);
+        String lastDay = Integer.toString(cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String yearString = Integer.toString(y);
+        String monthString;
+        if(m < 10)
+        {
+            monthString = "0" + Integer.toString(m);
+        }
+        else
+        {
+            monthString = Integer.toString(m);
+        }
+        String date = "'" + yearString + "-" + monthString + "-" + lastDay + "'";
+        System.out.println(date);
+        try
+        {
+            Connection connect = connection.getConnectionFromPool();
+            Statement stmt;
+            stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT Employee_ID FROM shift "
+                    + "WHERE Shift_Date = " + date);
+
+            while (rs.next())
+            {
+                System.out.println("test");
+                id = rs.getInt(1);
+            }
+            connection.returnConnectionToPool(connect);
+        } catch (SQLException err)
+        {
+            System.out.println("LastPhysican error: " + err);
+        }
+
+        return id;
+    }
 }
