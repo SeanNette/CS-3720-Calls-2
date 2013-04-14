@@ -10,26 +10,23 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-//import test.ButtonListener;
 
 /**
  *
@@ -43,7 +40,7 @@ public class CalendarController extends JPanel {
            
     private JButton next, previous;
     private JLabel monthLabel;
-    private String monthText;
+    private String monthText, panelName, panelSize;
     
     String[] day_of_week = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     private int daysInMonth;
@@ -56,21 +53,32 @@ public class CalendarController extends JPanel {
     
     private static int m = 0;
        
-    public CalendarController(int m, int y) {
+    public CalendarController(int m, int y, String name, String size) {
         this.month = m;        
         this.year = y;
+        this.panelName = name;
+        this.panelSize = size;
         
         mainCalendarPanel = new JPanel(new BorderLayout());
+                
         buttonPanel = new JPanel(new FlowLayout());
         calendarPanel = new JPanel(new GridBagLayout()); 
-    //    calendarPanel.setBorder(BorderFactory.createLineBorder(Color.black));
                  
         headerList = new ArrayList<>();
         dayList = new ArrayList<>();
         dayNums = new ArrayList<>();
         
-        next = new JButton("Next");
-        previous = new JButton("Previous");
+        if (panelSize != "small") 
+        {
+            next = new JButton("Next");
+            previous = new JButton("Previous");
+        }
+        
+        else 
+        {
+            next = new JButton(">");
+            previous = new JButton("<");
+        }
         
         c = new GridBagConstraints();  
         
@@ -98,8 +106,7 @@ public class CalendarController extends JPanel {
         for (int i = 0; i < day_of_week.length; i ++) 
         {                    
             headerList.add(new JLabel(day_of_week[i], JLabel.CENTER)); 
-            headerList.get(i).setBorder(BorderFactory.createRaisedBevelBorder());
-            headerList.get(i).setPreferredSize(new Dimension(90, 20));
+            headerList.get(i).setBorder(BorderFactory.createRaisedBevelBorder());     
             set_gridBagConstraints(i, 1, 1, 1, 1.0, 0.1, GridBagConstraints.BOTH, GridBagConstraints.NORTHWEST);
             calendarPanel.add(headerList.get(i),c);
         }
@@ -107,8 +114,7 @@ public class CalendarController extends JPanel {
         for (int j = 0; j < 42; j++)
         {
             dayList.add(new JPanel(new BorderLayout()));   
-            dayList.get(j).setBorder(BorderFactory.createLoweredBevelBorder());
-            dayList.get(j).setPreferredSize(new Dimension(90,80));
+            dayList.get(j).setBorder(BorderFactory.createLoweredBevelBorder());          
             dayList.get(j).addMouseListener(new dayPanelMouseListener());
             set_gridBagConstraints(j%7,((j/7)+2), 1, 1, 1.0, 1.0, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
             calendarPanel.add(dayList.get(j),c);        
@@ -120,18 +126,32 @@ public class CalendarController extends JPanel {
        
     public JPanel buttonPanel() 
     {
-        buttonPanel.add(previous);
-        previous.addActionListener(new calendarButtonListener());
-        
-        buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
-       
-        buttonPanel.add(monthLabel);
-        
-        buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
-        
-        buttonPanel.add(next);
-        next.addActionListener(new calendarButtonListener());
+        if (!panelSize.equals("small"))
+        {            
+            buttonPanel.add(previous);
+            previous.addActionListener(new calendarButtonListener());
 
+         //   buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
+
+            buttonPanel.add(monthLabel);
+
+         //   buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
+
+            buttonPanel.add(next);
+            next.addActionListener(new calendarButtonListener());
+        }
+        
+        else 
+        {
+            buttonPanel.add(previous);
+            previous.addActionListener(new calendarButtonListener());
+            buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttonPanel.add(monthLabel);
+            buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttonPanel.add(next);
+            next.addActionListener(new calendarButtonListener());
+        }
+        
         return buttonPanel;
     }   
     
@@ -220,6 +240,11 @@ public class CalendarController extends JPanel {
         return monthText;
     }
     
+    public ArrayList getDayList() 
+    {
+        return dayList;
+    }
+    
     // function to set constraints on component
     private void set_gridBagConstraints(int left_right, int top_bottom , int gridwidth, int gridheight, double width, double height, int fill, int anchor)
     {
@@ -238,24 +263,31 @@ public class CalendarController extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) 
         {
-            int panelPressed = dayList.indexOf(e.getSource());
-           
-            if (panelPressed < gapMonth || panelPressed > gapMonth + daysInMonth - 1)
+            if (panelName == "Days Off") 
             {
-                dayList.get(panelPressed).setBackground(null);
-            }
-            else 
-            {                
-                if (dayList.get(panelPressed).getBackground() == Color.red)
+                int panelPressed = dayList.indexOf(e.getSource());
+
+                if (panelPressed < gapMonth || panelPressed > gapMonth + daysInMonth - 1)
                 {
-                    dayList.get(panelPressed).setBackground(Color.white);                   
+                    dayList.get(panelPressed).setBackground(null);
                 }
                 else 
-                {
-                    dayList.get(panelPressed).setBackground(Color.red);                   
-                    String[] d = monthText.split(",");                    
-                    System.out.println(d[0] + " " + (panelPressed-gapMonth + 1) + "," + d[1]);                   
+                {                
+                    if (dayList.get(panelPressed).getBackground() == Color.red)
+                    {
+                        dayList.get(panelPressed).setBackground(Color.white);                   
+                    }
+                    else 
+                    {
+                        dayList.get(panelPressed).setBackground(Color.red);                   
+                        String[] d = monthText.split(",");                    
+                        System.out.println(d[0] + " " + (panelPressed-gapMonth + 1) + "," + d[1]);                   
+                    }
                 }
+            }
+            else if (panelName == "Scheduling Calendar") 
+            {
+                System.out.println("Scheduling Calendar");
             }
         }
     }   
