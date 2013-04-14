@@ -52,10 +52,10 @@ public class BasicAlgorithm
             Calendar cal = new GregorianCalendar(y, m - 1, 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);            
             //if not a friday, get physician from last month and schedule until weekend is done
-            if(cal.get(Calendar.DAY_OF_WEEK) == 6)
+            if(cal.get(Calendar.DAY_OF_WEEK) != 6)
             {
                 //get physician id from last month
-            
+                
             }            
         }
         
