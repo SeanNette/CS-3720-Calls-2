@@ -8,8 +8,9 @@ import Broker.PhysicianBroker;
 import Container.Physician;
 import Container.Shift;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.GregorianCalendar;
 
 /**
  * BasicAlgorithm - Generates a schedule for a specified month using limited
@@ -38,15 +39,32 @@ public class BasicAlgorithm
 
     public ArrayList<Shift> generateSchedule(int m, int y)
     {
-        //for(int k =0; k < 60; k++)
-        //{
         Collections.sort(physicians, new PhysicianComparator());
         int latestWeekend = physicians.get(physicians.size() - 1).getEmployeeId();
         System.out.println("Latest Weekend: " + latestWeekend);
         boolean found = false;
-
-        for (int i = 0; i < shifts.size(); i++)
+        int j = 0;
+        //check if previous month has a roll over
+        //check if first day is a weekend day or holiday
+        if(shifts.get(0).getType() != 0)
         {
+            //check if that is a friday and if so ignore and start schedule
+            Calendar cal = new GregorianCalendar(y, m - 1, 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);            
+            //if not a friday, get physician from last month and schedule until weekend is done
+            if(cal.get(Calendar.DAY_OF_WEEK) == 6)
+            {
+                //get physician id from last month
+            
+            }            
+        }
+        
+        
+        for (int i = j; i < shifts.size(); i++)
+        {
+            Collections.sort(physicians, new PhysicianComparator());
+            //Figure out way to check start date and end date
+            
             /*for(int j = 0; j < physicians.size(); j++)
             {
                 System.out.println(physicians.get(j).toString());
@@ -99,7 +117,7 @@ public class BasicAlgorithm
                 counter++;
             }
             found = false;
-            Collections.sort(physicians, new PhysicianComparator());
+            
         }
         /*for(int j = 0; j < physicians.size(); j++)
         {

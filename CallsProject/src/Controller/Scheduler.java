@@ -6,6 +6,7 @@ package Controller;
 
 import Algorithms.BasicAlgorithm;
 import Broker.PhysicianBroker;
+import Broker.ShiftBroker;
 import Container.Physician;
 import Container.Shift;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class Scheduler
         BasicAlgorithm ba = new BasicAlgorithm(physicians, shifts);
         shifts = ba.generateSchedule(month, year);
         //update shifts in database
-        
+        ShiftBroker.getShiftBroker().saveShifts(shifts);
     }
     
     private void generatePhysicians()
