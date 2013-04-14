@@ -220,21 +220,30 @@ public class PhysicianBroker
                         rs.getString(6), rs.getString(7), rs.getString(8));
                 physicians.add(p);
             }
-            if(m > 1)
-                m--;
-            else
-            {
-                y--;
-                m = 12;
-            }
             for (int i = 0; i < physicians.size(); i++)
             {
-                rs = stmt.executeQuery("SELECT Hours_Worked FROM hours "
-                        + "WHERE Employee_ID = " + physicians.get(i).getEmployeeId()
-                        + " AND Year = " + y + " AND Month = " + m);
-                if (rs.next())
+                int tempM = m;
+                int tempY = y;
+                for(int j=0; j < 3; j++)
                 {
-                    physicians.get(i).setPreviousHours(rs.getInt(1));
+                    tempM = tempM - j;
+                    if(tempM > 1)
+                    {
+                        tempM--;
+                    }
+                    else
+                    {
+                        tempY--;
+                        tempM = 12;
+                    }
+                    
+                    rs = stmt.executeQuery("SELECT Hours_Worked FROM hours "
+                            + "WHERE Employee_ID = " + physicians.get(i).getEmployeeId()
+                            + " AND Year = " + tempY + " AND Month = " + tempM);
+                    if (rs.next())
+                    {
+                        physicians.get(i).setPreviousHours(physicians.get(i).getPreviousHours() + rs.getInt(1));
+                    } 
                 }
             }
             
