@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author Dariusz
+ * @author Sean Nette
  */
 public class ShiftBroker
 {
@@ -92,7 +92,6 @@ public class ShiftBroker
             monthString = Integer.toString(m);
         }
         String date = "'" + yearString + "-" + monthString + "-" + lastDay + "'";
-        System.out.println(date);
         try
         {
             Connection connect = connection.getConnectionFromPool();
@@ -103,7 +102,6 @@ public class ShiftBroker
 
             while (rs.next())
             {
-                System.out.println("test");
                 id = rs.getInt(1);
             }
             connection.returnConnectionToPool(connect);
@@ -113,5 +111,31 @@ public class ShiftBroker
         }
 
         return id;
+    }
+    
+    public boolean isDayOff(String date, int physID)
+    {
+        System.out.println(date);
+        try
+        {
+            Connection connect = connection.getConnectionFromPool();
+            Statement stmt;
+            stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM daysoff "
+                    + "WHERE day_Off = '" + date + "' AND Employee_ID = " + physID);
+
+            if(rs.next())
+            {
+                connection.returnConnectionToPool(connect);
+                System.out.println("day off");
+                return true;
+            }
+            connection.returnConnectionToPool(connect);
+            return false;
+        } catch (SQLException err)
+        {
+            System.out.println("Dayoff error: " + err);
+            return false;
+        }
     }
 }

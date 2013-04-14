@@ -37,7 +37,7 @@ public class Calls {
                 frame.setBounds(200, 200, 1000, 800);
                 frame.setVisible(true);
 
-                //Scheduler s = new Scheduler(7, 2013);
+                Scheduler s = new Scheduler(7, 2013);
             }
         });
         
