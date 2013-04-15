@@ -117,14 +117,18 @@ public class ShiftBroker {
         }
     }
 
-    public ArrayList<Shift> getAllShifts() {
+    public ArrayList<Shift> getAllShiftsForCurrentMonth(int month, int year) {
         ArrayList<Shift> shiftList = new ArrayList<>();
+        
+        String date = "'" + Integer.toString(year) + "-" 
+                + Integer.toString(month);
 
         try {
             Connection connect = connection.getConnectionFromPool();
             Statement stmt;
             stmt = connect.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM shift");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM shift WHERE Shift_Date >= "
+                   + date + "-01' AND Shift_Date <= " + date + "-31'");
 
             while (rs.next()) {
                 Shift s = new Shift(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getInt(4));

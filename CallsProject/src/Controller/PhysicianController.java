@@ -57,6 +57,16 @@ public class PhysicianController
             return sb.toString();
         }
     }
+    
+    public String findPhysicianByID(int id)
+    {
+        String s;
+        PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+        
+        s = pBroker.objectPhysician(id);
+        
+        return s;
+    }
 
     // Delete function
     public String workPhysician(int choice, int ID)
