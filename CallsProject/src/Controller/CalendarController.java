@@ -186,10 +186,6 @@ public class CalendarController extends JPanel
     {
         for (int i = 0; i < daysInMonth; i++)
         {
-            if (gapMonth == 0)
-            {
-                gapMonth = 7;
-            }
             dayNums.add(new JLabel(Integer.toString(i + 1)));
             dayNums.get(i).setVerticalAlignment(JLabel.TOP);
             dayNums.get(i).setHorizontalAlignment(JLabel.RIGHT);
