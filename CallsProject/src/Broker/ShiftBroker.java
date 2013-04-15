@@ -96,7 +96,6 @@ public class ShiftBroker {
     }
 
     public boolean isDayOff(String date, int physID) {
-        System.out.println(date);
         try {
             Connection connect = connection.getConnectionFromPool();
             Statement stmt;
@@ -106,7 +105,6 @@ public class ShiftBroker {
 
             if (rs.next()) {
                 connection.returnConnectionToPool(connect);
-                System.out.println("day off");
                 return true;
             }
             connection.returnConnectionToPool(connect);
@@ -141,5 +139,25 @@ public class ShiftBroker {
         }
         
         return shiftList;
+    }
+    public boolean isHoliday(String date)
+    {        
+        try {
+            Connection connect = connection.getConnectionFromPool();
+            Statement stmt;
+            stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM holidays "
+                    + "WHERE holiday = '" + date + "'");
+
+            if (rs.next()) {
+                connection.returnConnectionToPool(connect);
+                return true;
+            }
+            connection.returnConnectionToPool(connect);
+            return false;
+        } catch (SQLException err) {
+            System.out.println("Holiday error: " + err);
+            return false;
+        }
     }
 }

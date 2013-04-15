@@ -88,14 +88,33 @@ public class BasicAlgorithm
         for (int i = j; i < shifts.size(); i++)
         {
             Collections.sort(physicians, new PhysicianComparator());
-            //Figure out way to check start date and end date
 
-            
             int counter = 0;
             while (!found)
             {
-                //TODO check if physician at counter has day off
-                if(!(ShiftBroker.getShiftBroker().isDayOff(shifts.get(i).getDate(), physicians.get(counter).getEmployeeId())))
+                boolean working = true;
+                String monthString;
+                if (m < 10)
+                {
+                    monthString = "0" + Integer.toString(m);
+                }
+                else
+                {
+                    monthString = Integer.toString(m);
+                }
+                String compareDate = Integer.toString(y) + "-" + monthString + "-" + Integer.toString(i + 1);
+                        //Check start and end date for this physician
+                if ((physicians.get(counter).getStartDate() != null) && (physicians.get(counter).getStartDate().compareTo(compareDate) > 0))
+                {
+                    working = false;
+                }
+                if ((physicians.get(counter).getEndDate() != null) && (physicians.get(counter).getEndDate().compareTo(compareDate) < 0))
+                {
+                    working = false;
+                }
+                //physicians.get(counter).getStartDate().
+                //check if physician at counter has day off
+                if (!(ShiftBroker.getShiftBroker().isDayOff(shifts.get(i).getDate(), physicians.get(counter).getEmployeeId())) && working)
                 {
                     //checking if shift is a weekday shift
                     if (shifts.get(i).getType() == 0)
