@@ -4,6 +4,7 @@
  */
 package Interface;
 
+import Calendar.PhysicianCalendar;
 import Controller.CalendarController;
 import Controller.PhysicianController;
 import Controller.ShiftController;
@@ -24,12 +25,16 @@ import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,6 +47,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -54,19 +60,20 @@ public class PhysicianWindow extends JPanel {
     private JScrollPane scrollPane = new JScrollPane();
     private JPanel tablePanel = new JPanel(new BorderLayout());
     private JLabel labelFname;
+    JPanel dPanel = new JPanel(new BorderLayout());
     private JTextField textFieldFname;
     private JLabel labelLname;
     private JTextField textFieldLname;
     private JLabel labelBdate;
-    private JTextField textFieldBdate;
+    private JFormattedTextField textFieldBdate;
     private JLabel labelSdate;
-    private JTextField textFieldSdate;
+    private JFormattedTextField textFieldSdate;
     private JLabel labelEdate;
-    private JTextField textFieldEdate;
+    private JFormattedTextField textFieldEdate;
     private JLabel labelAddress;
     private JTextField textFieldAddress;
     private JLabel labelPhone;
-    private JTextField textFieldPhone;
+    private JFormattedTextField textFieldPhone;
     private JLabel daysOffLabel;
     private JTextField textFieldDaysOff;
     private JButton addButton;
@@ -76,7 +83,7 @@ public class PhysicianWindow extends JPanel {
     private ArrayList<JTextField> allTextFields = new ArrayList<JTextField>();
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
     private int selectedRowIndex;
-    private CalendarController cc;
+    private PhysicianCalendar pc;
 
     public PhysicianWindow() {
         
@@ -296,7 +303,7 @@ public class PhysicianWindow extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldFname);
         fieldPanel.add(textFieldFname, c);
         /**
@@ -316,7 +323,7 @@ public class PhysicianWindow extends JPanel {
         c.gridx = 1;
         c.gridy = 1;
         //  c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldLname);
         fieldPanel.add(textFieldLname, c);
         /*
@@ -331,12 +338,24 @@ public class PhysicianWindow extends JPanel {
         //    c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelBdate, c);
-
-        textFieldBdate = new JTextField(16);
+        
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        textFieldBdate = new JFormattedTextField(df);
+        textFieldBdate.setColumns(10);
+        try 
+        {
+            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
+            bdateFormat.setValidCharacters("0123456789");
+            bdateFormat.install(textFieldBdate);
+        }
+        catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         c.gridx = 0;
         c.gridy = 5;
         //    c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldBdate);
         fieldPanel.add(textFieldBdate, c);
         /**
@@ -352,11 +371,22 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelSdate, c);
 
-        textFieldSdate = new JTextField(16);
+        textFieldSdate = new JFormattedTextField(df);
+        textFieldSdate.setColumns(10);
+        try 
+        {
+            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
+            bdateFormat.setValidCharacters("0123456789");
+            bdateFormat.install(textFieldSdate);
+        }
+        catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         c.gridx = 0;
         c.gridy = 7;
         //   c.gridwidth = 1;
-        c.fill = GridBagConstraints.BOTH;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldSdate);
         fieldPanel.add(textFieldSdate, c);
         /**
@@ -372,11 +402,22 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelEdate, c);
 
-        textFieldEdate = new JTextField(16);
+        textFieldEdate = new JFormattedTextField(df);
+        textFieldEdate.setColumns(10);
+        try 
+        {
+            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
+            bdateFormat.setValidCharacters("0123456789");
+            bdateFormat.install(textFieldEdate);
+        }
+        catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         c.gridx = 1;
         c.gridy = 7;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldEdate);
         fieldPanel.add(textFieldEdate, c);
         /**
@@ -396,7 +437,7 @@ public class PhysicianWindow extends JPanel {
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 2;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldAddress);
         fieldPanel.add(textFieldAddress, c);
         /**
@@ -412,11 +453,19 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelPhone, c);
 
-        textFieldPhone = new JTextField(16);
+        MaskFormatter phoneNumberFormat;
+        try {
+            phoneNumberFormat = new MaskFormatter("(###) ###-####");
+            phoneNumberFormat.setValidCharacters("0123456789");
+            textFieldPhone = new JFormattedTextField(phoneNumberFormat);
+            textFieldPhone.setColumns(14);
+        } catch (ParseException ex) {
+            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
         c.gridx = 0;
         c.gridy = 9;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldPhone);
         fieldPanel.add(textFieldPhone, c);
         /**
@@ -501,10 +550,12 @@ public class PhysicianWindow extends JPanel {
     }
 
     private JPanel daysOffPanel(Border border) {
-        JPanel dPanel = new JPanel(new BorderLayout());
+        dPanel = new JPanel(new BorderLayout());
+        pc = new PhysicianCalendar(2,2013);
+        dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
         JPanel showOff = new JPanel(new FlowLayout());
         dPanel.setBorder(border);
-        cc = new CalendarController(2,2013,"Days Off", "small");
+        
         daysOffLabel = new JLabel("Days Off: ");
 
         showOff.add(daysOffLabel);
@@ -516,7 +567,7 @@ public class PhysicianWindow extends JPanel {
         JButton addOff = new JButton("Save");
         showOff.add(addOff);
 
-        dPanel.add(cc.calendarPanel(null), BorderLayout.CENTER);
+        
         dPanel.add(showOff, BorderLayout.SOUTH);
 
         
@@ -526,8 +577,10 @@ public class PhysicianWindow extends JPanel {
     private class MouseListen extends MouseAdapter {
 
         public void mouseClicked(MouseEvent e) {
+            
             selectedRowIndex = table.getSelectedRow();
-
+            
+            
             int columnCount = table.getColumnCount();
             System.out.println(columnCount);
             for (int i = 0; i < columnCount - 1; i++) {
