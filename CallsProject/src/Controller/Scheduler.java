@@ -90,8 +90,17 @@ public class Scheduler
             
             int type = 0;
             //check if shift already in calendar as a holiday and if it is set shift = that info
-            if(cal.get(Calendar.DAY_OF_WEEK) == 1 || cal.get(Calendar.DAY_OF_WEEK) == 7 || cal.get(Calendar.DAY_OF_WEEK) == 6)
-                type = 1;
+            if(ShiftBroker.getShiftBroker().isHoliday(date))
+            {
+                type = 2;
+            }
+            else
+            {
+                if(cal.get(Calendar.DAY_OF_WEEK) == 1 || cal.get(Calendar.DAY_OF_WEEK) == 7 || cal.get(Calendar.DAY_OF_WEEK) == 6)
+                {
+                    type = 1;
+                }
+            }
             Shift s = new Shift(date, type);
             shifts.add(s);
         }

@@ -88,8 +88,6 @@ public class BasicAlgorithm
         for (int i = j; i < shifts.size(); i++)
         {
             Collections.sort(physicians, new PhysicianComparator());
-            //Figure out way to check start date and end date
-
 
             int counter = 0;
             while (!found)
