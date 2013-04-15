@@ -65,15 +65,21 @@ public class PhysicianWindow extends JPanel {
     private JLabel labelLname;
     private JTextField textFieldLname;
     private JLabel labelBdate;
-    private JFormattedTextField textFieldBdate;
+    private JTextField textFieldBdate;
     private JLabel labelSdate;
-    private JFormattedTextField textFieldSdate;
+    private JTextField textFieldSdate;
     private JLabel labelEdate;
-    private JFormattedTextField textFieldEdate;
+    private JTextField textFieldEdate;
     private JLabel labelAddress;
     private JTextField textFieldAddress;
     private JLabel labelPhone;
-    private JFormattedTextField textFieldPhone;
+    private JTextField textFieldPhone;
+    private JLabel labelWeekday;
+    private JTextField textFieldWeekday;
+    private JLabel labelWeekend;
+    private JTextField textFieldWeekend;
+    private JLabel labelHolidays;
+    private JTextField textFieldHolidays;
     private JLabel daysOffLabel;
     private JTextField textFieldDaysOff;
     private JButton addButton;
@@ -295,6 +301,8 @@ public class PhysicianWindow extends JPanel {
         c.gridy = 0;
         c.gridwidth = 1;
         // sets 
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.anchor = GridBagConstraints.NORTHWEST;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelFname, c);
@@ -303,6 +311,8 @@ public class PhysicianWindow extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldFname);
         fieldPanel.add(textFieldFname, c);
@@ -316,6 +326,8 @@ public class PhysicianWindow extends JPanel {
         c.gridx = 1;
         c.gridy = 0;
         //  c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelLname, c);
 
@@ -323,69 +335,105 @@ public class PhysicianWindow extends JPanel {
         c.gridx = 1;
         c.gridy = 1;
         //  c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldLname);
         fieldPanel.add(textFieldLname, c);
         /*
          * *******************************************************************
          */
+        
+        /**
+         * ** Address ********************************************************
+         */
+        labelAddress = new JLabel("Address: ");
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        fieldPanel.add(labelAddress, c);
+
+        textFieldAddress = new JTextField(16);
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        allTextFields.add(textFieldAddress);
+        fieldPanel.add(textFieldAddress, c);
+        /**
+         * *******************************************************************
+         */
+        
         /*
          * ** Birth Date *****************************************************
          */
-        labelBdate = new JLabel("Birth Date: ");
+        labelBdate = new JLabel("Birth Date (yyyy-mm-dd): ");
         c.gridx = 0;
         c.gridy = 4;
         //    c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelBdate, c);
         
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-        textFieldBdate = new JFormattedTextField(df);
-        textFieldBdate.setColumns(10);
-        try 
-        {
-            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
-            bdateFormat.setValidCharacters("0123456789");
-            bdateFormat.install(textFieldBdate);
-        }
-        catch (ParseException ex) {
-            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
+        textFieldBdate = new JTextField(10);              
         c.gridx = 0;
         c.gridy = 5;
         //    c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldBdate);
         fieldPanel.add(textFieldBdate, c);
         /**
          * *******************************************************************
          */
+        
+         /**
+         * ** Phone **********************************************************
+         */
+        labelPhone = new JLabel("Phone ((###) ###-####): ");
+        c.gridx = 1;
+        c.gridy = 4;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        fieldPanel.add(labelPhone, c);
+
+        textFieldPhone = new JTextField(14);         
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        allTextFields.add(textFieldPhone);
+        fieldPanel.add(textFieldPhone, c);
+        /**
+         * *******************************************************************
+         */
+        
         /**
          * ** Start Date *****************************************************
          */
-        labelSdate = new JLabel("Start Employment Date: ");
+        labelSdate = new JLabel("Start Employment Date (yyyy-mm-dd): ");
         c.gridx = 0;
         c.gridy = 6;
         //     c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelSdate, c);
 
-        textFieldSdate = new JFormattedTextField(df);
-        textFieldSdate.setColumns(10);
-        try 
-        {
-            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
-            bdateFormat.setValidCharacters("0123456789");
-            bdateFormat.install(textFieldSdate);
-        }
-        catch (ParseException ex) {
-            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        textFieldSdate = new JTextField(10);                
         c.gridx = 0;
         c.gridy = 7;
         //   c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldSdate);
         fieldPanel.add(textFieldSdate, c);
@@ -395,85 +443,86 @@ public class PhysicianWindow extends JPanel {
         /**
          * ** End Date *******************************************************
          */
-        labelEdate = new JLabel("End Employment Date: ");
+        labelEdate = new JLabel("End Employment Date (yyyy-mm-dd): ");
         c.gridx = 1;
         c.gridy = 6;
         c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelEdate, c);
 
-        textFieldEdate = new JFormattedTextField(df);
-        textFieldEdate.setColumns(10);
-        try 
-        {
-            MaskFormatter bdateFormat = new MaskFormatter("####-##-##");
-            bdateFormat.setValidCharacters("0123456789");
-            bdateFormat.install(textFieldEdate);
-        }
-        catch (ParseException ex) {
-            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        textFieldEdate = new JTextField(10);                
         c.gridx = 1;
         c.gridy = 7;
         c.gridwidth = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldEdate);
         fieldPanel.add(textFieldEdate, c);
         /**
          * *******************************************************************
          */
-        /**
-         * ** Address ********************************************************
-         */
-        labelAddress = new JLabel("Address: ");
+        
+       
+        
+        JPanel WeekPanel = new JPanel(new GridBagLayout());
+        
+        labelWeekday = new JLabel("Weekday:");
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 0;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
-        fieldPanel.add(labelAddress, c);
-
-        textFieldAddress = new JTextField(16);
+        WeekPanel.add(labelWeekday,c);
+        
+        textFieldWeekday = new JTextField(3);         
         c.gridx = 0;
-        c.gridy = 3;
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.NONE;
-        allTextFields.add(textFieldAddress);
-        fieldPanel.add(textFieldAddress, c);
-        /**
-         * *******************************************************************
-         */
-        /**
-         * ** Phone **********************************************************
-         */
-        labelPhone = new JLabel("Phone: ");
-        c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 1;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
-        fieldPanel.add(labelPhone, c);
-
-        MaskFormatter phoneNumberFormat;
-        try {
-            phoneNumberFormat = new MaskFormatter("(###) ###-####");
-            phoneNumberFormat.setValidCharacters("0123456789");
-            textFieldPhone = new JFormattedTextField(phoneNumberFormat);
-            textFieldPhone.setColumns(14);
-        } catch (ParseException ex) {
-            Logger.getLogger(PhysicianWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        c.gridx = 0;
-        c.gridy = 9;
+        allTextFields.add(textFieldWeekday);
+        WeekPanel.add(textFieldWeekday, c);
+        
+        labelWeekend = new JLabel("Weekend:");
+        c.gridx = 1;
+        c.gridy = 0;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
-        allTextFields.add(textFieldPhone);
-        fieldPanel.add(textFieldPhone, c);
-        /**
-         * *******************************************************************
-         */
+        WeekPanel.add(labelWeekend,c);
+        
+        textFieldWeekend = new JTextField(3);         
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        allTextFields.add(textFieldWeekend);
+        WeekPanel.add(textFieldWeekend, c);
+        
+        labelHolidays = new JLabel("Holidays:");
+        c.gridx = 2;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        WeekPanel.add(labelHolidays,c);
+        
+        textFieldHolidays = new JTextField(3);         
+        c.gridx = 2;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        allTextFields.add(textFieldHolidays);
+        WeekPanel.add(textFieldHolidays, c);
+        
         
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 8;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.NONE;
+        fieldPanel.add(WeekPanel, c);
+        
+        c.gridx = 0;
+        c.gridy = 12;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         fieldPanel.add(buttonPanel(null), c);
@@ -556,10 +605,10 @@ public class PhysicianWindow extends JPanel {
         dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
         JPanel showOff = new JPanel(new FlowLayout());
         dPanel.setBorder(border);
-<<<<<<< HEAD
+
         
         daysOffLabel = new JLabel("Days Off: ");
-=======
+
      //   CalendarController cc = new CalendarController(3,2013,"Days Off", "small");
       /*  daysOffLabel = new JLabel("Days Off: ");
 >>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
@@ -583,7 +632,7 @@ public class PhysicianWindow extends JPanel {
         dPanel.add(addOff);
 */
      //siema zi   dPanel.add(cc.calendarPanel(null));
->>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
+
         return dPanel;
     }
 
@@ -714,7 +763,7 @@ public class PhysicianWindow extends JPanel {
             scrollPane = new JScrollPane(table);
             // set the size of the scroll pane
 
-            scrollPane.setPreferredSize(new Dimension(720, 150));
+          //  scrollPane.setPreferredSize(new Dimension(720, 150));
             tablePanel.add(scrollPane);
             tablePanel.validate();
             tablePanel.repaint();
