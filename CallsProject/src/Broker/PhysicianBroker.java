@@ -232,13 +232,23 @@ public class PhysicianBroker
     {
         ArrayList<Physician> physicians = new ArrayList();
         Connection connect = connection.getConnectionFromPool();
-        
+        String monthString;
+        if(m < 10)
+        {
+            monthString = "0" + Integer.toString(m);
+        }
+        else
+        {
+            monthString = Integer.toString(m);
+        }
+        String date = "'" + Integer.toString(y) + "-" + monthString + "-01'";
         try
         {
             Statement stmt;
             stmt = connect.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM physician "
-                    + "WHERE End_Employment_Date is NULL");
+                    + "WHERE End_Employment_Date is NULL "
+                    + "OR End_Employment_Date >= " + date);
             
             while (rs.next())
             {
