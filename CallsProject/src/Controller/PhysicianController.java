@@ -7,6 +7,8 @@ package Controller;
 import Broker.*;
 import Container.Physician;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.sql.Date;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -79,5 +81,13 @@ public class PhysicianController
 
 
         return dtm;
+    }
+    
+    public ArrayList<Date> daysOff(int employeeID)
+    {
+        PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+        ArrayList<java.sql.Date> dOff = pBroker.getDaysOff(employeeID);
+        
+        return dOff;        
     }
 }

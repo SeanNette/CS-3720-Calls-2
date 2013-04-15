@@ -201,6 +201,33 @@ public class PhysicianBroker
         return dm;
     }
     
+    public ArrayList<Date> getDaysOff(int employeeID)
+    {
+        ArrayList<Date> daysOff = new ArrayList();
+        Connection connect = connection.getConnectionFromPool();
+        
+        try
+        {
+            Statement stmt;
+            stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT day_Off FROM daysoff "
+                    + "WHERE Employee_ID = " + employeeID);
+            
+            while (rs.next())
+            {               
+               daysOff.add(rs.getDate(1));
+            }         
+            connection.returnConnectionToPool(connect);
+            
+            
+        } catch (SQLException ex)
+        {
+            System.out.println("Get current physicians error: " + ex);
+        }        
+        
+        return daysOff;
+    }
+    
     public ArrayList<Physician> getCurrentPhysicians(int m, int y)
     {
         ArrayList<Physician> physicians = new ArrayList();

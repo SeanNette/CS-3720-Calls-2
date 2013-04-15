@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -75,8 +76,10 @@ public class PhysicianWindow extends JPanel {
     private ArrayList<JTextField> allTextFields = new ArrayList<JTextField>();
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
     private int selectedRowIndex;
+    private CalendarController cc;
 
     public PhysicianWindow() {
+        
     }
 
     public JPanel createPhysicianWindow() {
@@ -498,21 +501,25 @@ public class PhysicianWindow extends JPanel {
     }
 
     private JPanel daysOffPanel(Border border) {
-        JPanel dPanel = new JPanel();
+        JPanel dPanel = new JPanel(new BorderLayout());
+        JPanel showOff = new JPanel(new FlowLayout());
         dPanel.setBorder(border);
-        CalendarController cc = new CalendarController(3,2013,"Days Off", "small");
-      /*  daysOffLabel = new JLabel("Days Off: ");
+        cc = new CalendarController(2,2013,"Days Off", "small");
+        daysOffLabel = new JLabel("Days Off: ");
 
-        dPanel.add(daysOffLabel);
+        showOff.add(daysOffLabel);
 
         textFieldDaysOff = new JTextField(16);
 
-        dPanel.add(textFieldDaysOff);
+        showOff.add(textFieldDaysOff);
 
-        JButton addOff = new JButton("Add");
-        dPanel.add(addOff);
-*/
-        dPanel.add(cc.showCalendar());
+        JButton addOff = new JButton("Save");
+        showOff.add(addOff);
+
+        dPanel.add(cc.calendarPanel(null), BorderLayout.CENTER);
+        dPanel.add(showOff, BorderLayout.SOUTH);
+
+        
         return dPanel;
     }
 
@@ -533,6 +540,14 @@ public class PhysicianWindow extends JPanel {
             allButtons.get(2).setEnabled(true);
             allButtons.get(3).setEnabled(true);
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            
+            int empID = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
+            
+            PhysicianController pc = new PhysicianController();
+            ArrayList<Date> daysOff = new ArrayList();
+            daysOff = pc.daysOff(empID);
+            
+            System.out.println(daysOff);
         }
     }
 
