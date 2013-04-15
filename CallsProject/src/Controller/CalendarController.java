@@ -217,12 +217,15 @@ public class CalendarController extends JPanel
         while (i < shiftList.size())
         {            
                 name = pc.findPhysicianByID(shiftList.get(i).getEmployeeID());
+                
                 physList.add(new JLabel(name));
+                physList.get(i).setBackground(Color.red);
+                physList.get(i).setOpaque(true);
                 physList.get(i).setVerticalAlignment(JLabel.CENTER);
                 physList.get(i).setHorizontalAlignment(JLabel.LEFT);
                 dayList.get(i + gapMonth).add(physList.get(i), BorderLayout.SOUTH);
                 dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
-                dayList.get(i + gapMonth).setBackground(Color.white);
+                dayList.get(i + gapMonth).setBackground(Color.WHITE);
                 dayList.get(i + gapMonth).repaint();
             i++;
         }

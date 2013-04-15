@@ -556,10 +556,9 @@ public class PhysicianWindow extends JPanel {
         dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
         JPanel showOff = new JPanel(new FlowLayout());
         dPanel.setBorder(border);
-<<<<<<< HEAD
-        
+
         daysOffLabel = new JLabel("Days Off: ");
-=======
+
      //   CalendarController cc = new CalendarController(3,2013,"Days Off", "small");
       /*  daysOffLabel = new JLabel("Days Off: ");
 >>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
@@ -583,7 +582,6 @@ public class PhysicianWindow extends JPanel {
         dPanel.add(addOff);
 */
      //siema zi   dPanel.add(cc.calendarPanel(null));
->>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
         return dPanel;
     }
 
