@@ -100,10 +100,9 @@ public class PhysicianBroker
     }
 
     // This one returns as P object.
-    public Physician objectPhysician(int pID)
+    public String objectPhysician(int pID)
     {
-        Physician p = null;
-        
+        String s=null;        
         try
         {
             Connection connect = connection.getConnectionFromPool();
@@ -114,22 +113,17 @@ public class PhysicianBroker
             cs.execute();
             
             ResultSet rs = cs.getResultSet();
-            
             rs.next();
-            
-            p = new Physician(rs.getInt(1), rs.getString(2),
-                    rs.getString(3), rs.getString(4), rs.getString(5),
-                    rs.getString(6), rs.getString(7), rs.getString(8));
-            
+            s = rs.getString(2) + " " + rs.getString(3);
             
             cs.close();
-            System.out.println(p.getFirstName());
+            connection.returnConnectionToPool(connect);
         } catch (SQLException e)
         {
             System.out.println("Error: " + e);
         }
         
-        return p;
+        return s;
         
     }
     

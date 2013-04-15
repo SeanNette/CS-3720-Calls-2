@@ -364,7 +364,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * ** Start Date *****************************************************
          */
-        labelSdate = new JLabel("Hire Date: ");
+        labelSdate = new JLabel("Start Employment Date: ");
         c.gridx = 0;
         c.gridy = 6;
         //     c.gridwidth = 1;
@@ -395,7 +395,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * ** End Date *******************************************************
          */
-        labelEdate = new JLabel("Fired Date: ");
+        labelEdate = new JLabel("End Employment Date: ");
         c.gridx = 1;
         c.gridy = 6;
         c.gridwidth = 1;
@@ -471,6 +471,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * *******************************************************************
          */
+        
         c.gridx = 0;
         c.gridy = 10;
         c.gridwidth = 2;
@@ -555,8 +556,13 @@ public class PhysicianWindow extends JPanel {
         dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
         JPanel showOff = new JPanel(new FlowLayout());
         dPanel.setBorder(border);
+<<<<<<< HEAD
         
         daysOffLabel = new JLabel("Days Off: ");
+=======
+     //   CalendarController cc = new CalendarController(3,2013,"Days Off", "small");
+      /*  daysOffLabel = new JLabel("Days Off: ");
+>>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
 
         showOff.add(daysOffLabel);
 
@@ -564,6 +570,7 @@ public class PhysicianWindow extends JPanel {
 
         showOff.add(textFieldDaysOff);
 
+<<<<<<< HEAD
         JButton addOff = new JButton("Save");
         showOff.add(addOff);
 
@@ -571,6 +578,12 @@ public class PhysicianWindow extends JPanel {
         dPanel.add(showOff, BorderLayout.SOUTH);
 
         
+=======
+        JButton addOff = new JButton("Add");
+        dPanel.add(addOff);
+*/
+     //siema zi   dPanel.add(cc.calendarPanel(null));
+>>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
         return dPanel;
     }
 

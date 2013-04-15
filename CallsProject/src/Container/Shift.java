@@ -68,6 +68,16 @@ public class Shift {
     {
         this.type = type;
     }
+    
+    public String monthToString()
+    {
+        String s;
+        String delims = "-";
+        String[] tokens = this.date.split(delims);
+        
+        s = tokens[1];
+        return s;
+    }
 
     @Override
     public String toString()
