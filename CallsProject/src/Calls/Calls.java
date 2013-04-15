@@ -39,10 +39,6 @@ public class Calls {
 
 
                // Scheduler s = new Scheduler(1, 2013);
-<<<<<<< HEAD
-=======
-                //Scheduler s = new Scheduler(7, 2013);
->>>>>>> ccdc4ee06b424b2e1706874550ebca0c79833c02
             }
         });
         

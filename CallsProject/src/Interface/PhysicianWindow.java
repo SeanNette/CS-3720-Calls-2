@@ -513,7 +513,7 @@ public class PhysicianWindow extends JPanel {
         JButton addOff = new JButton("Add");
         dPanel.add(addOff);
 */
-        dPanel.add(cc.showCalendar());
+        dPanel.add(cc.calendarPanel(null));
         return dPanel;
     }
 

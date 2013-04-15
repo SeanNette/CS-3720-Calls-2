@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Container.Shift;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,7 +38,10 @@ public class CalendarController extends JPanel {
     private ArrayList<JLabel> headerList;
     private ArrayList<JPanel> dayList;    
     private ArrayList<JLabel> dayNums;
+    private ArrayList<JLabel> physList;
+    private ArrayList<Shift> shiftList = new ArrayList<>();
            
+    String[] physicianName = {"John Smith", "Darek Zborowski"};
     private JButton next, previous;
     private JLabel monthLabel;
     private String monthText, panelName, panelSize;
@@ -46,7 +50,7 @@ public class CalendarController extends JPanel {
     private int daysInMonth;
     private int gapMonth;
       
-    private GridBagConstraints c;    
+    private GridBagConstraints c;
     private Calendar cal;
     
     private int month, year;
@@ -67,6 +71,7 @@ public class CalendarController extends JPanel {
         headerList = new ArrayList<>();
         dayList = new ArrayList<>();
         dayNums = new ArrayList<>();
+        physList = new ArrayList<>();
         
         if (panelSize != "small") 
         {
@@ -88,7 +93,7 @@ public class CalendarController extends JPanel {
         cal.set(Calendar.DATE,1);
         cal.set(Calendar.MONTH,month);
         cal.set(Calendar.YEAR,year);
-
+        
         cal.set(Calendar.DAY_OF_MONTH, 1);
         Date monthYear = cal.getTime();  
 
@@ -104,7 +109,7 @@ public class CalendarController extends JPanel {
     public JPanel showCalendar() 
     {        
         for (int i = 0; i < day_of_week.length; i ++) 
-        {                    
+        {
             headerList.add(new JLabel(day_of_week[i], JLabel.CENTER)); 
             headerList.get(i).setBorder(BorderFactory.createRaisedBevelBorder());     
             set_gridBagConstraints(i, 1, 1, 1, 1.0, 0.1, GridBagConstraints.BOTH, GridBagConstraints.NORTHWEST);
@@ -113,14 +118,16 @@ public class CalendarController extends JPanel {
         
         for (int j = 0; j < 42; j++)
         {
-            dayList.add(new JPanel(new BorderLayout()));   
+            dayList.add(new JPanel(new BorderLayout()));
             dayList.get(j).setBorder(BorderFactory.createLoweredBevelBorder());          
             dayList.get(j).addMouseListener(new dayPanelMouseListener());
             set_gridBagConstraints(j%7,((j/7)+2), 1, 1, 1.0, 1.0, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
             calendarPanel.add(dayList.get(j),c);        
-        } 
-        addLabelsForMonth();
+        }
         
+        createShiftBlock();
+        addPhysicians();        
+        addLabelsForMonth();
         return calendarPanel;
     }
        
@@ -183,11 +190,41 @@ public class CalendarController extends JPanel {
             dayNums.add(new JLabel(Integer.toString(i+1)));
             dayNums.get(i).setVerticalAlignment(JLabel.TOP);
             dayNums.get(i).setHorizontalAlignment(JLabel.RIGHT);
-            dayList.get(i+gapMonth).add(dayNums.get(i));
+            dayList.get(i+gapMonth).add(dayNums.get(i),BorderLayout.NORTH);
             dayList.get(i+gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
             dayList.get(i+gapMonth).setBackground(Color.white);
             dayList.get(i+gapMonth).repaint();
         }      
+    }
+    
+    public void createShiftBlock()
+    {
+        ShiftController sc = new ShiftController();
+        
+        
+        shiftList = sc.getShiftObject();
+        
+        
+        
+    }
+    
+    // adding a physician to the calendar block
+    public void addPhysicians()
+    {
+        for (int i = 0; i < daysInMonth; i++)
+        {
+            if (gapMonth == 0)
+                gapMonth = 7;            
+            physList.add(new JLabel(physicianName[1]));
+            physList.get(i).setVerticalAlignment(JLabel.CENTER);
+            physList.get(i).setHorizontalAlignment(JLabel.CENTER);
+            
+            dayList.get(i+gapMonth).add(physList.get(i),BorderLayout.SOUTH);
+            dayList.get(i+gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
+            dayList.get(i+gapMonth).setBackground(Color.white);
+            dayList.get(i+gapMonth).repaint();
+            
+        }
     }
         
     public JPanel getMainPanel() 
@@ -272,7 +309,7 @@ public class CalendarController extends JPanel {
                     dayList.get(panelPressed).setBackground(null);
                 }
                 else 
-                {                
+                {
                     if (dayList.get(panelPressed).getBackground() == Color.red)
                     {
                         dayList.get(panelPressed).setBackground(Color.white);                   
@@ -287,6 +324,9 @@ public class CalendarController extends JPanel {
             }
             else if (panelName == "Scheduling Calendar") 
             {
+                // clicked on the white space.
+                // bring the physician thats in this position
+                // push it to 
                 System.out.println("Scheduling Calendar");
             }
         }

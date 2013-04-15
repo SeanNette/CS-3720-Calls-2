@@ -104,7 +104,10 @@ public class CalendarWindow
         
         change = new JButton("Change");
         generate = new JButton("Generate");
-        use = new JButton("Use");
+        System.out.print("Current month: " + cd.getMonth());
+        
+        // run algorithm, display callendar
+        use = new JButton("Use"); // use current callendar
         previous = new JButton("Previous");
         next = new JButton("Next"); 
     }
