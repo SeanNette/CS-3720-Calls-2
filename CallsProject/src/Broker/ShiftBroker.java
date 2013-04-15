@@ -96,7 +96,6 @@ public class ShiftBroker {
     }
 
     public boolean isDayOff(String date, int physID) {
-        System.out.println(date);
         try {
             Connection connect = connection.getConnectionFromPool();
             Statement stmt;
@@ -106,7 +105,6 @@ public class ShiftBroker {
 
             if (rs.next()) {
                 connection.returnConnectionToPool(connect);
-                System.out.println("day off");
                 return true;
             }
             connection.returnConnectionToPool(connect);

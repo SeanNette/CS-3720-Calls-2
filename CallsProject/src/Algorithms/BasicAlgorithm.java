@@ -108,14 +108,10 @@ public class BasicAlgorithm
                         //Check start and end date for this physician
                 if ((physicians.get(counter).getStartDate() != null) && (physicians.get(counter).getStartDate().compareTo(compareDate) > 0))
                 {
-                    System.out.println(physicians.get(counter).getStartDate() + "Start date before " + physicians.get(counter).getEmployeeId());
-                    System.out.println(compareDate);
                     working = false;
                 }
                 if ((physicians.get(counter).getEndDate() != null) && (physicians.get(counter).getEndDate().compareTo(compareDate) < 0))
                 {
-                    System.out.println(physicians.get(counter).getEndDate() + "End date after " + physicians.get(counter).getEmployeeId());
-                    System.out.println(compareDate);
                     working = false;
                 }
                 //physicians.get(counter).getStartDate().
