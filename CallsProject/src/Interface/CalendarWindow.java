@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -307,12 +308,33 @@ public class CalendarWindow
         String name;
         PhysicianController pc = new PhysicianController();
         int i = 0;
+        physicianList = pc.getFirstAndLastname();
+        HashMap colorMap = new HashMap();
+        Random rand = new Random(22);
+         
+        for(int j = 0; j < physicianList.size(); j++)
+        {
+            int r = rand.nextInt(100);
+            r += 135;
+            int g = rand.nextInt(100);
+            g += 135;
+            int b = rand.nextInt(100);
+            b += 135;
+            int[] rgb = new int[3];
+            rgb[0] = r;
+            rgb[1] = g;
+            rgb[2] = b;
+            colorMap.put(physicianList.get(j).getEmployeeId(), rgb);
+        }
+        
         while (i < shiftList.size())
         {
             name = pc.findPhysicianByID(shiftList.get(i).getEmployeeID());
 
             physList.add(new JLabel(name));
-            //physList.get(i).setBackground(Color.red);
+            int[] rgb;
+            rgb = (int[]) colorMap.get(shiftList.get(i).getEmployeeID());
+            physList.get(i).setBackground(new Color(rgb[0], rgb[1], rgb[2]));
             physList.get(i).setOpaque(true);
             physList.get(i).setVerticalAlignment(JLabel.CENTER);
             physList.get(i).setHorizontalAlignment(JLabel.LEFT);
@@ -555,7 +577,7 @@ public class CalendarWindow
                 System.out.println("CURRENT MONTH = " + month);
                 Scheduler s = new Scheduler(month, Integer.parseInt(tokens[1]));
                 //   setGenerateButton();
-                redraw();
+                //redraw();
             } else if (e.getSource() == next)
             {
                 int i=0;
