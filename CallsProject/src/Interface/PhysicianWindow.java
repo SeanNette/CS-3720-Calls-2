@@ -644,11 +644,35 @@ public class PhysicianWindow extends JPanel {
             
             
             int columnCount = table.getColumnCount();
-            System.out.println(columnCount);
-            for (int i = 0; i < columnCount - 1; i++) {
+         //   System.out.println(columnCount);
+           /* for (int i = 0; i < columnCount - 1; i++) {
                 allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
+            }*/
+            textFieldFname.setText(null);
+            textFieldLname.setText(null);
+            textFieldAddress.setText(null);
+            textFieldBdate.setText(null);
+            textFieldEdate.setText(null);
+            textFieldPhone.setText(null);
+            textFieldSdate.setText(null);
+                
+            textFieldFname.setText(model.getValueAt(selectedRowIndex, 1).toString());
+            textFieldLname.setText(model.getValueAt(selectedRowIndex, 2).toString());
+            textFieldBdate.setText(model.getValueAt(selectedRowIndex, 3).toString());
+            textFieldSdate.setText(model.getValueAt(selectedRowIndex, 4).toString());
+            String edate;
+            try 
+            {
+                edate = model.getValueAt(selectedRowIndex, 5).toString();
+                textFieldEdate.setText(edate);
             }
-            System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
+            catch (Exception ex) {
+                System.out.println("End Employment Date exception handled.");
+            }
+            textFieldAddress.setText(model.getValueAt(selectedRowIndex, 6).toString());
+            textFieldPhone.setText(model.getValueAt(selectedRowIndex, 7).toString());
+            
+         //   System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
 
             allButtons.get(0).setEnabled(false);
             allButtons.get(1).setEnabled(true);
