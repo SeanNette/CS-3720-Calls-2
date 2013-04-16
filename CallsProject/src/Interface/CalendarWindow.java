@@ -449,14 +449,20 @@ public class CalendarWindow
 
         legendPanel.add(legendLabel);
 
-
+        Random rand = new Random(22);
         for (int i = 0; i < physicianList.size(); i++)
         {
-
+            int r = rand.nextInt(100);
+            r += 135;
+            int g = rand.nextInt(100);
+            g += 135;
+            int b = rand.nextInt(100);
+            b += 135;
             legendLabels = new JLabel(physicianList.get(i).getFirstName() + " "
                     + physicianList.get(i).getLastName() + " ---- "
                     + sc.numberOfDaysWorked(physicianList.get(i).getEmployeeId(), monthText));
-
+            legendLabels.setOpaque(true);
+            legendLabels.setBackground(new Color(r, g, b));
             legendPanel.add(legendLabels);
         }
         legendPanel.revalidate();
