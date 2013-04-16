@@ -242,6 +242,7 @@ public class CalendarWindow
 
         cbuttonPanel.add(next);
         next.addActionListener(new ButtonListener());
+        change.addActionListener(new ButtonListener());
         // setGenerateButton();
         return cbuttonPanel;
     }
@@ -355,12 +356,6 @@ public class CalendarWindow
          * *******************************************************************
          */
 
-        /*
-         * ** Number of Hours **************************************************
-         */
-        addComponent(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST, fieldPanel, no_of_hoursLabel);
-        no_of_hoursTextField.setEditable(false);
-        addComponent(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NONE, GridBagConstraints.WEST, fieldPanel, no_of_hoursTextField);
         /*
          * *********************************************************************
          */
@@ -555,7 +550,7 @@ public class CalendarWindow
                 System.out.println("CURRENT MONTH = " + month);
                 Scheduler s = new Scheduler(month, Integer.parseInt(tokens[1]));
                 //   setGenerateButton();
-                redraw();
+               // redraw();
             } else if (e.getSource() == next)
             {
                 int i=0;
@@ -611,6 +606,10 @@ public class CalendarWindow
                 addPhysicians();
                 legendPanel();
                 addLabelsForMonth();
+            }
+            else if (e.getSource() == change)
+            {
+                System.out.println("dskhdakjh");
             }
         }
 
