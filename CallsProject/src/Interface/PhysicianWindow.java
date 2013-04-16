@@ -647,13 +647,7 @@ public class PhysicianWindow extends JPanel {
            /* for (int i = 0; i < columnCount - 1; i++) {
                 allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
             }*/
-            textFieldFname.setText(null);
-            textFieldLname.setText(null);
-            textFieldAddress.setText(null);
-            textFieldBdate.setText(null);
-            textFieldEdate.setText(null);
-            textFieldPhone.setText(null);
-            textFieldSdate.setText(null);
+            clearAllFields();
                 
             textFieldFname.setText(model.getValueAt(selectedRowIndex, 1).toString());
             textFieldLname.setText(model.getValueAt(selectedRowIndex, 2).toString());
@@ -688,6 +682,17 @@ public class PhysicianWindow extends JPanel {
             System.out.println(daysOff);
         }
     }
+    
+    private void clearAllFields()
+    {        
+            textFieldFname.setText(null);
+            textFieldLname.setText(null);
+            textFieldAddress.setText(null);
+            textFieldBdate.setText(null);
+            textFieldEdate.setText(null);
+            textFieldPhone.setText(null);
+            textFieldSdate.setText(null);
+    }
 
     private class ButtonsListen implements ActionListener {
 
@@ -712,6 +717,7 @@ public class PhysicianWindow extends JPanel {
                 try {
                     choice = 1;
                     done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone);
+                    clearAllFields();
                     redraw();
 
                 } catch (Exception ex) {
@@ -740,6 +746,7 @@ public class PhysicianWindow extends JPanel {
                         "Quit");
                 if (resp == 0) {
                     done = phys.workPhysician(choice, Integer.parseInt(id));
+                    clearAllFields();                    
                 } else {
                     done = "Cancelled";
                     return;
@@ -747,13 +754,7 @@ public class PhysicianWindow extends JPanel {
                 redraw();
 
             } else if (e.getSource() == clearButton) {
-                textFieldFname.setText(null);
-                textFieldLname.setText(null);
-                textFieldAddress.setText(null);
-                textFieldBdate.setText(null);
-                textFieldEdate.setText(null);
-                textFieldPhone.setText(null);
-                textFieldSdate.setText(null);
+                clearAllFields();
 
                 allButtons.get(0).setEnabled(true);
                 allButtons.get(1).setEnabled(false);

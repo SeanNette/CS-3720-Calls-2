@@ -25,6 +25,7 @@ public class PhysicianController
         firstName = firstName.trim();
         lastName = lastName.trim();
         String validDate = "^\\d\\d\\d\\d?-?\\d\\d?-?\\d\\d";
+        String validPhone = "^\\d\\d\\d?-?\\d\\d\\d?-?\\d\\d\\d\\d";
         //   String validDate = "^[A-Z]\\d[A-Z]? ?\\d[A-Z]\\d";
         String testDate = "2012-12-12";
 
@@ -72,6 +73,10 @@ public class PhysicianController
         if (sDate.isEmpty())
         {
             sb.append("\nMissing Start Date");
+        }
+        if (!phoneNumber.matches(validPhone))
+        {
+            sb.append("\nMake sure phone is in a proper format ###-###-####");
         }
         if (!eDate.isEmpty())
         {
