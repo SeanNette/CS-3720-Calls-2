@@ -693,6 +693,14 @@ public class PhysicianWindow extends JPanel {
             textFieldPhone.setText(null);
             textFieldSdate.setText(null);
     }
+    
+    private void setAllButtons()
+    {
+        allButtons.get(0).setEnabled(true);
+        allButtons.get(1).setEnabled(false);
+        allButtons.get(2).setEnabled(false);
+        allButtons.get(3).setEnabled(false);
+    }
 
     private class ButtonsListen implements ActionListener {
 
@@ -717,7 +725,6 @@ public class PhysicianWindow extends JPanel {
                 try {
                     choice = 1;
                     done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone);
-                    clearAllFields();
                     redraw();
 
                 } catch (Exception ex) {
@@ -747,6 +754,7 @@ public class PhysicianWindow extends JPanel {
                 if (resp == 0) {
                     done = phys.workPhysician(choice, Integer.parseInt(id));
                     clearAllFields();                    
+                    setAllButtons();
                 } else {
                     done = "Cancelled";
                     return;
@@ -755,11 +763,7 @@ public class PhysicianWindow extends JPanel {
 
             } else if (e.getSource() == clearButton) {
                 clearAllFields();
-
-                allButtons.get(0).setEnabled(true);
-                allButtons.get(1).setEnabled(false);
-                allButtons.get(2).setEnabled(false);
-                allButtons.get(3).setEnabled(false);
+                setAllButtons();
                 return;
             }
 
