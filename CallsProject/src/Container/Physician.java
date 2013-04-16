@@ -167,7 +167,7 @@ public class Physician
     @Override
     public String toString()
     {
-        return "Physician{" + "employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate + ", startDate=" + startDate + ", endDate=" + endDate + ", address=" + address + ", phoneNumber=" + phoneNumber + ", previousHours=" + previousHours + ", curHours=" + curHours + ", totalHours=" + totalHours + '}';
+        return firstName + " " + lastName;
     }
 
     

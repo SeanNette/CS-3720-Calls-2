@@ -5,7 +5,7 @@
 package Interface;
 
 import Calendar.PhysicianCalendar;
-import Controller.CalendarController;
+import Calendar.CalendarController;
 import Controller.PhysicianController;
 import Controller.ShiftController;
 import java.awt.BorderLayout;
@@ -678,8 +678,6 @@ public class PhysicianWindow extends JPanel {
             PhysicianController pc = new PhysicianController();
             ArrayList<Date> daysOff = new ArrayList();
             daysOff = pc.daysOff(empID);
-            
-            System.out.println(daysOff);
         }
     }
     

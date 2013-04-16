@@ -16,22 +16,12 @@ import java.util.ArrayList;
 public class ShiftController {
     private ArrayList<Shift> shifts;
     
-    
-    public ArrayList<Shift> getShiftObject(String date)
+    public int convertMonth(String month)
     {
-        String month="null";
-        int year;
         int m = 0;
-                
-        String delims = ", ";
-        String[] tokens = date.split(delims);
-        
-        month = tokens[0];
-        year = Integer.parseInt(tokens[1]);
-        
         if(month.equals("January"))
             m = 1;
-        if(month.equals("Febuary"))
+        if(month.equals("February"))
             m = 2;
         if(month.equals("March"))
             m = 3;
@@ -54,6 +44,23 @@ public class ShiftController {
         if(month.equals("December"))
             m = 12;
         
+        return m;
+    }
+    
+    public ArrayList<Shift> getShiftObject(String date)
+    {
+        String month="null";
+        int year;
+        int m = 0;
+                
+        String delims = ", ";
+        String[] tokens = date.split(delims);
+        
+        month = tokens[0];
+        m = convertMonth(month);
+        year = Integer.parseInt(tokens[1]);
+        
+        
         shifts = new ArrayList<>();
         ShiftBroker sb = ShiftBroker.getShiftBroker();
         
@@ -66,5 +73,17 @@ public class ShiftController {
         } 
         
         return shifts;        
+    }
+    
+    public String numberOfDaysWorked(int id)
+    {
+        String s = null;
+        ShiftBroker sb = ShiftBroker.getShiftBroker();
+        
+        s = sb.countDays(id);
+        
+        return s;
+        
+        
     }
 }

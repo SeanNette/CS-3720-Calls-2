@@ -2,10 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Calendar;
 
 import Container.Physician;
 import Container.Shift;
+import Controller.PhysicianController;
+import Controller.ShiftController;
+import Interface.CalendarWindow;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,7 +37,7 @@ import javax.swing.border.Border;
  *
  * @author Asus
  */
-public class CalendarController extends JPanel
+public class CalendarController extends JPanel  
 {
 
     private JPanel mainCalendarPanel, calendarPanel, buttonPanel;
@@ -43,8 +46,9 @@ public class CalendarController extends JPanel
     private ArrayList<JLabel> dayNums;
     private ArrayList<JLabel> physList;
     private ArrayList<Shift> shiftList;
-    private ArrayList<Physician> physicianList = new ArrayList<>();
-    
+    private String currentName;
+    private String selectedMonth;
+        
     private JButton next, previous;
     private JLabel monthLabel;
     private String monthText, panelName, panelSize;
@@ -219,7 +223,7 @@ public class CalendarController extends JPanel
                 name = pc.findPhysicianByID(shiftList.get(i).getEmployeeID());
                 
                 physList.add(new JLabel(name));
-                physList.get(i).setBackground(Color.red);
+                //physList.get(i).setBackground(Color.red);
                 physList.get(i).setOpaque(true);
                 physList.get(i).setVerticalAlignment(JLabel.CENTER);
                 physList.get(i).setHorizontalAlignment(JLabel.LEFT);
@@ -230,10 +234,23 @@ public class CalendarController extends JPanel
             i++;
         }
     }
+    
 
     public JPanel getMainPanel()
     {
         return calendarPanel;
+    }
+    public String getSelectedMonth()
+    {
+        return selectedMonth;
+    }
+    public String getCurrentName()
+    {
+        return currentName;
+    }
+    public void setCurrentName(String name)
+    {
+        currentName = name;
     }
 
     public void setCurrentMonth(int m)
@@ -298,6 +315,13 @@ public class CalendarController extends JPanel
         c.gridwidth = gridwidth;
         c.gridheight = gridheight;
     }
+    public boolean isScheduled()
+    {
+        if(physList.get(0).getText().isEmpty())
+            return false;
+        else
+            return true;
+    }
 
     private class dayPanelMouseListener extends MouseAdapter
     {
@@ -305,6 +329,7 @@ public class CalendarController extends JPanel
         @Override
         public void mouseClicked(MouseEvent e)
         {
+            CalendarWindow cw = new CalendarWindow();
             if (panelName == "Scheduling Calendar")
             {
                 int panelPressed = dayList.indexOf(e.getSource());
@@ -321,11 +346,14 @@ public class CalendarController extends JPanel
                         dayList.get(panelPressed).setBackground(Color.white);
                     } else
                     {
-                        dayList.get(panelPressed).setBackground(Color.red);
-                        String[] d = monthText.split(",");
-                        System.out.println(d[0] + " " + (panelPressed - gapMonth + 1) + "," + d[1]);
                         
-                        System.out.println(physList.get(panelPressed - gapMonth).getText());
+                        String[] d = monthText.split(",");
+                        
+                        
+                        selectedMonth = (d[0] + " " + (panelPressed - gapMonth + 1) + "," + d[1]);
+                        setCurrentName(physList.get(panelPressed - gapMonth).getText());
+                        cw.setFieldName();
+                      
                     }
                 }
             } 
@@ -338,6 +366,8 @@ public class CalendarController extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
+            
+            
             if (e.getSource() == next)
             {
                 clearLabelsForMonth();
@@ -357,8 +387,7 @@ public class CalendarController extends JPanel
                 monthText = df.format(cal.getTime());
                 monthLabel.setText(monthText);
                 System.out.print("NEW MONTH: " + monthText);
-
-
+                
                 createShiftBlock();
                 addPhysicians();
                 addLabelsForMonth();
@@ -381,6 +410,7 @@ public class CalendarController extends JPanel
                 monthText = df.format(cal.getTime());
                 monthLabel.setText(monthText);
                 System.out.print("NEW MONTH: " + monthText);
+                
                 
                 createShiftBlock();
                 addPhysicians();

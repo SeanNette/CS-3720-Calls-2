@@ -127,11 +127,10 @@ public class PhysicianBroker
         
     }
     
-    public ArrayList<Physician> getAllPhysicians() 
+    public ArrayList<Physician> getAllPhysiciansNames() 
     {
         ArrayList<Physician> phys = new ArrayList<>();
-        
-        
+                
         try 
         {
             Connection connect = connection.getConnectionFromPool();
@@ -142,8 +141,7 @@ public class PhysicianBroker
             while (rs.next())
             {
                 Physician p = new Physician(rs.getInt(1), rs.getString(2),
-                        rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getString(6), rs.getString(7), rs.getString(8));
+                        rs.getString(3), null, null,null, null, null);
                 phys.add(p);
             }
             connection.returnConnectionToPool(connect);

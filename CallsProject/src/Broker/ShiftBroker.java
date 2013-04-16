@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -159,5 +161,43 @@ public class ShiftBroker {
             System.out.println("Holiday error: " + err);
             return false;
         }
+    }
+    public String countDays(int id)
+    {
+        String s = null;
+        try {
+            Connection connect = connection.getConnectionFromPool();
+            Statement stmt1, stmt2, stmt3;
+            stmt1 = connect.createStatement();
+            stmt2 = connect.createStatement();
+            stmt3 = connect.createStatement();
+            ResultSet rs1 = stmt1.executeQuery("SELECT Day_Type, COUNT(*) FROM "
+                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '0';");            
+            while (rs1.next()) {
+                 ResultSet rs2 = stmt2.executeQuery("SELECT Day_Type, COUNT(*) FROM "
+                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '1';");
+                 while(rs2.next())
+                 {
+                     ResultSet rs3 = stmt3.executeQuery("SELECT Day_Type, COUNT(*) FROM "
+                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '2';");
+                     while(rs3.next())
+                     {
+                     s = Integer.toString(rs1.getInt(2)) + ", " + Integer.toString(rs2.getInt(2))
+                    + ", " + Integer.toString(rs3.getInt(2));
+                     }
+            
+                 }
+            
+            }
+            
+            connection.returnConnectionToPool(connect);
+            
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ShiftBroker.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+       return s;
+        
     }
 }

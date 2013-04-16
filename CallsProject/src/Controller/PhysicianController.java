@@ -117,7 +117,16 @@ public class PhysicianController
 
         return s;
     }
-
+    
+    public ArrayList<Physician> getFirstAndLastname()
+    {
+        ArrayList<Physician> p;
+        PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+        p = pBroker.getAllPhysiciansNames();
+        
+        return p;
+        
+    }
     // Delete function
     public String workPhysician(int choice, int ID)
     {
