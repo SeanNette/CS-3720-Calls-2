@@ -58,11 +58,11 @@ public class CalendarWindow
     {
         "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
     };
-    private int daysInMonth;
+    private int daysInMonth, startDays;
     private int gapMonth;
     private Calendar cal;
     private int month, year;
-    private static int m = 0;
+    private static int m = 1;
 
     public CalendarWindow()
     {
@@ -204,7 +204,7 @@ public class CalendarWindow
         createShiftBlock();
         setGenerateButton();
         addPhysicians();
-        addLabelsForMonth();
+        addLabelsForStartMonth();
         return calendarPanel;
     }
 
@@ -224,7 +224,7 @@ public class CalendarWindow
 
         cal = Calendar.getInstance();
         cal.set(Calendar.DATE, 1);
-        cal.set(Calendar.MONTH, 2);
+        cal.set(Calendar.MONTH, 3);
         cal.set(Calendar.YEAR, 2013);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -233,7 +233,7 @@ public class CalendarWindow
         DateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
 
         gapMonth = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        startDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH)+1;
 
         monthText = sdf.format(monthYear);
         monthLabel = new JLabel(monthText);
@@ -257,6 +257,22 @@ public class CalendarWindow
             dayList.get(i + gapMonth).setBackground(null);
             dayList.get(i + gapMonth).repaint();
         }
+    }
+    
+    
+    public void addLabelsForStartMonth()
+    {
+        for (int i = 0; i < startDays-1; i++)
+        {
+            dayNums.add(new JLabel(Integer.toString(i + 1)));
+            dayNums.get(i).setVerticalAlignment(JLabel.TOP);
+            dayNums.get(i).setHorizontalAlignment(JLabel.RIGHT);
+            dayList.get(i + gapMonth).add(dayNums.get(i), BorderLayout.NORTH);
+            dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
+            dayList.get(i + gapMonth).setBackground(Color.white);
+            dayList.get(i + gapMonth).repaint();
+        }
+        daysInMonth = startDays + 2;
     }
 
     public void addLabelsForMonth()
@@ -513,6 +529,7 @@ public class CalendarWindow
 
                     selectedMonth = (d[0] + " " + (panelPressed - gapMonth + 1) + "," + d[1]);
                     setFieldName(physList.get(panelPressed - gapMonth).getText());
+                    System.out.println("DAY? " + selectedMonth);
                     //   cw.setFieldName();
 
                 }
@@ -538,26 +555,30 @@ public class CalendarWindow
                 System.out.println("CURRENT MONTH = " + month);
                 Scheduler s = new Scheduler(month, Integer.parseInt(tokens[1]));
                 //   setGenerateButton();
-                //redraw();
+                redraw();
             } else if (e.getSource() == next)
             {
+                int i=0;
+                i++;
                 clearLabelsForMonth();
                 ++m;
-                Calendar cal = new GregorianCalendar();
-                cal = Calendar.getInstance();
-                cal.set(Calendar.DATE, 1);
-                cal.set(Calendar.MONTH, Calendar.MONTH + m);
-                cal.set(Calendar.YEAR, 2013);
+                Calendar cals = new GregorianCalendar();
+                cals = Calendar.getInstance();
+                cals.set(Calendar.DATE, 1);
+                cals.set(Calendar.MONTH, Calendar.MONTH + m);
+                cals.set(Calendar.YEAR, 2013);
 
-                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cals.set(Calendar.DAY_OF_MONTH, 1);
 
                 DateFormat df = new SimpleDateFormat("MMMM, YYYY");
 
-                gapMonth = cal.get(Calendar.DAY_OF_WEEK) - 1;
-                daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-                monthText = df.format(cal.getTime());
+                gapMonth = cals.get(Calendar.DAY_OF_WEEK) - 1;
+                daysInMonth = cals.getActualMaximum(Calendar.DAY_OF_MONTH);
+                monthText = df.format(cals.getTime());
                 monthLabel.setText(monthText);
-                System.out.print("NEW MONTH: " + monthText);
+                
+                System.out.print("Days in Month: " + daysInMonth + " Current Selected" + Calendar.MONTH
+                       + " Next month should be +1 from current month" + (Calendar.MONTH + m));
                 
                 createShiftBlock();
                 setGenerateButton();
@@ -595,8 +616,8 @@ public class CalendarWindow
 
         public void redraw()
         {
-            calendarWindow.remove(calendarPanel());
-            calendarWindow.add(calendarPanel(), BorderLayout.CENTER);
+            calendarWindow.removeAll();
+            calendarWindow.add(createCalendarWindow(),BorderLayout.CENTER);
             calendarWindow.validate();
             calendarWindow.repaint();
         }
