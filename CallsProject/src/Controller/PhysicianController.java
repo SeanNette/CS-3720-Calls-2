@@ -157,4 +157,11 @@ public class PhysicianController
 
         return dOff;
     }
+    
+    public void addDaysOff(ArrayList<String> offList)
+    {
+        PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+        
+    }
+            
 }

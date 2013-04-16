@@ -314,4 +314,36 @@ public class PhysicianBroker
             return false;
         }
     }
+    
+    public boolean addDaysOff(ArrayList<String> offList)
+    {
+        try
+        {
+          /*  Connection connect = connection.getConnectionFromPool();
+            String SQL = "INSERT INTO ";
+            CallableStatement cs = connect.prepareCall(SQL);
+            
+            for(int i = 0; i < offList.size(); i++)
+            {
+                cs.setInt(1, offList.get(i));
+                cs.setInt(2, m);
+                cs.setInt(3, y);
+                cs.setInt(4, phys.get(i).getCurHours());
+                cs.execute();
+            }
+                    
+            cs.close();
+                    
+            connection.returnConnectionToPool(connect);*/
+            
+            return true;
+        }
+        
+        catch (Exception e)
+        {
+            
+        }
+        
+        return false;
+    }
 }

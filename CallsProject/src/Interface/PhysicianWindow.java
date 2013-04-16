@@ -89,11 +89,16 @@ public class PhysicianWindow extends JPanel {
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
     private int selectedRowIndex;
     private PhysicianCalendar pc;
-
+    private int empID;
     public PhysicianWindow() {
         
     }
-
+    
+    public int getEmployeeID()
+    {
+        return empID;
+    }
+    
     public JPanel createPhysicianWindow() {
         // offset window by 10 pixels all around      //top,left,bottom,right
         Border paneEdge = BorderFactory.createEmptyBorder(10, 10, 10, 10);
@@ -599,7 +604,7 @@ public class PhysicianWindow extends JPanel {
     }
 
     private JPanel daysOffPanel(Border border) {
-        dPanel = new JPanel(new BorderLayout());
+        
         pc = new PhysicianCalendar(2,2013);
         dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
         JPanel showOff = new JPanel(new FlowLayout());
@@ -672,8 +677,11 @@ public class PhysicianWindow extends JPanel {
             allButtons.get(3).setEnabled(true);
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             
-            int empID = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
-            
+         //   pc = new PhysicianCalendar(2,2013);
+           // dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
+           // dPanel.repaint();
+            empID = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
+            System.out.println(empID);
             PhysicianController pc = new PhysicianController();
             ArrayList<Date> daysOff = new ArrayList();
             daysOff = pc.daysOff(empID);

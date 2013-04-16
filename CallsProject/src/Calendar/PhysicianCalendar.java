@@ -9,6 +9,8 @@ package Calendar;
  *
  * @author Asus
  */
+import Controller.ShiftController;
+import Interface.PhysicianWindow;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +33,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 /**
@@ -38,14 +41,17 @@ import javax.swing.border.Border;
  * @author Asus
  */
 public class PhysicianCalendar extends JPanel {
-    private JPanel mainCalendarPanel, calendarPanel, buttonPanel;
+    private JPanel mainCalendarPanel, calendarPanel, buttonPanel, sidePanel;
     private ArrayList<JLabel> headerList;
     private ArrayList<JPanel> dayList;    
     private ArrayList<JLabel> dayNums;
+    private ArrayList<String> addDaysOff;
+    private ArrayList<String> delDaysOff;
            
-    private JButton next, previous;
-    private JLabel monthLabel;
+    private JButton next, previous, update;
+    private JLabel monthLabel,daysOffLabel;
     private String monthText;
+    private JTextField daysOffTextField;
     
     String[] day_of_week = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     private int daysInMonth;
@@ -135,8 +141,22 @@ public class PhysicianCalendar extends JPanel {
     {
         mainCalendarPanel.add(buttonPanel(),BorderLayout.NORTH);
         mainCalendarPanel.add(showCalendar(),BorderLayout.CENTER);
+        mainCalendarPanel.add(sidePanelFields(),BorderLayout.SOUTH);
     
         return mainCalendarPanel;
+    }
+    
+    public JPanel sidePanelFields()
+    {
+        sidePanel = new JPanel(new FlowLayout());
+        daysOffLabel = new JLabel("Days Off:");
+        daysOffTextField = new JTextField(16);
+        update = new JButton("Update");
+        update.addActionListener(new calendarButtonListener()); 
+        sidePanel.add(daysOffLabel);
+        sidePanel.add(daysOffTextField);
+        sidePanel.add(update);
+        return sidePanel;
     }
     
     public void clearLabelsForMonth() 
@@ -233,7 +253,7 @@ public class PhysicianCalendar extends JPanel {
         c.gridwidth = gridwidth;
         c.gridheight = gridheight;
     }
-               
+                   
     private class dayPanelMouseListener extends MouseAdapter
     {
         @Override
@@ -250,13 +270,27 @@ public class PhysicianCalendar extends JPanel {
             {                
                 if (dayList.get(panelPressed).getBackground() == Color.red)
                 {
-                    dayList.get(panelPressed).setBackground(Color.white);                   
+                    //delDaysOff = new ArrayList();
+                    dayList.get(panelPressed).setBackground(Color.white);  
+                    String[] d = monthText.split(","); 
+                    String phys = d[0] + " " + (panelPressed-gapMonth + 1) + "," + d[1];
+                 //   delDaysOff.add(phys);
+                 //   System.out.println("REMOVE: " + phys);
                 }
                 else 
                 {
+                  //  addDaysOff = new ArrayList();
                     dayList.get(panelPressed).setBackground(Color.red);                   
-                    String[] d = monthText.split(",");                    
-                    System.out.println(d[0] + " " + (panelPressed-gapMonth + 1) + "," + d[1]);                   
+                    String[] d = monthText.split(","); 
+                    String dOff = "";
+                    String phys = d[0] + " " + (panelPressed-gapMonth + 1) + "," + d[1];                   
+                  //  addDaysOff.add(phys);
+                  //  System.out.println("ADD: " + phys);
+                }
+                
+                if (dayList.get(panelPressed).getBackground() == Color.blue)
+                {
+                    dayList.get(panelPressed).setBackground(Color.green);
                 }
             }          
         }
@@ -308,6 +342,44 @@ public class PhysicianCalendar extends JPanel {
                 monthLabel.setText(monthText);
 
                 addLabelsForMonth();                   
+            }
+            
+            else if (e.getSource() == update) 
+            {
+                
+                addDaysOff = new ArrayList();
+                delDaysOff = new ArrayList();
+                
+                PhysicianWindow pw = new PhysicianWindow();
+                
+                for (int i = 0; i < daysInMonth; i++)
+                {
+                    ShiftController sc = new ShiftController();
+                    // add to DB daysOff
+                    if (dayList.get(i+gapMonth).getBackground() == Color.red)
+                    {
+                        String[] d = monthText.split(", "); 
+                        int month = sc.convertMonth(d[0]);
+                        String phys = Integer.parseInt(d[1]) + "-" + month + "-" + (i + 1);
+                        addDaysOff.add(phys);
+                        System.out.println(pw.getEmployeeID());
+                        
+                    }
+                    
+                    // remove from DB daysOff
+                    else if (dayList.get(i+gapMonth).getBackground() == Color.green)
+                    {
+                        String[] d = monthText.split(", "); 
+                        int month = sc.convertMonth(d[0]);
+                        String phys = Integer.parseInt(d[1]) + "-" + month + "-" + (i + 1);
+                        delDaysOff.add(phys);
+                    }
+                }
+                
+                if (addDaysOff.size() > 0)
+                {
+                    
+                }
             }
         }
     }
