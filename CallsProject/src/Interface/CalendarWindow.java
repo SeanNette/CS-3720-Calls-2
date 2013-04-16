@@ -4,15 +4,22 @@
  */
 package Interface;
 
-import Calendar.CalendarController;
 import Container.Physician;
+import Container.Shift;
 import Controller.PhysicianController;
 import Controller.Scheduler;
 import Controller.ShiftController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -35,9 +42,30 @@ public class CalendarWindow
     private Border paneEdge, blackline, fieldPanelBorder, legendBorder, empty;
     private GridBagConstraints c;
     PhysicianController pc = new PhysicianController();
-    CalendarController cd;
-    private ArrayList<Physician> physicianList;
     
+    private ArrayList<Physician> physicianList;
+    private JPanel mainCalendarPanel, calendarPanel, cbuttonPanel;
+    private ArrayList<JLabel> headerList;
+    private ArrayList<JPanel> dayList;
+    private ArrayList<JLabel> dayNums;
+    private ArrayList<JLabel> physList;
+    private ArrayList<Shift> shiftList;
+    private String currentName;
+    private String selectedMonth;
+        
+    private JButton next, previous;
+    private JLabel monthLabel;
+    private String monthText, panelName, panelSize;
+    String[] day_of_week =
+    {
+        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+    };
+    private int daysInMonth;
+    private int gapMonth;
+    
+    private Calendar cal;
+    private int month, year;
+    private static int m = 0;
 
     public CalendarWindow()
     {
@@ -77,10 +105,8 @@ public class CalendarWindow
         legendPanel.setBorder(legendBorder);
         legendPanel.setPreferredSize(new Dimension(250, 500));
 
-        cd = new CalendarController(2, 2013, "Scheduling Calendar", "normal");
+       // cd = new CalendarController(2, 2013, "Scheduling Calendar", "normal");
         c = new GridBagConstraints();
-
-
 
         currPhysLabel = new JLabel("Current Physician: ");
         currPhysTextField = new JTextField(12);
@@ -94,23 +120,18 @@ public class CalendarWindow
         change = new JButton("Change");
         generate = new JButton("Generate");
         generate.addActionListener(new ButtonListener());
-        System.out.print("Current month: " + cd.getMonth());
+     //   System.out.print("Current month: " + cd.getMonth());
 
         // run algorithm, display callendar
+       
     }
     
-    public void setFieldName()
-    {
-        System.out.println("name? " + cd.getCurrentName());
-        currPhysTextField.setText(cd.getCurrentName());
-    }
-
     public JPanel createCalendarWindow()
     {
         /**
          * Calendar Panel location *********************************************
          */
-        calendarWindow.add(cd.calendarPanel(empty), BorderLayout.CENTER);
+        calendarWindow.add(calendarPanel(), BorderLayout.CENTER);
         /**
          * *********************************************************************
          */
@@ -144,6 +165,157 @@ public class CalendarWindow
          */
         return calendarWindow;
     }
+        
+    private JPanel calendarPanel() 
+    {
+        mainCalendarPanel = new JPanel(new BorderLayout());        
+
+        headerList = new ArrayList<>();
+        dayList = new ArrayList<>();
+        dayNums = new ArrayList<>();
+             
+        c = new GridBagConstraints();
+        
+        mainCalendarPanel.add(buttonPanel(),BorderLayout.NORTH);
+        mainCalendarPanel.add(showCalendar(),BorderLayout.CENTER);
+        
+        return mainCalendarPanel;
+    }
+    
+    public JPanel showCalendar()
+    {
+        calendarPanel = new JPanel(new GridBagLayout());
+    
+        for (int i = 0; i < day_of_week.length; i++)
+        {
+            headerList.add(new JLabel(day_of_week[i], JLabel.CENTER));
+            headerList.get(i).setBorder(BorderFactory.createRaisedBevelBorder());
+            set_gridBagConstraints(i, 1, 1, 1, 1.0, 0.1, GridBagConstraints.BOTH, GridBagConstraints.NORTHWEST);
+            calendarPanel.add(headerList.get(i), c);
+        }
+
+        for (int j = 0; j < 42; j++)
+        {
+            dayList.add(new JPanel(new BorderLayout()));
+            dayList.get(j).setBorder(BorderFactory.createLoweredBevelBorder());
+            dayList.get(j).addMouseListener(new dayPanelMouseListener());
+            set_gridBagConstraints(j % 7, ((j / 7) + 2), 1, 1, 1.0, 1.0, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+            calendarPanel.add(dayList.get(j), c);
+        }
+
+        createShiftBlock();
+        addPhysicians();
+        addLabelsForMonth();
+        return calendarPanel;
+    }
+
+    public JPanel buttonPanel()
+    {
+        cbuttonPanel = new JPanel(new FlowLayout());
+        
+        next = new JButton("Next");
+        previous = new JButton("Previous");
+        
+        cbuttonPanel.add(previous);
+        previous.addActionListener(new ButtonListener());
+
+        //   buttonPanel.add(Box.createRigidArea(new Dimension(190, 0)));
+        
+        cal = new GregorianCalendar();
+
+        cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.MONTH, 2);
+        cal.set(Calendar.YEAR, 2013);
+
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date monthYear = cal.getTime();
+
+        DateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
+
+        gapMonth = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        monthText = sdf.format(monthYear);
+        monthLabel = new JLabel(monthText);
+        
+        cbuttonPanel.add(monthLabel);
+
+        cbuttonPanel.add(next);
+        next.addActionListener(new ButtonListener());
+       // setGenerateButton();
+        return cbuttonPanel;
+    }
+    
+    public void clearLabelsForMonth()
+    {
+        for (int i = 0; i < daysInMonth; i++)
+        {
+            dayList.get(i + gapMonth).setBorder(BorderFactory.createLoweredBevelBorder());
+            dayList.get(i + gapMonth).removeAll();
+           // dayList.get(i + gapMonth).remove(dayNums.get(i));
+          //  dayList.get(i + gapMonth).remove(physList.get(i));
+            dayList.get(i + gapMonth).setBackground(null);
+            dayList.get(i + gapMonth).repaint();
+        }
+    }
+
+    public void addLabelsForMonth()
+    {
+        for (int i = 0; i < daysInMonth; i++)
+        {
+            dayNums.add(new JLabel(Integer.toString(i + 1)));
+            dayNums.get(i).setVerticalAlignment(JLabel.TOP);
+            dayNums.get(i).setHorizontalAlignment(JLabel.RIGHT);
+            dayList.get(i + gapMonth).add(dayNums.get(i), BorderLayout.NORTH);
+            dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
+            dayList.get(i + gapMonth).setBackground(Color.white);
+            dayList.get(i + gapMonth).repaint();
+        }
+    }
+
+    public ArrayList<Shift> createShiftBlock()
+    {
+        shiftList = new ArrayList<>();
+        
+        ShiftController sc = new ShiftController();
+                
+        shiftList = sc.getShiftObject(monthText);
+        
+        return shiftList;
+    }
+
+    // adding a physician to the calendar block
+    public void addPhysicians()
+    {
+        physList = new ArrayList<>();
+        String name;
+        PhysicianController pc = new PhysicianController();
+        int i = 0;
+        while (i < shiftList.size())
+        {            
+                name = pc.findPhysicianByID(shiftList.get(i).getEmployeeID());
+                
+                physList.add(new JLabel(name));
+                //physList.get(i).setBackground(Color.red);
+                physList.get(i).setOpaque(true);
+                physList.get(i).setVerticalAlignment(JLabel.CENTER);
+                physList.get(i).setHorizontalAlignment(JLabel.LEFT);
+                dayList.get(i + gapMonth).add(physList.get(i), BorderLayout.SOUTH);
+                dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
+                dayList.get(i + gapMonth).setBackground(Color.WHITE);
+                dayList.get(i + gapMonth).repaint();
+            i++;
+        }
+    }
+    
+    public void setFieldName(String name)
+    {
+      //  System.out.println("name? " + cd.getCurrentName());
+        currPhysTextField.setText(name);
+    }
+
+    
 
     private JPanel fieldPanel()
     {
@@ -262,10 +434,20 @@ public class CalendarWindow
 
         return legendPanel;
     }
+    
+    public boolean isScheduled()
+    {
+        System.out.println(physList.get(0).getText());
+        if(physList.get(0).getText().isEmpty())
+            return false;
+        else
+            return true;
+    }
 
+    
     public void setGenerateButton()
     {
-        if(cd.isScheduled())
+        if(isScheduled())
             generate.setEnabled(false);
         else
             generate.setEnabled(true);
@@ -286,7 +468,54 @@ public class CalendarWindow
 
         cont.add(comp, c);
     }
+    
+    // function to set constraints on component
+    private void set_gridBagConstraints(int left_right, int top_bottom, int gridwidth, int gridheight, double width, double height, int fill, int anchor)
+    {
+        c.fill = fill;
+        c.anchor = anchor;
+        c.weightx = width;
+        c.weighty = height;
+        c.gridx = left_right;
+        c.gridy = top_bottom;
+        c.gridwidth = gridwidth;
+        c.gridheight = gridheight;
+    }
+    
+    private class dayPanelMouseListener extends MouseAdapter
+    {
 
+        @Override
+        public void mouseClicked(MouseEvent e)
+        {           
+           
+            int panelPressed = dayList.indexOf(e.getSource());
+
+            if (panelPressed < gapMonth || panelPressed > gapMonth + daysInMonth - 1)
+            {
+                dayList.get(panelPressed).setBackground(null);
+            } else
+            {
+                System.out.println(panelPressed - gapMonth);
+
+                if (dayList.get(panelPressed).getBackground() == Color.red)
+                {
+                    dayList.get(panelPressed).setBackground(Color.white);
+                } else
+                {
+
+                    String[] d = monthText.split(",");
+
+
+                    selectedMonth = (d[0] + " " + (panelPressed - gapMonth + 1) + "," + d[1]);
+                    setFieldName(physList.get(panelPressed - gapMonth).getText());
+                 //   cw.setFieldName();
+
+                }
+            }
+        }        
+    }
+    
     private class ButtonListener implements ActionListener
     {
 
@@ -298,22 +527,70 @@ public class CalendarWindow
                 ShiftController sc = new ShiftController();
 
                 String delims = ", ";
-                String[] tokens = cd.getMonth().split(delims);
+                String[] tokens = monthText.split(delims);
 
                 month = sc.convertMonth(tokens[0]);
 
                 System.out.println("CURRENT MONTH = " + month);
                 Scheduler s = new Scheduler(month, Integer.parseInt(tokens[1]));
-                setGenerateButton();
+             //   setGenerateButton();
                 //redraw();
+            }
+            
+            else if (e.getSource() == next)
+            {
+                clearLabelsForMonth();
+                ++m;
+                Calendar cal = new GregorianCalendar();
+                cal = Calendar.getInstance();
+                cal.set(Calendar.DATE, 1);
+                cal.set(Calendar.MONTH, Calendar.MONTH + m);
+                cal.set(Calendar.YEAR, 2013);
+
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+
+                DateFormat df = new SimpleDateFormat("MMMM, YYYY");
+
+                gapMonth = cal.get(Calendar.DAY_OF_WEEK) - 1;
+                daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                monthText = df.format(cal.getTime());
+                monthLabel.setText(monthText);
+                System.out.print("NEW MONTH: " + monthText);
+               // setGenerateButton();
+                createShiftBlock();
+                addPhysicians();
+                addLabelsForMonth();
+            } else if (e.getSource() == previous)
+            {
+                clearLabelsForMonth();
+                --m;
+                Calendar cal = new GregorianCalendar();
+                cal = Calendar.getInstance();
+                cal.set(Calendar.DATE, 1);
+                cal.set(Calendar.MONTH, Calendar.MONTH + m);
+                cal.set(Calendar.YEAR, 2013);
+
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+
+                DateFormat df = new SimpleDateFormat("MMMM, YYYY");
+
+                gapMonth = cal.get(Calendar.DAY_OF_WEEK) - 1;
+                daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                monthText = df.format(cal.getTime());
+                monthLabel.setText(monthText);
+                System.out.print("NEW MONTH: " + monthText);
+                
+              //  setGenerateButton();
+                createShiftBlock();
+                addPhysicians();
+                addLabelsForMonth();
             }
         }
 
         public void redraw()
-        {
-            
-            calendarWindow.remove(cd.calendarPanel(empty));
-            calendarWindow.add(cd.calendarPanel(empty), BorderLayout.CENTER);
+        {            
+            calendarWindow.remove(calendarPanel());
+            calendarWindow.add(calendarPanel(), BorderLayout.CENTER);
             calendarWindow.validate();
             calendarWindow.repaint();
         }
