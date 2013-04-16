@@ -162,8 +162,11 @@ public class ShiftBroker {
             return false;
         }
     }
-    public String countDays(int id)
+    public String countDays(int id, int month, int year)
     {
+        String date = Integer.toString(year) + "-" 
+                + Integer.toString(month);
+        System.out.println("date: " + date);
         String s = null;
         try {
             Connection connect = connection.getConnectionFromPool();
@@ -172,14 +175,20 @@ public class ShiftBroker {
             stmt2 = connect.createStatement();
             stmt3 = connect.createStatement();
             ResultSet rs1 = stmt1.executeQuery("SELECT Day_Type, COUNT(*) FROM "
-                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '0';");            
+                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '0' "
+                    + "AND Shift_Date >= '"+date+"-01' AND "
+                    + "Shift_Date <= '"+date+"-31';");            
             while (rs1.next()) {
                  ResultSet rs2 = stmt2.executeQuery("SELECT Day_Type, COUNT(*) FROM "
-                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '1';");
+                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '1' "
+                    + "AND Shift_Date >= '"+date+"-01' AND "
+                    + "Shift_Date <= '"+date+"-31';");
                  while(rs2.next())
                  {
                      ResultSet rs3 = stmt3.executeQuery("SELECT Day_Type, COUNT(*) FROM "
-                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '2';");
+                    + "shift WHERE Employee_ID = '" + id + "' AND Day_Type = '2' "
+                    + "AND Shift_Date >= '"+date+"-01' AND "
+                    + "Shift_Date <= '"+date+"-31';");
                      while(rs3.next())
                      {
                      s = Integer.toString(rs1.getInt(2)) + ", " + Integer.toString(rs2.getInt(2))

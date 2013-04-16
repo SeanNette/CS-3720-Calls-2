@@ -75,12 +75,23 @@ public class ShiftController {
         return shifts;        
     }
     
-    public String numberOfDaysWorked(int id)
+    public String numberOfDaysWorked(int id, String date)
     {
+        String month="null";
+        int year;
+        int m = 0;
+                
+        String delims = ", ";
+        String[] tokens = date.split(delims);
+        
+        month = tokens[0];
+        m = convertMonth(month);
+        year = Integer.parseInt(tokens[1]);
+        
         String s = null;
         ShiftBroker sb = ShiftBroker.getShiftBroker();
-        
-        s = sb.countDays(id);
+        System.out.println("ID " +id+ " M " + m+ " YEAR " +year);
+        s = sb.countDays(id,m,year);
         
         return s;
         
