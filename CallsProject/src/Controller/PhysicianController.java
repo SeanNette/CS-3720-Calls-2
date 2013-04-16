@@ -24,6 +24,26 @@ public class PhysicianController
         StringBuilder sb = new StringBuilder();
         firstName = firstName.trim();
         lastName = lastName.trim();
+        String validDate = "^\\d\\d\\d\\d?-?\\d\\d?-?\\d\\d";
+        //   String validDate = "^[A-Z]\\d[A-Z]? ?\\d[A-Z]\\d";
+        String testDate = "2012-12-12";
+
+        System.out.print("HELLO\n");
+        if (validDate.equals(testDate))
+        {
+            System.out.print("Works for 2012-12-12 - EQUALS");
+        }
+
+        if (validDate.contains(testDate))
+        {
+            System.out.print("Works for 2012-12-12 - CONTAINS");
+        }
+
+        if (!validDate.matches(testDate))
+        {
+            System.out.print("WORKS MATCHES");
+        }
+
 
         if (firstName.isEmpty())
         {
@@ -45,6 +65,29 @@ public class PhysicianController
             sb.append("\nMissing Address");
 
         }
+        if (phoneNumber.isEmpty())
+        {
+            sb.append("\nMissing Phone Number");
+        }
+        if (sDate.isEmpty())
+        {
+            sb.append("\nMissing Start Date");
+        }
+        if (!eDate.isEmpty())
+        {
+            if (!eDate.matches(validDate))
+            {
+            sb.append("\nMake sure date is in a proper format YYYY-MM-DD");
+            }
+        }
+        if(eDate.isEmpty())
+        {
+            eDate = null;
+        }
+        if (!sDate.matches(validDate) || !bDate.matches(validDate))
+        {
+            sb.append("\nMake sure date is in a proper format YYYY-MM-DD");
+        }
         if (sb.toString().isEmpty())
         {
             PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
@@ -59,14 +102,14 @@ public class PhysicianController
             return sb.toString();
         }
     }
-    
+
     public String findPhysicianByID(int id)
     {
         String s;
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
-        
+
         s = pBroker.objectPhysician(id);
-        
+
         return s;
     }
 
@@ -77,7 +120,7 @@ public class PhysicianController
         Physician p = new Physician(ID, null, null, null, null, null, null, null);
 
         pBroker.modifyPhysician(choice, p);
-        
+
         return "Deleted";
     }
 
@@ -92,12 +135,12 @@ public class PhysicianController
 
         return dtm;
     }
-    
+
     public ArrayList<Date> daysOff(int employeeID)
     {
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
         ArrayList<java.sql.Date> dOff = pBroker.getDaysOff(employeeID);
-        
-        return dOff;        
+
+        return dOff;
     }
 }
