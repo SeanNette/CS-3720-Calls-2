@@ -94,9 +94,11 @@ public class PhysicianBroker
                   //  System.out.println("ID OF EMP IN BROKER: " + empID + " " + w + " " + we + " " + h);
                     Statement stmt3;
                     stmt3 = connect.createStatement();
-                    stmt3.execute("INSERT INTO initialdays (Employee_ID,weekdays,weekend_days,holidays)"
-                            + "VALUES("+p.getEmployeeId()+","+w+","+we+","+h+")");   
-                    
+                    stmt3.execute("UPDATE initialdays SET weekdays= " + w + ", weekend_days = " + we +
+                            ", holidays = " + h + " WHERE Employee_ID = " + p.getEmployeeId() + ";");
+                    /*(Employee_ID,weekdays,weekend_days,holidays)"
+                            + "VALUES("+p.getEmployeeId()+","+w+","+we+","+h+")");*/   
+                  
                     csUp.execute();
                     
                     csUp.close();

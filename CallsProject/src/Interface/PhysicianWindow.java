@@ -777,7 +777,7 @@ public class PhysicianWindow extends JPanel
             String address = textFieldAddress.getText();
             String phone = textFieldPhone.getText();
             int w = Integer.parseInt(textFieldWeekday.getText());
-            int we = Integer.parseInt(textFieldWeekday.getText());
+            int we = Integer.parseInt(textFieldWeekend.getText());
             int h = Integer.parseInt(textFieldHolidays.getText());
           //  int week = Integer.parseInt(textFieldWeekday.getText());
           //  int weekend = Integer.parseInt(textFieldWeekend.getText());

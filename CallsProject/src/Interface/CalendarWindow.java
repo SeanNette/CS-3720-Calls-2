@@ -599,6 +599,7 @@ public class CalendarWindow
                     monthLabel.setText(monthText);
 
                     Scheduler s = new Scheduler(mo, Integer.parseInt(tokens[1]));
+                    populateScroll();
                     redraw();
                 } else
                 {
@@ -662,18 +663,6 @@ public class CalendarWindow
                 redraw();
             } else if (e.getSource() == change)
             {
-                int resp = JOptionPane.showOptionDialog(
-                        null,
-                        "Change physician '" + currPhysTextField.getText() + "'?",
-                        "Create Schedule",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        yn,
-                        "Quit");
-                if (resp == 0)
-                {
-
                     clearLabelsForMonth();
                     ShiftController sc = new ShiftController();
                     System.out.println("Current phys" + currPhysTextField.getText());
@@ -686,11 +675,7 @@ public class CalendarWindow
                     sc.SetNewShift(si.getEmployeeId(), date, comments.getText(), type);
                     change.setEnabled(false);
                     redraw();
-                } else
-                {
-                    JOptionPane.showMessageDialog(calendarPanel, "Cancelled");
-                    return;
-                }
+                
             }
         }
 
