@@ -4,6 +4,7 @@ package Calls;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import Controller.HolidayController;
 import Controller.Scheduler;
 import Interface.Interface;
 import java.awt.Color;
@@ -39,7 +40,8 @@ public class Calls {
 
 
                 
-
+                /*HolidayController hc = new HolidayController();
+                hc.generateHolidays(2013);*/
             }
         });
         
