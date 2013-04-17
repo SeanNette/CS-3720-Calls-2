@@ -142,7 +142,8 @@ public class PhysicianBroker
             while (rs.next())
             {
                 Physician p = new Physician(rs.getInt(1), rs.getString(2),
-                        rs.getString(3), null, null,null, null, null);
+                        rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(5), 
+                        rs.getString(6), rs.getString(7));
                 phys.add(p);
             }
             connection.returnConnectionToPool(connect);

@@ -33,12 +33,15 @@ public class Interface extends JPanel {
         // create a new physician window object
         PhysicianWindow pw = new PhysicianWindow();
         CalendarWindow cw = new CalendarWindow();
+        SettingWindow sw = new SettingWindow();
         JPanel physicianPanel = pw.createPhysicianWindow();
         JPanel calendarPanel = cw.createCalendarWindow();
+        JPanel report = sw.createPhysicianWindow();
       //  physicianPanel.setBackground(Color.gray);
       //  calendarPanel.setBackground(Color.lightGray);
         tabbedPane.addTab("Physician",physicianPanel);
         tabbedPane.addTab("Calendar",calendarPanel);
+        tabbedPane.addTab("Report",report);
         add(tabbedPane);
     } 
     
