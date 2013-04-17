@@ -151,6 +151,18 @@ public class PhysicianController
 
         return dtm;
     }
+    
+    // makes the getTableData useable for the physican window
+    public DefaultTableModel reportsData()
+    {
+        PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+
+
+        DefaultTableModel dtm = pBroker.getReportsData();
+
+
+        return dtm;
+    }
 
     public ArrayList<DaysOff> daysOff(int employeeID)
     {

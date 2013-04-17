@@ -61,6 +61,7 @@ public class SettingWindow extends JPanel {
     private JPanel tablePanel = new JPanel(new BorderLayout());
     private JLabel labelPath;
     private JTextField textPath;
+    private JScrollPane scrollPanel;
     private JButton addButton;
     private ArrayList<JTextField> allTextFields = new ArrayList<JTextField>();
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
@@ -101,37 +102,42 @@ public class SettingWindow extends JPanel {
         JPanel physicianWindow = new JPanel(new BorderLayout());
         physicianWindow.setBorder(paneEdge);
 
-        physicianWindow.add(leftPanel(blackline), BorderLayout.WEST/*, c*/);
-        physicianWindow.add(rightPanel(fieldPanelBorder), BorderLayout.CENTER/*, c*/);
+       // physicianWindow.add(leftPanel(blackline), BorderLayout.NORTH/*, c*/);
+        physicianWindow.add(reportsPanel(fieldPanelBorder), BorderLayout.NORTH/*, c*/);
+        physicianWindow.add(tablePanel(null),BorderLayout.CENTER);
         return physicianWindow;
     }
 
-    private JPanel leftPanel(Border border) {
+  /*  private JPanel leftPanel(Border border) {
         JPanel lpanel = new JPanel();
         lpanel.add(tablePanel(border));
         return lpanel;
-    }
+    }*/
 
-    private JPanel rightPanel(Border border) {
-        JPanel rpanel = new JPanel(new GridLayout(2, 1));
+    private JPanel reportsPanel(Border border) {
+        JPanel rpanel = new JPanel(new BorderLayout());
 
         Border fieldPanelBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Manipulate Table Data"),
+                BorderFactory.createTitledBorder("Reports"),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         rpanel.add(fieldPanel(fieldPanelBorder)/*,BorderLayout.CENTER*/);
-        Border daysOffPanelBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Days Off"),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5));
-  //      rpanel.add(daysOffPanel(daysOffPanelBorder)/*,BorderLayout.SOUTH*/);
+        
         return rpanel;
     }
 
     private JPanel tablePanel(Border border) {
         PhysicianController phys = new PhysicianController();
-
+        
         // create table model
-        model = phys.tableData();
+        model = phys.reportsData();
+        table = new JTable(model);
+        scrollPanel = new JScrollPane(table);
+        tablePanel.add(scrollPanel);
+        
+       /* table.getColumnModel().getColumn(0).setMinWidth(0);
+        table.getColumnModel().getColumn(0).setMaxWidth(0);*/
+        
         tablePanel.setBorder(border);
         return tablePanel;
     }
@@ -196,8 +202,10 @@ public class SettingWindow extends JPanel {
         // setborder 
         buttonPanel.setBorder(border);
         addButton = new JButton("Run");
-
+        addButton.addActionListener(new ButtonListener()); 
+        
         allButtons.add(addButton);
+        
         buttonPanel.add(addButton/*, c*/);
 
         buttonPanel.setBorder(border);
@@ -381,5 +389,16 @@ public class SettingWindow extends JPanel {
 
         }
   */
+
+    private class ButtonListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) 
+        {
+            if (e.getSource() == addButton) 
+            {
+                
+            }
+        }
+    }
 
 }

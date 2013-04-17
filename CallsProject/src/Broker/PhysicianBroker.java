@@ -219,6 +219,52 @@ public class PhysicianBroker
         return dm;
     }
     
+    public DefaultTableModel getReportsData()
+    {
+        DefaultTableModel dm = new DefaultTableModel();
+        try
+        {
+            Connection connect = connection.getConnectionFromPool();
+            Statement stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT p.first_name, p.last_name, i.weekdays as Initial_Weekdays,\n" +
+"i.weekend_days as Initial_Weekend_Days, i.holidays as Initial_Holidays,\n" +
+"(Select count(*) FROM shift WHERE shift.day_type = 0 AND shift.Employee_ID\n" +
+"= p.Employee_ID) as Weekdays,\n" +
+"(Select count(*) FROM shift WHERE shift.day_type = 1 AND shift.Employee_ID\n" +
+"= p.Employee_ID) as Weekend_Days,\n" +
+"(Select count(*) FROM shift WHERE shift.day_type = 2 AND shift.Employee_ID\n" +
+"= p.Employee_ID) as Holidays\n" +
+"FROM physician as p, initialdays as i\n" +
+"WHERE p.Employee_ID = i.Employee_ID;");
+            ResultSetMetaData md = rs.getMetaData();
+            int num_cols = md.getColumnCount();
+            String c[] = new String[num_cols];
+          //  System.out.println("reportsData: " + c[0]);
+            for (int i = 0; i < num_cols; i++)
+            {
+                c[i] = md.getColumnName(i + 1);
+                dm.addColumn(c[i]);
+            }
+            
+            Object row[] = new Object[num_cols];
+            while (rs.next())
+            {
+                for (int i = 0; i < num_cols; i++)
+                {
+                    row[i] = rs.getString(i + 1);
+                }
+                dm.addRow(row);
+            }
+            
+            connection.returnConnectionToPool(connect);
+        } catch (SQLException err)
+        {
+            System.out.println("ShowPhysician error: " + err);
+        }
+        
+        return dm;
+    }
+    
     public ArrayList<DaysOff> getDaysOff(int employeeID)
     {
         ArrayList<DaysOff> daysOff = new ArrayList();
