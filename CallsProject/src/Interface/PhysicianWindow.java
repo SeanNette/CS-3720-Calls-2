@@ -733,7 +733,9 @@ public class PhysicianWindow extends JPanel {
             String edate = textFieldEdate.getText();
             String address = textFieldAddress.getText();
             String phone = textFieldPhone.getText();
-
+            int week = Integer.parseInt(textFieldWeekday.getText());
+            int weekend = Integer.parseInt(textFieldWeekend.getText());
+            int holiday = Integer.parseInt(textFieldHolidays.getText());
 
             PhysicianController phys = new PhysicianController();
             ShiftController shit = new ShiftController();
@@ -741,8 +743,8 @@ public class PhysicianWindow extends JPanel {
 
             if (e.getSource() == addButton) {
                 try {
-                    choice = 1;
-                    done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone);
+                    choice = 1;                    
+                    done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone,week,weekend,holiday);
                     redraw();
 
                 } catch (Exception ex) {
@@ -753,7 +755,7 @@ public class PhysicianWindow extends JPanel {
                 try {
                     String id = table.getValueAt(selectedRowIndex, 0).toString();
                     choice = 2;
-                    done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone);
+                    done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone,week,weekend,holiday);
                     redraw();
                 } catch (Exception ex) {
                 }
