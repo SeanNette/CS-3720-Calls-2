@@ -272,7 +272,18 @@ public class CalendarWindow
             dayNums.get(i).setHorizontalAlignment(JLabel.RIGHT);
             dayList.get(i + gapMonth).add(dayNums.get(i), BorderLayout.NORTH);
             dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
-            dayList.get(i + gapMonth).setBackground(Color.white);
+            if(!shiftList.isEmpty()){
+                if(shiftList.get(i).getType() == 2){
+                    dayList.get(i + gapMonth).setBackground(new Color(173, 216, 230));
+                }
+                else{
+                    dayList.get(i + gapMonth).setBackground(Color.white);
+                }
+            }
+            else{
+                dayList.get(i + gapMonth).setBackground(Color.white);
+            }        
+            
             dayList.get(i + gapMonth).repaint();
         }
     }
