@@ -209,4 +209,25 @@ public class ShiftBroker {
        return s;
         
     }
+    
+    public boolean addHoliday(String date)
+    {
+        Connection connect = connection.getConnectionFromPool();
+        try {
+            
+            Statement stmt;
+            stmt = connect.createStatement();
+            
+            stmt.execute("INSERT INTO holidays "
+                    + "VALUES('" + date + "')");
+
+            
+            connection.returnConnectionToPool(connect);
+            return true;
+        } catch (SQLException err) {
+            System.out.println("Holiday error: " + err);
+            connection.returnConnectionToPool(connect);
+            return false;
+        }
+    }
 }
