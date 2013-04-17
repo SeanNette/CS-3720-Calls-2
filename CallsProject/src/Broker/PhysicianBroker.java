@@ -36,6 +36,7 @@ public class PhysicianBroker
         Connection connect = connection.getConnectionFromPool();
         Physician p = (Physician) o;
         String SQL = null;
+        int id=0;
         try
         {
             
@@ -58,6 +59,22 @@ public class PhysicianBroker
                     
                     cs.close();
                     
+                    Statement stmt,stmt1;
+                    stmt = connect.createStatement();
+                    ResultSet rs = stmt.executeQuery("SELECT Employee_ID FROM Physician WHERE first_name ='"+
+                            p.getFirstName()+"' AND Last_Name='"+p.getLastName()+"';");
+                    while(rs.next())
+                    {
+                        id=rs.getInt(1);
+                    }
+                    
+                    stmt1 = connect.createStatement();
+                    
+                    stmt1.execute("INSERT INTO initialdays (Employee_ID,weekdays,weekend_days,holidays)"
+                            + "VALUES("+id+","+w+","+we+","+h+")");   
+                    
+                    
+                    
                     connection.returnConnectionToPool(connect);
                     break;
                 
@@ -75,9 +92,9 @@ public class PhysicianBroker
                     csUp.setString(8, p.getPhoneNumber());
                     
                   //  System.out.println("ID OF EMP IN BROKER: " + empID + " " + w + " " + we + " " + h);
-                    Statement stmt;
-                    stmt = connect.createStatement();
-                    stmt.execute("INSERT INTO initialdays (Employee_ID,weekdays,weekend_days,holidays)"
+                    Statement stmt3;
+                    stmt3 = connect.createStatement();
+                    stmt3.execute("INSERT INTO initialdays (Employee_ID,weekdays,weekend_days,holidays)"
                             + "VALUES("+p.getEmployeeId()+","+w+","+we+","+h+")");   
                     
                     csUp.execute();
