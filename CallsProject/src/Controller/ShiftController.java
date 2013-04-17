@@ -97,4 +97,47 @@ public class ShiftController {
         
         
     }
+    public void SetNewShift(int id, String date, String text, int type)
+    {        
+        boolean next=true, previous=true;
+        int counter=0;
+        String newDate=null;
+        
+        ShiftBroker sb = ShiftBroker.getShiftBroker();
+        
+        sb.updateShiftPhysician(id, date, text);
+        
+        if(type==0)
+        {
+            next=false;
+            previous=false;
+            return;
+        }
+        
+        while(next)
+        {
+            while(previous)
+            {
+                counter++;
+                if(sb.checkIfWeekend(date,counter))
+                {
+                    // add counter to date
+                    sb.updateShiftPhysician(id, newDate, text);
+                }
+                else
+                {
+                    counter = 0;
+                    previous = false;
+                }
+            }
+            
+            counter--;
+            if(sb.checkIfWeekend(date, counter))
+            {
+                sb.updateShiftPhysician(id, date, text);
+            }
+            else
+                next=false;
+        }
+    }
 }
