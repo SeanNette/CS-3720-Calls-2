@@ -13,19 +13,14 @@ import Container.Physician;
 import java.io.FileOutputStream;
 import java.util.Date;
 
-import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -35,7 +30,7 @@ import java.util.ArrayList;
 public class PdfCreator
 {
 
-    private static String FILE = "C:/Users/Evan/Documents/GitHub/Calls/CS-3720-Calls-2/CallsProject/ReportResources/Output/reports.pdf";
+    private static String FILE = "C:/Users/Evan/Documents/GitHub/Calls/CS-3720-Calls-2/CallsProject/reports/reports.pdf";
     // Font type setup
     private static Font labelFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
             Font.BOLD);
