@@ -102,7 +102,7 @@ public class PdfCreator
 
     private static void createTableInternal(Paragraph tableInt) throws BadElementException, DocumentException
     {
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100);
 
         PdfPCell c1 = new PdfPCell(new Phrase("First Name", tblheadFont));
@@ -117,21 +117,21 @@ public class PdfCreator
         c3.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c3);
 
-        PdfPCell c4 = new PdfPCell(new Phrase("Weekdays", tblheadFont));
+        PdfPCell c4 = new PdfPCell(new Phrase("Date of Birth", tblheadFont));
         c4.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c4);
 
-        PdfPCell c5 = new PdfPCell(new Phrase("Weekends", tblheadFont));
+        PdfPCell c5 = new PdfPCell(new Phrase("Start Date", tblheadFont));
         c5.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c5);
 
-        PdfPCell c6 = new PdfPCell(new Phrase("Holidays", tblheadFont));
+        PdfPCell c6 = new PdfPCell(new Phrase("End Date", tblheadFont));
         c6.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c6);
 
-        // PdfPCell c7 = new PdfPCell(new Phrase("Address"));
-        // c7.setHorizontalAlignment(Element.ALIGN_CENTER);
-        // table.addCell(c7);
+        PdfPCell c7 = new PdfPCell(new Phrase("Address", tblheadFont));
+        c7.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c7);
 
         table.setHeaderRows(1);
 
@@ -151,20 +151,34 @@ public class PdfCreator
             PdfPCell phonenum = new PdfPCell(new Phrase(phys.get(i).getPhoneNumber(), tblinfoFont));
             phonenum.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(phonenum);
-            PdfPCell weekdays = new PdfPCell(new Phrase("40", tblinfoFont));
-            weekdays.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(weekdays);
-            PdfPCell weekends = new PdfPCell(new Phrase("10", tblinfoFont));
-            weekends.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(weekends);
-            PdfPCell holidays = new PdfPCell(new Phrase("3", tblinfoFont));
-            holidays.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(holidays);
+            /*
+             PdfPCell weekdays = new PdfPCell(new Phrase("40", tblinfoFont));
+             weekdays.setHorizontalAlignment(Element.ALIGN_CENTER);
+             table.addCell(weekdays);
+             PdfPCell weekends = new PdfPCell(new Phrase("10", tblinfoFont));
+             weekends.setHorizontalAlignment(Element.ALIGN_CENTER);
+             table.addCell(weekends);
+             PdfPCell holidays = new PdfPCell(new Phrase("3", tblinfoFont));
+             holidays.setHorizontalAlignment(Element.ALIGN_CENTER);
+             table.addCell(holidays);
+             */
+            PdfPCell dob = new PdfPCell(new Phrase(phys.get(i).getBirthDate(), tblinfoFont));
+            dob.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(dob);
+            PdfPCell sdate = new PdfPCell(new Phrase(phys.get(i).getStartDate(), tblinfoFont));
+            sdate.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(sdate);
+            PdfPCell edate = new PdfPCell(new Phrase(phys.get(i).getEndDate(), tblinfoFont));
+            edate.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(edate);
+            PdfPCell addr = new PdfPCell(new Phrase(phys.get(i).getAddress(), tblinfoFont));
+            addr.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(addr);
         }
 
         int[] columnWidths = new int[]
         {
-            15, 15, 15, 10, 10, 10
+            10, 10, 13, 10, 10, 10, 17
         };
         table.setWidths(columnWidths);
         tableInt.add(table);
