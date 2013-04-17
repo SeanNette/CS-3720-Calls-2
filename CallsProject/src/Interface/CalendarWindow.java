@@ -413,7 +413,7 @@ public class CalendarWindow
         // put to change listener  
         Physician si = (Physician) newPhysCombo.getSelectedItem();
 
-        System.out.print("PHYS ID: " + si.getEmployeeId());
+        //System.out.print("PHYS ID: " + si.getEmployeeId());
         return newPhysCombo;
 
     }

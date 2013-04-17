@@ -92,8 +92,8 @@ public class BasicAlgorithm
             int counter = 0;
             while (!found)
             {
-                boolean working = true;
-                String monthString;
+                boolean working = false;
+                /*String monthString;
                 if (m < 10)
                 {
                     monthString = "0" + Integer.toString(m);
@@ -101,16 +101,56 @@ public class BasicAlgorithm
                 else
                 {
                     monthString = Integer.toString(m);
-                }
-                String compareDate = Integer.toString(y) + "-" + monthString + "-" + Integer.toString(i + 1);
-                        //Check start and end date for this physician
-                if ((physicians.get(counter).getStartDate() != null) && (physicians.get(counter).getStartDate().compareTo(compareDate) > 0))
+                }*/
+
+                //Check start and end date for this physician
+                System.out.println(counter);
+                if (physicians.get(counter).getStartDate() != null)
                 {
-                    working = false;
+                    String[] startDates = physicians.get(counter).getStartDate().split("-");
+                    /*System.out.println("Getting into startDate");
+                    
+                    System.out.println("Date: " + (i+1));
+                    System.out.println("Start Day: " + startDates[2]);
+                    
+                    
+                    
+                    if (((Integer.parseInt(startDates[2])) > (i + 1)) || ((Integer.parseInt(startDates[1])) > m) || ((Integer.parseInt(startDates[0])) >= y))
+                    {
+                        working = false;
+                    }*/
+                    
+                    if(y >= Integer.parseInt(startDates[0]))
+                    {
+                        if(m >= Integer.parseInt(startDates[1]))
+                        {
+                            if((i + 1) >= Integer.parseInt(startDates[2]))
+                            {
+                                working = true;
+                            }
+                        }
+                    }
                 }
-                if ((physicians.get(counter).getEndDate() != null) && (physicians.get(counter).getEndDate().compareTo(compareDate) < 0))
+                if (physicians.get(counter).getEndDate() != null)
                 {
-                    working = false;
+                    System.out.println("Getting into endDate");
+                    String[] endDates = physicians.get(counter).getEndDate().split("-");
+                    /*System.out.println("Date: " + (i+1));
+                    System.out.println("End Day: " + endDates[2]);
+                    if (((Integer.parseInt(endDates[2])) < (i + 1)) && ((Integer.parseInt(endDates[1])) <= m) && ((Integer.parseInt(endDates[0])) <= y))
+                    {
+                        working = false;
+                    }*/
+                    if(y >= Integer.parseInt(endDates[0]))
+                    {
+                        if(m >= Integer.parseInt(endDates[1]))
+                        {
+                            if((i + 1) >= Integer.parseInt(endDates[2]))
+                            {
+                                working = false;
+                            }
+                        }
+                    }
                 }
                 //physicians.get(counter).getStartDate().
                 //check if physician at counter has day off
