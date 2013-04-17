@@ -9,6 +9,7 @@ import Container.DaysOff;
 import Container.Physician;
 import Controller.PhysicianController;
 import Controller.ShiftController;
+import Reports.PdfCreator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -396,7 +397,8 @@ public class SettingWindow extends JPanel {
         {
             if (e.getSource() == addButton) 
             {
-                
+                PdfCreator pdf = new PdfCreator();
+                pdf.generateReports();
             }
         }
     }
