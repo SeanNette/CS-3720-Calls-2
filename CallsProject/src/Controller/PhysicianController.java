@@ -20,7 +20,8 @@ public class PhysicianController
 {
 
     public String workPhysician(int choice, int id, String firstName, String lastName,
-            String bDate, String sDate, String eDate, String Address, String phoneNumber)
+            String bDate, String sDate, String eDate, String Address, String phoneNumber
+            ,int week,int weekend,int holiday)
     {
         StringBuilder sb = new StringBuilder();
         firstName = firstName.trim();
@@ -100,7 +101,7 @@ public class PhysicianController
             // use connection from pool
             // when done put connection back into pool 
             Physician p = new Physician(id, firstName, lastName, bDate, sDate, eDate, Address, phoneNumber);
-            pBroker.modifyPhysician(choice, p);
+            pBroker.modifyPhysician(choice, p,week,weekend,holiday);
 
             return "Success";
         } else
@@ -134,7 +135,7 @@ public class PhysicianController
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
         Physician p = new Physician(ID, null, null, null, null, null, null, null);
 
-        pBroker.modifyPhysician(choice, p);
+        pBroker.modifyPhysician(choice, p, 0,0,0);
 
         return "Deleted";
     }

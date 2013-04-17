@@ -31,7 +31,7 @@ public class PhysicianBroker
         return pBroker;
     }
     
-    public void modifyPhysician(int choice, Object o)
+    public void modifyPhysician(int choice, Object o, int w, int we, int h)
     {
         Connection connect = connection.getConnectionFromPool();
         Physician p = (Physician) o;
@@ -52,6 +52,7 @@ public class PhysicianBroker
                     cs.setString(5, p.getEndDate());
                     cs.setString(6, p.getAddress());
                     cs.setString(7, p.getPhoneNumber());
+                                     
                     
                     cs.execute();
                     
@@ -72,6 +73,12 @@ public class PhysicianBroker
                     csUp.setString(6, p.getEndDate());
                     csUp.setString(7, p.getAddress());
                     csUp.setString(8, p.getPhoneNumber());
+                    
+                  //  System.out.println("ID OF EMP IN BROKER: " + empID + " " + w + " " + we + " " + h);
+                    Statement stmt;
+                    stmt = connect.createStatement();
+                    stmt.execute("INSERT INTO initialdays (Employee_ID,weekdays,weekend_days,holidays)"
+                            + "VALUES("+p.getEmployeeId()+","+w+","+we+","+h+")");   
                     
                     csUp.execute();
                     
