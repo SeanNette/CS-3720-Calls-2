@@ -440,4 +440,30 @@ public class PhysicianBroker
             
         }
     }
+    public String getIniDays(int id)
+    {
+        String s = null;
+        int w=0, wk=0, h=0;
+        try
+        {            
+            Connection connect = connection.getConnectionFromPool();
+            Statement stmt;
+            stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM initialdays WHERE Employee_ID = '"+id+"';");
+            
+            while(rs.next())
+            {
+                w = rs.getInt(2);
+                wk = rs.getInt(3);
+                h = rs.getInt(4);
+            }
+            connection.returnConnectionToPool(connect);
+            s = w + ", " + wk + ", " + h +", ";
+            
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(PhysicianBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            return s;
+    }
 }

@@ -192,5 +192,11 @@ public class PhysicianController
         
         
     }
+    public String getIniHours(int id)
+    {
+        String s = null;
+        s = PhysicianBroker.getPhysicianBroker().getIniDays(id);
+        return s;
+    }
             
 }

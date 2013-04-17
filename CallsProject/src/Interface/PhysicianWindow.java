@@ -53,7 +53,8 @@ import javax.swing.text.MaskFormatter;
  *
  * @author Wojg
  */
-public class PhysicianWindow extends JPanel {
+public class PhysicianWindow extends JPanel
+{
 
     private DefaultTableModel model;
     private JTable table;
@@ -88,26 +89,29 @@ public class PhysicianWindow extends JPanel {
     private JButton clearButton;
     private ArrayList<JTextField> allTextFields = new ArrayList<JTextField>();
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
+    private ArrayList<String> iniHours;
     private int selectedRowIndex;
     private PhysicianCalendar pcCal;
+    private int week, weekend, holiday;
     private static int empID;
     private static boolean clicked = false;
 
-    public PhysicianWindow() 
+    public PhysicianWindow()
     {
     }
 
-    public int getEmployeeID() 
+    public int getEmployeeID()
     {
         return empID;
     }
-    
-    public boolean getClicked() 
+
+    public boolean getClicked()
     {
         return clicked;
     }
 
-    public JPanel createPhysicianWindow() {
+    public JPanel createPhysicianWindow()
+    {
         // offset window by 10 pixels all around      //top,left,bottom,right
         Border paneEdge = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 
@@ -167,13 +171,15 @@ public class PhysicianWindow extends JPanel {
         return physicianWindow;
     }
 
-    private JPanel leftPanel(Border border) {
+    private JPanel leftPanel(Border border)
+    {
         JPanel lpanel = new JPanel();
         lpanel.add(tablePanel(border));
         return lpanel;
     }
 
-    private JPanel rightPanel(Border border) {
+    private JPanel rightPanel(Border border)
+    {
         JPanel rpanel = new JPanel(new GridLayout(2, 1));
 
         Border fieldPanelBorder = BorderFactory.createCompoundBorder(
@@ -188,7 +194,8 @@ public class PhysicianWindow extends JPanel {
         return rpanel;
     }
 
-    private JPanel tablePanel(Border border) {
+    private JPanel tablePanel(Border border)
+    {
         PhysicianController phys = new PhysicianController();
 
         // create table model
@@ -292,7 +299,8 @@ public class PhysicianWindow extends JPanel {
         return tablePanel;
     }
 
-    private JPanel fieldPanel(Border border) {
+    private JPanel fieldPanel(Border border)
+    {
 
         JPanel fieldPanel = new JPanel(new GridBagLayout());
 
@@ -533,10 +541,15 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
         fieldPanel.add(buttonPanel(null), c);
 
+        textFieldWeekday.setText("0");
+        textFieldWeekend.setText("0");
+        textFieldHolidays.setText("0");
+
         return fieldPanel;
     }
 
-    private JPanel buttonPanel(Border border) {
+    private JPanel buttonPanel(Border border)
+    {
         // create button panel and set align to right
         JPanel buttonPanel = new JPanel(new FlowLayout()/* GridBagLayout()*/);
         // setborder 
@@ -605,7 +618,8 @@ public class PhysicianWindow extends JPanel {
         return buttonPanel;
     }
 
-    private JPanel daysOffPanel(Border border) {
+    private JPanel daysOffPanel(Border border)
+    {
 
         pcCal = new PhysicianCalendar(2, 2013);
         dPanel.add(pcCal.calendarPanel(null), BorderLayout.CENTER);
@@ -641,19 +655,22 @@ public class PhysicianWindow extends JPanel {
         return dPanel;
     }
 
-    private class MouseListen extends MouseAdapter {
+    private class MouseListen extends MouseAdapter
+    {
 
-        public void mouseClicked(MouseEvent e) {
-            
+        public void mouseClicked(MouseEvent e)
+        {
+            PhysicianController pc = new PhysicianController();
+
             clicked = true;
             pcCal.getNextButton().setEnabled(true);
             pcCal.getPrevButton().setEnabled(true);
             pcCal.getUpdateButton().setEnabled(true);
-            
+
             selectedRowIndex = table.getSelectedRow();
 
             int columnCount = table.getColumnCount();
-            
+
             clearAllFields();
 
             textFieldFname.setText(model.getValueAt(selectedRowIndex, 1).toString());
@@ -661,10 +678,12 @@ public class PhysicianWindow extends JPanel {
             textFieldBdate.setText(model.getValueAt(selectedRowIndex, 3).toString());
             textFieldSdate.setText(model.getValueAt(selectedRowIndex, 4).toString());
             String edate;
-            try {
+            try
+            {
                 edate = model.getValueAt(selectedRowIndex, 5).toString();
                 textFieldEdate.setText(edate);
-            } catch (Exception ex) {
+            } catch (Exception ex)
+            {
                 System.out.println("End Employment Date exception handled.");
             }
             textFieldAddress.setText(model.getValueAt(selectedRowIndex, 6).toString());
@@ -674,14 +693,23 @@ public class PhysicianWindow extends JPanel {
             allButtons.get(1).setEnabled(true);
             allButtons.get(2).setEnabled(true);
             allButtons.get(3).setEnabled(true);
-            
+
             empID = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
-          
+            String temp = null;
+            temp = pc.getIniHours(empID);
+
+            String delims = ", ";
+            String[] tokens = temp.split(delims);
+
+            textFieldWeekday.setText(tokens[0]);
+            textFieldWeekend.setText(tokens[1]);
+            textFieldHolidays.setText(tokens[2]);
+
             displayDaysOff();
         }
     }
 
-    public void displayDaysOff() 
+    public void displayDaysOff()
     {
         PhysicianController pc = new PhysicianController();
         ArrayList<DaysOff> daysOffDates = new ArrayList();
@@ -690,20 +718,29 @@ public class PhysicianWindow extends JPanel {
         pcCal.addLabelsForMonth();
         if (daysOffDates.size() > 0)
         {
-            for (int i = 0; i < daysOffDates.size(); i++) {
-                
+            for (int i = 0; i < daysOffDates.size(); i++)
+            {
+
                 SimpleDateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
-                if (pcCal.getMonth().equals(sdf.format(daysOffDates.get(i).getDayOff().getTime()))) {
+                if (pcCal.getMonth().equals(sdf.format(daysOffDates.get(i).getDayOff().getTime())))
+                {
                     SimpleDateFormat sdf1 = new SimpleDateFormat("d");
                     int day = Integer.parseInt(sdf1.format(daysOffDates.get(i).getDayOff().getTime()));
                     pcCal.getDayList().get(day + pcCal.getGapMonth() - 1).setBackground(Color.blue);
                     pcCal.getDayList().get(day + pcCal.getGapMonth() - 1).repaint();
-                }                
+                }
             }
-        }               
+        }
     }
 
-    private void clearAllFields() {
+    private void clearAllFields()
+    {
+        week =0;
+        weekend =0;
+        holiday= 0;
+        textFieldWeekday.setText("0");
+        textFieldWeekend.setText("0");
+        textFieldHolidays.setText("0");
         textFieldFname.setText(null);
         textFieldLname.setText(null);
         textFieldAddress.setText(null);
@@ -713,18 +750,24 @@ public class PhysicianWindow extends JPanel {
         textFieldSdate.setText(null);
     }
 
-    private void setAllButtons() {
+    private void setAllButtons()
+    {
         allButtons.get(0).setEnabled(true);
         allButtons.get(1).setEnabled(false);
         allButtons.get(2).setEnabled(false);
         allButtons.get(3).setEnabled(false);
     }
 
-    private class ButtonsListen implements ActionListener {
+    private class ButtonsListen implements ActionListener
+    {
 
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             String done = "";
-            String[] yn = {"Yes", "No"};
+            String[] yn =
+            {
+                "Yes", "No"
+            };
             int choice = 0; // 1 - Add, 2 - Del, 3 - Update
             String fname = textFieldFname.getText();
             String lname = textFieldLname.getText();
@@ -733,33 +776,56 @@ public class PhysicianWindow extends JPanel {
             String edate = textFieldEdate.getText();
             String address = textFieldAddress.getText();
             String phone = textFieldPhone.getText();
-            int week = Integer.parseInt(textFieldWeekday.getText());
-            int weekend = Integer.parseInt(textFieldWeekend.getText());
-            int holiday = Integer.parseInt(textFieldHolidays.getText());
+            int w = Integer.parseInt(textFieldWeekday.getText());
+            int we = Integer.parseInt(textFieldWeekday.getText());
+            int h = Integer.parseInt(textFieldHolidays.getText());
+          //  int week = Integer.parseInt(textFieldWeekday.getText());
+          //  int weekend = Integer.parseInt(textFieldWeekend.getText());
+          //  int holiday = Integer.parseInt(textFieldHolidays.getText());
 
             PhysicianController phys = new PhysicianController();
             ShiftController shit = new ShiftController();
 
 
-            if (e.getSource() == addButton) {
-                try {
-                    choice = 1;                    
-                    done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone,week,weekend,holiday);
+            if (e.getSource() == addButton)
+            {
+                try
+                {
+                    if (textFieldWeekday.getText().isEmpty())
+                    {
+                        week = 0;
+                    }
+                    if (textFieldWeekend.getText().isEmpty())
+                    {
+                        weekend = 0;
+                    }
+                    if (textFieldHolidays.getText().isEmpty())
+                    {
+                        holiday = 0;
+                    }
+                    choice = 1;
+                    done = phys.workPhysician(choice, 0, fname, lname, bdate, sdate, edate, address, phone, w, we, h);
+                    
                     redraw();
 
-                } catch (Exception ex) {
+                } catch (Exception ex)
+                {
                 }
 
-            } else if (e.getSource() == saveButton) {
+            } else if (e.getSource() == saveButton)
+            {
 
-                try {
+                try
+                {
                     String id = table.getValueAt(selectedRowIndex, 0).toString();
                     choice = 2;
-                    done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone,week,weekend,holiday);
+                    done = phys.workPhysician(choice, Integer.parseInt(id), fname, lname, bdate, sdate, edate, address, phone, w, we, h);
                     redraw();
-                } catch (Exception ex) {
+                } catch (Exception ex)
+                {
                 }
-            } else if (e.getSource() == deleteButton) {
+            } else if (e.getSource() == deleteButton)
+            {
                 String id = table.getValueAt(selectedRowIndex, 0).toString();
                 choice = 3;
                 int resp = JOptionPane.showOptionDialog(
@@ -771,17 +837,20 @@ public class PhysicianWindow extends JPanel {
                         null,
                         yn,
                         "Quit");
-                if (resp == 0) {
+                if (resp == 0)
+                {
                     done = phys.workPhysician(choice, Integer.parseInt(id));
                     clearAllFields();
                     setAllButtons();
-                } else {
+                } else
+                {
                     done = "Cancelled";
                     return;
                 }
                 redraw();
 
-            } else if (e.getSource() == clearButton) {
+            } else if (e.getSource() == clearButton)
+            {
                 clearAllFields();
                 setAllButtons();
                 return;
@@ -790,7 +859,8 @@ public class PhysicianWindow extends JPanel {
             JOptionPane.showMessageDialog(null, done);
         }
 
-        private void redraw() {
+        private void redraw()
+        {
             PhysicianController phys = new PhysicianController();
 
             tablePanel.remove(scrollPane);
