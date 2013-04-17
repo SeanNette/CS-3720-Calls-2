@@ -84,6 +84,8 @@ public class PhysicianCalendar extends JPanel {
         
         next = new JButton(">");
         previous = new JButton("<");
+        update = new JButton("Update");
+        update.addActionListener(new calendarButtonListener()); 
         
         c = new GridBagConstraints();  
         
@@ -103,7 +105,12 @@ public class PhysicianCalendar extends JPanel {
         daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         
         monthText = sdf.format(monthYear);   
-        monthLabel = new JLabel(monthText);     
+        monthLabel = new JLabel(monthText);    
+        
+        next.setEnabled(false);
+        previous.setEnabled(false);
+        update.setEnabled(false);
+        
     }
       
     public JPanel showCalendar() 
@@ -156,8 +163,8 @@ public class PhysicianCalendar extends JPanel {
         sidePanel = new JPanel(new FlowLayout());
         daysOffLabel = new JLabel("Days Off:");
         daysOffTextField = new JTextField(16);
-        update = new JButton("Update");
-        update.addActionListener(new calendarButtonListener()); 
+       // update = new JButton("Update");
+       // update.addActionListener(new calendarButtonListener()); 
         sidePanel.add(daysOffLabel);
         sidePanel.add(daysOffTextField);
         sidePanel.add(update);
@@ -189,6 +196,21 @@ public class PhysicianCalendar extends JPanel {
             dayList.get(i+gapMonth).setBackground(Color.white);
             dayList.get(i+gapMonth).repaint();
         }      
+    }
+    
+    public JButton getNextButton()
+    {
+        return next;
+    }
+    
+    public JButton getPrevButton()
+    {
+        return previous;
+    }
+    
+    public JButton getUpdateButton()
+    {
+        return update;
     }
         
     public JPanel getMainPanel() 
@@ -264,35 +286,38 @@ public class PhysicianCalendar extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) 
         {
-            
-            int panelPressed = dayList.indexOf(e.getSource());
-            
-            if (panelPressed < gapMonth || panelPressed > gapMonth + daysInMonth - 1)
+            PhysicianWindow pw = new PhysicianWindow();
+            if (pw.getClicked()) 
             {
-                dayList.get(panelPressed).setBackground(null);
+                int panelPressed = dayList.indexOf(e.getSource());
+
+                if (panelPressed < gapMonth || panelPressed > gapMonth + daysInMonth - 1)
+                {
+                    dayList.get(panelPressed).setBackground(null);
+                }
+                else 
+                {                
+                    if (dayList.get(panelPressed).getBackground() == Color.red)
+                    {
+                        dayList.get(panelPressed).setBackground(Color.white); 
+                    }
+
+                    else if (dayList.get(panelPressed).getBackground() == Color.blue) 
+                    {
+                        dayList.get(panelPressed).setBackground(Color.green);                   
+                    }
+
+                    else if (dayList.get(panelPressed).getBackground() == Color.green)
+                    {
+                        dayList.get(panelPressed).setBackground(Color.blue);
+                    }
+
+                    else if (dayList.get(panelPressed).getBackground() == Color.white)
+                    {
+                        dayList.get(panelPressed).setBackground(Color.red);
+                    }                
+                }     
             }
-            else 
-            {                
-                if (dayList.get(panelPressed).getBackground() == Color.red)
-                {
-                    dayList.get(panelPressed).setBackground(Color.white); 
-                }
-                
-                else if (dayList.get(panelPressed).getBackground() == Color.blue) 
-                {
-                    dayList.get(panelPressed).setBackground(Color.green);                   
-                }
-                
-                else if (dayList.get(panelPressed).getBackground() == Color.green)
-                {
-                    dayList.get(panelPressed).setBackground(Color.blue);
-                }
-                
-                else if (dayList.get(panelPressed).getBackground() == Color.white)
-                {
-                    dayList.get(panelPressed).setBackground(Color.red);
-                }                
-            }          
         }
     }   
     

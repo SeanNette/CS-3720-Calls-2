@@ -91,12 +91,20 @@ public class PhysicianWindow extends JPanel {
     private int selectedRowIndex;
     private PhysicianCalendar pcCal;
     private static int empID;
+    private static boolean clicked = false;
 
-    public PhysicianWindow() {
+    public PhysicianWindow() 
+    {
     }
 
-    public int getEmployeeID() {
+    public int getEmployeeID() 
+    {
         return empID;
+    }
+    
+    public boolean getClicked() 
+    {
+        return clicked;
     }
 
     public JPanel createPhysicianWindow() {
@@ -636,7 +644,12 @@ public class PhysicianWindow extends JPanel {
     private class MouseListen extends MouseAdapter {
 
         public void mouseClicked(MouseEvent e) {
-
+            
+            clicked = true;
+            pcCal.getNextButton().setEnabled(true);
+            pcCal.getPrevButton().setEnabled(true);
+            pcCal.getUpdateButton().setEnabled(true);
+            
             selectedRowIndex = table.getSelectedRow();
 
             int columnCount = table.getColumnCount();
