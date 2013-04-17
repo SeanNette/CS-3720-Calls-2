@@ -66,11 +66,11 @@ public class ShiftController {
         
         shifts = sb.getAllShiftsForCurrentMonth(m,year);
         
-       for (int i = 0; i < shifts.size(); i++)
+   /*    for (int i = 0; i < shifts.size(); i++)
         {
             System.out.print("Employee ID: " + shifts.get(i).getEmployeeID()
                     + " Date Working: " + shifts.get(i).getDate() + "\n");
-        } 
+        } */ 
         
         return shifts;        
     }
@@ -90,7 +90,7 @@ public class ShiftController {
         
         String s = null;
         ShiftBroker sb = ShiftBroker.getShiftBroker();
-        System.out.println("ID " +id+ " M " + m+ " YEAR " +year);
+     //   System.out.println("ID " +id+ " M " + m+ " YEAR " +year);
         s = sb.countDays(id,m,year);
         
         return s;
@@ -102,6 +102,12 @@ public class ShiftController {
         boolean next=true, previous=true;
         int counter=0;
         String newDate=null;
+        
+        int day,result = 0; 
+        String delims = "-";
+        String[] tokens = date.split(delims);
+        
+        
         
         ShiftBroker sb = ShiftBroker.getShiftBroker();
         
@@ -121,7 +127,10 @@ public class ShiftController {
                 counter++;
                 if(sb.checkIfWeekend(date,counter))
                 {
+                    day = Integer.parseInt(tokens[2]) + counter;
+                    newDate = tokens[0] + "-" + tokens[1] + "-" + day;
                     // add counter to date
+                    //System.out.println("COUNTER++ : "+ id + " " + newDate + " " );
                     sb.updateShiftPhysician(id, newDate, text);
                 }
                 else
@@ -134,7 +143,9 @@ public class ShiftController {
             counter--;
             if(sb.checkIfWeekend(date, counter))
             {
-                sb.updateShiftPhysician(id, date, text);
+                day = Integer.parseInt(tokens[2]) + counter;
+                newDate = tokens[0] + "-" + tokens[1] + "-" + day;
+                sb.updateShiftPhysician(id, newDate, text);
             }
             else
                 next=false;

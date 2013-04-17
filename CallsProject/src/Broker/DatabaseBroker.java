@@ -51,7 +51,7 @@ public class DatabaseBroker
             //System.out.println("Not FULL.");
             connectionPool.add(createNewConnection());
         }
-        System.out.println("Pool allocated to maximum capacity " + connectionPool.size() + "." );
+   //     System.out.println("Pool allocated to maximum capacity " + connectionPool.size() + "." );
     }
 
     // creates the new connection
@@ -80,7 +80,7 @@ public class DatabaseBroker
         Connection connect = null;
         if (connectionPool.size() > 0) {
             connect = connectionPool.poll();
-            System.out.println("Removed connection from pool" + " " + (connectionPool.size()+1));
+         //   System.out.println("Removed connection from pool" + " " + (connectionPool.size()+1));
         }
 
         else
@@ -91,7 +91,7 @@ public class DatabaseBroker
     // once connection used put back in to pool
     public void returnConnectionToPool(Connection connect) {
         connectionPool.add(connect);
-        System.out.println("Added connection back to pool " + connectionPool.size());
+      //  System.out.println("Added connection back to pool " + connectionPool.size());
     }
 
 }

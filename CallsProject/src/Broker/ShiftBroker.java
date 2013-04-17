@@ -155,7 +155,7 @@ public class ShiftBroker
             while (rs.next())
             {
                 Shift s = new Shift(rs.getString(1), rs.getInt(2), rs.getString(4), rs.getInt(3));
-                System.out.println(s);
+             //   System.out.println(s);
                 shiftList.add(s);
             }
             connection.returnConnectionToPool(connect);
@@ -264,7 +264,7 @@ public class ShiftBroker
     public boolean checkIfWeekend(String initialDate, int counter)
     {
         String newDate;
-        int day,result; 
+        int day,result = 0; 
         String delims = "-";
         String[] tokens = initialDate.split(delims);
         
@@ -280,7 +280,14 @@ public class ShiftBroker
             
             while(rs.next())
             {
-                result = rs.getInt(1);
+            result = rs.getInt(1);
+            }
+            
+            connection.returnConnectionToPool(connect);
+            
+            if(result == 1 || result == 2)
+            {
+                return true;
             }
             
         } catch (SQLException ex)

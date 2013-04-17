@@ -50,12 +50,11 @@ public class CalendarWindow
     private ArrayList<JLabel> dayNums;
     private ArrayList<JLabel> physList;
     private ArrayList<Shift> shiftList;
-    private String currentName;
     private String date;
     private String selectedMonth;
     private JButton next, previous;
     private JLabel monthLabel;
-    private String monthText, panelName, panelSize;
+    private String monthText;
     String[] day_of_week =
     {
         "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
@@ -63,7 +62,7 @@ public class CalendarWindow
     private int daysInMonth;
     private int gapMonth;
     private Calendar cal;
-    private int month, year, type;
+    private int startMonth=2, type;
     private static int m = 0;
 
     public CalendarWindow()
@@ -76,7 +75,7 @@ public class CalendarWindow
 
         // field panel border
         fieldPanelBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Calendar Data Shit"),
+                BorderFactory.createTitledBorder("Calendar Data"),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         legendBorder = BorderFactory.createCompoundBorder(
@@ -111,13 +110,14 @@ public class CalendarWindow
         currPhysTextField = new JTextField(12);
         newPhysLabel = new JLabel("New Physician: ");
         dateSelectedLabel = new JLabel("Date Selected: ");
-        dateSelected = new JTextField(10);
+        dateSelected = new JTextField(15);
         dateSelected.setEditable(false);
         comments = new JTextArea(5, 18);
         scrollPane = new JScrollPane(comments);
         commentsLabel = new JLabel("Comments: ");
 
         change = new JButton("Change");
+        change.setEnabled(false);
         generate = new JButton("Generate");
         generate.addActionListener(new ButtonListener());
         
@@ -177,7 +177,7 @@ public class CalendarWindow
 
         c = new GridBagConstraints();
 
-        mainCalendarPanel.add(buttonPanel(), BorderLayout.NORTH);
+        mainCalendarPanel.add(buttonPanel(startMonth), BorderLayout.NORTH);
         mainCalendarPanel.add(showCalendar(), BorderLayout.CENTER);
 
         return mainCalendarPanel;
@@ -211,7 +211,7 @@ public class CalendarWindow
         return calendarPanel;
     }
 
-    public JPanel buttonPanel()
+    public JPanel buttonPanel(int ma)
     {
         cbuttonPanel = new JPanel(new FlowLayout());
 
@@ -227,7 +227,7 @@ public class CalendarWindow
 
         cal = Calendar.getInstance();
         cal.set(Calendar.DATE, 1);
-        cal.set(Calendar.MONTH, 2);
+        cal.set(Calendar.MONTH, ma);
         cal.set(Calendar.YEAR, 2013);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -325,6 +325,7 @@ public class CalendarWindow
             physList.get(i).setOpaque(true);
             physList.get(i).setVerticalAlignment(JLabel.CENTER);
             physList.get(i).setHorizontalAlignment(JLabel.LEFT);
+            physList.get(i).repaint();
             dayList.get(i + gapMonth).add(physList.get(i), BorderLayout.SOUTH);
             dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
             dayList.get(i + gapMonth).setBackground(Color.WHITE);
@@ -451,22 +452,6 @@ public class CalendarWindow
         legendPanel.validate();
         legendPanel.repaint();
 
-
-        // call calendarController for the list
-        /*
-         for (int i = 0; i < no_of_phys; i++)
-         {
-         JLabel legendLabels = new JLabel("Physician " + i);
-         legendLabels.setOpaque(true);
-
-         Random rand = new Random();
-         int r = rand.nextInt(256);
-         int g = rand.nextInt(256);
-         int b = rand.nextInt(256);
-         legendLabels.setBackground(new Color(r, g, b));
-         legendPanel.add(legendLabels);
-         } */
-
         return legendPanel;
     }
 
@@ -518,6 +503,8 @@ public class CalendarWindow
         @Override
         public void mouseClicked(MouseEvent e)
         {
+            try
+            {
 
             int panelPressed = dayList.indexOf(e.getSource());
 
@@ -533,7 +520,8 @@ public class CalendarWindow
                     dayList.get(panelPressed).setBackground(Color.white);
                 } else
                 {
-
+                    
+                    comments.setText(shiftList.get(panelPressed - gapMonth).getComments());
                     String[] d = monthText.split(",");
 
 
@@ -543,8 +531,14 @@ public class CalendarWindow
                     //System.out.print("HELLO TYPE " + shiftList.get(panelPressed - gapMonth).getType());
                     type = shiftList.get(panelPressed - gapMonth).getType();
                     date = shiftList.get(panelPressed - gapMonth).getDate();
-                    System.out.println("DAY? " + selectedMonth);
+                    change.setEnabled(true);
+                 //   System.out.println("DAY? " + selectedMonth);
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                System.out.println("Mouse Null EX");
             }
         }
     }
@@ -556,16 +550,33 @@ public class CalendarWindow
         {
             if (e.getSource() == generate)
             {
-                int month = 0;
+                clearLabelsForMonth();
+                
                 ShiftController sc = new ShiftController();
 
                 String delims = ", ";
                 String[] tokens = monthText.split(delims);
+                int mo = sc.convertMonth(tokens[0]);
+              
+                Calendar cals = new GregorianCalendar();
+                cals = Calendar.getInstance();
+                cals.set(Calendar.DATE, 1);
+                cals.set(Calendar.MONTH, mo-1);
+                cals.set(Calendar.YEAR, 2013);
 
-                month = sc.convertMonth(tokens[0]);
+                cals.set(Calendar.DAY_OF_MONTH, 1);
 
-                System.out.println("CURRENT MONTH = " + month);
-                Scheduler s = new Scheduler(month, Integer.parseInt(tokens[1]));
+                DateFormat df = new SimpleDateFormat("MMMM, YYYY");
+
+                gapMonth = cals.get(Calendar.DAY_OF_WEEK) - 1;
+                daysInMonth = cals.getActualMaximum(Calendar.DAY_OF_MONTH);
+                monthText = df.format(cals.getTime());
+                monthLabel.setText(monthText);
+                
+                
+                
+                Scheduler s = new Scheduler(mo, Integer.parseInt(tokens[1]));
+                 redraw();
                 //   setGenerateButton();
 
             } else if (e.getSource() == next)
@@ -589,14 +600,13 @@ public class CalendarWindow
                 monthText = df.format(cals.getTime());
                 monthLabel.setText(monthText);
                 
-                System.out.print("Days in Month: " + daysInMonth + " Current Selected" + Calendar.MONTH
-                       + " Next month should be +1 from current month" + (Calendar.MONTH + m));
-                
-                createShiftBlock();
-                setGenerateButton();
-                addPhysicians();
-                legendPanel();
-                addLabelsForMonth();
+       //         System.out.print("Days in Month: " + daysInMonth + " Current Selected" + Calendar.MONTH
+          //             + " Next month should be +1 from current month" + (Calendar.MONTH + m));
+                comments.setText("");
+                currPhysTextField.setText("");
+                dateSelected.setText("");
+                change.setEnabled(false);
+                redraw();
 
             } else if (e.getSource() == previous)
             {
@@ -616,16 +626,16 @@ public class CalendarWindow
                 daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
                 monthText = df.format(cal.getTime());
                 monthLabel.setText(monthText);
-                System.out.print("NEW MONTH: " + monthText);
-                
-                createShiftBlock();
-                setGenerateButton();
-                addPhysicians();
-                legendPanel();
-                addLabelsForMonth();
+             //   System.out.print("NEW MONTH: " + monthText);
+                comments.setText("");
+                currPhysTextField.setText("");
+                dateSelected.setText("");
+                change.setEnabled(false);
+                redraw();
             }
             else if (e.getSource() == change)
             {
+                clearLabelsForMonth();
                 ShiftController sc = new ShiftController();
                 System.out.println("Current phys" + currPhysTextField.getText());
                 System.out.println("Date selected: " + date);
@@ -635,15 +645,20 @@ public class CalendarWindow
                 System.out.println("ID: " + si.getEmployeeId());
                 
                 sc.SetNewShift(si.getEmployeeId(), date,comments.getText(), type);
+                change.setEnabled(false);
+                redraw();
             }
         }
 
-        public void redraw()
-        {
-            calendarWindow.removeAll();
-            calendarWindow.add(createCalendarWindow(),BorderLayout.CENTER);
-            calendarWindow.validate();
-            calendarWindow.repaint();
-        }
+    }
+    public void redraw()
+    {
+        
+                createShiftBlock();
+                setGenerateButton();
+                addPhysicians();
+                legendPanel();
+                addLabelsForMonth();
+        
     }
 }
