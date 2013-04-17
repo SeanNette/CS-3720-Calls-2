@@ -169,14 +169,14 @@ public class PhysicianController
         
     }
     
-    public boolean delDaysOff(int dayID)
+    public void delDaysOff(int empID, String d)
     {
-        boolean success = false;
-      //  DaysOff dOff = new DaysOff(dayID, null, null);
+        
+    //    DaysOff dOff = new DaysOff(dayID, 0, null);
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
-        success = pBroker.delDaysOffFromDB(dayID);
+        pBroker.delDaysOffFromDB(empID,d);
        
-        return success;
+        
         
     }
             

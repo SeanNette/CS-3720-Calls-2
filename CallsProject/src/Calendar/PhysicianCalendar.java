@@ -49,6 +49,7 @@ public class PhysicianCalendar extends JPanel {
     private ArrayList<JLabel> dayNums;
     private ArrayList<String> addDaysOff;
     private ArrayList<String> delDaysOff;
+    private ArrayList<String> indexOfGreen;
            
     private JButton next, previous, update;
     private JLabel monthLabel,daysOffLabel;
@@ -63,6 +64,8 @@ public class PhysicianCalendar extends JPanel {
     private Calendar cal;
     
     private int month, year;
+    
+    private ArrayList<DaysOff> daysOffDates;
     
     private static int m = 0;
        
@@ -320,7 +323,7 @@ public class PhysicianCalendar extends JPanel {
            
                 PhysicianWindow pw = new PhysicianWindow();
                 PhysicianController pc = new PhysicianController();
-                ArrayList<DaysOff> daysOffDates = new ArrayList();
+                daysOffDates = new ArrayList();
                 daysOffDates = pc.daysOff(pw.getEmployeeID());
 
                 addLabelsForMonth();   
@@ -362,18 +365,23 @@ public class PhysicianCalendar extends JPanel {
                 
                 PhysicianWindow pw = new PhysicianWindow();
                 PhysicianController pc = new PhysicianController();
-                ArrayList<DaysOff> daysOffDates = new ArrayList();
+                daysOffDates = new ArrayList();
                 daysOffDates = pc.daysOff(pw.getEmployeeID());               
                 
                 addLabelsForMonth(); 
                 if (daysOffDates.size() > 0)
                 {
+                    delDaysOff = new ArrayList();
                     for (int i = 0; i < daysOffDates.size(); i++) 
                     {
                         SimpleDateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
                         if (monthText.equals(sdf.format(daysOffDates.get(i).getDayOff().getTime()))) {
                             SimpleDateFormat sdf1 = new SimpleDateFormat("d");
+                            
                             int day = Integer.parseInt(sdf1.format(daysOffDates.get(i).getDayOff().getTime()));
+                            String daysIDWithIndex = Integer.toString(daysOffDates.get(i).getDaysID()) + " " + (day+gapMonth-1);
+                            System.out.println(daysIDWithIndex);
+                            delDaysOff.add(daysIDWithIndex);
                             dayList.get(day + gapMonth - 1).setBackground(Color.blue);
                             dayList.get(day + gapMonth - 1).repaint();
                         }
@@ -386,11 +394,11 @@ public class PhysicianCalendar extends JPanel {
                 
                 addDaysOff = new ArrayList();
                 delDaysOff = new ArrayList();
-                                
+                indexOfGreen = new ArrayList();         
                 PhysicianWindow pw = new PhysicianWindow();
                 PhysicianController pc = new PhysicianController();
                 
-                
+                String phys = null;
                 for (int i = 0; i < daysInMonth; i++)
                 {
                     ShiftController sc = new ShiftController();
@@ -400,8 +408,8 @@ public class PhysicianCalendar extends JPanel {
                     {
                         String[] d = monthText.split(", "); 
                         int month = sc.convertMonth(d[0]);
-                        String phys = Integer.parseInt(d[1]) + "-" + month + "-" + (i + 1);
-                        addDaysOff.add(phys);                  
+                        String physAdd = Integer.parseInt(d[1]) + "-" + month + "-" + (i + 1);
+                        addDaysOff.add(physAdd);                  
                         //dayList.get(i+gapMonth).repaint();
                     }
                     
@@ -410,8 +418,9 @@ public class PhysicianCalendar extends JPanel {
                     {
                         String[] d = monthText.split(", "); 
                         int month = sc.convertMonth(d[0]);
-                        String phys = Integer.parseInt(d[1]) + "-" + month + "-" + (i + 1);
-                        delDaysOff.add(phys);
+                        phys = Integer.parseInt(d[1]) + "-" + month + "-" + (i + 1);
+                       // delDaysOff.add(phys);
+                        pc.delDaysOff(pw.getEmployeeID(), phys);
                        // dayList.get(i+gapMonth).repaint();
                     }
                 }
@@ -420,12 +429,29 @@ public class PhysicianCalendar extends JPanel {
                 {
                     pc.addDaysOff(pw.getEmployeeID(), addDaysOff); 
                 }
+                clearLabelsForMonth();
+                addLabelsForMonth(); 
                 
-                if (delDaysOff.size() > 0)
+                daysOffDates = new ArrayList();
+                daysOffDates = pc.daysOff(pw.getEmployeeID());  
+                if (daysOffDates.size() > 0)
                 {
-                    
-                    //pc.delDaysOff()
+               
+                    for (int i = 0; i < daysOffDates.size(); i++) 
+                    {
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
+                        if (monthText.equals(sdf.format(daysOffDates.get(i).getDayOff().getTime()))) {
+                            SimpleDateFormat sdf1 = new SimpleDateFormat("d");
+                            
+                            int day = Integer.parseInt(sdf1.format(daysOffDates.get(i).getDayOff().getTime()));
+                            String daysIDWithIndex = Integer.toString(daysOffDates.get(i).getDaysID()) + " " + (day+gapMonth-1);
+                            System.out.println(daysIDWithIndex);
+                            dayList.get(day + gapMonth - 1).setBackground(Color.blue);
+                            dayList.get(day + gapMonth - 1).repaint();
+                        }
+                    }
                 }
+                
             }
         }
     }  

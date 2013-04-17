@@ -350,29 +350,23 @@ public class PhysicianBroker
         return false;
     }
     
-    public boolean delDaysOffFromDB(int dayID)
+    public void delDaysOffFromDB(int empID, String d)
     {
         try
         {
             
             Connection connect = connection.getConnectionFromPool();
-            String SQL = "DELETE FROM daysoff WHERE Employee_ID = '" + dayID + "'";
-            CallableStatement cs = connect.prepareCall(SQL);
-
-            cs.setInt(1,dayID);
-            cs.execute();                  
-            cs.close();
+            Statement stmt;
+            stmt = connect.createStatement();
+            stmt.execute("DELETE FROM daysoff WHERE Employee_ID = '" + empID + "' AND day_Off = '" + d + "'");            
                     
             connection.returnConnectionToPool(connect);
-            
-            return true;
+          
         }
         
         catch (Exception e)
         {
             
         }
-        
-        return false;
     }
 }
