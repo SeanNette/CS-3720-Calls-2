@@ -1,5 +1,6 @@
 package Broker;
 
+import Container.DaysOff;
 import Container.Physician;
 import java.sql.*;
 import java.util.ArrayList;
@@ -193,22 +194,24 @@ public class PhysicianBroker
         return dm;
     }
     
-    public ArrayList<Date> getDaysOff(int employeeID)
+    public ArrayList<DaysOff> getDaysOff(int employeeID)
     {
-        ArrayList<Date> daysOff = new ArrayList();
+        ArrayList<DaysOff> daysOff = new ArrayList();
         Connection connect = connection.getConnectionFromPool();
         
         try
         {
             Statement stmt;
             stmt = connect.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT day_Off FROM daysoff "
+            ResultSet rs = stmt.executeQuery("SELECT * FROM daysoff "
                     + "WHERE Employee_ID = " + employeeID);
             
             while (rs.next())
             {               
-               daysOff.add(rs.getDate(1));
-            }         
+               DaysOff doff = new DaysOff(rs.getInt(1),rs.getInt(2),rs.getDate(3));
+               daysOff.add(doff); 
+            }            
+            
             connection.returnConnectionToPool(connect);
             
             
@@ -315,26 +318,52 @@ public class PhysicianBroker
         }
     }
     
-    public boolean addDaysOff(ArrayList<String> offList)
+    public boolean addDaysOffToDB(int empID, ArrayList<String> oDates)
     {
         try
         {
-          /*  Connection connect = connection.getConnectionFromPool();
-            String SQL = "INSERT INTO ";
+            
+            Connection connect = connection.getConnectionFromPool();
+            String SQL = "INSERT INTO daysoff (Days_ID, Employee_ID, day_Off) VALUES (?,?,?) ";
             CallableStatement cs = connect.prepareCall(SQL);
             
-            for(int i = 0; i < offList.size(); i++)
-            {
-                cs.setInt(1, offList.get(i));
-                cs.setInt(2, m);
-                cs.setInt(3, y);
-                cs.setInt(4, phys.get(i).getCurHours());
+            for (int i = 0; i < oDates.size(); i ++)
+            {       
+                cs.setInt(1,0);
+                cs.setInt(2, empID);
+                cs.setString(3, oDates.get(i));
                 cs.execute();
             }
                     
             cs.close();
                     
-            connection.returnConnectionToPool(connect);*/
+            connection.returnConnectionToPool(connect);
+            
+            return true;
+        }
+        
+        catch (Exception e)
+        {
+            
+        }
+        
+        return false;
+    }
+    
+    public boolean delDaysOffFromDB(int dayID)
+    {
+        try
+        {
+            
+            Connection connect = connection.getConnectionFromPool();
+            String SQL = "DELETE FROM daysoff WHERE Employee_ID = '" + dayID + "'";
+            CallableStatement cs = connect.prepareCall(SQL);
+
+            cs.setInt(1,dayID);
+            cs.execute();                  
+            cs.close();
+                    
+            connection.returnConnectionToPool(connect);
             
             return true;
         }

@@ -5,6 +5,7 @@
 package Interface;
 
 import Calendar.PhysicianCalendar;
+import Container.DaysOff;
 import Controller.PhysicianController;
 import Controller.ShiftController;
 import java.awt.BorderLayout;
@@ -88,17 +89,16 @@ public class PhysicianWindow extends JPanel {
     private ArrayList<JTextField> allTextFields = new ArrayList<JTextField>();
     private ArrayList<JButton> allButtons = new ArrayList<JButton>();
     private int selectedRowIndex;
-    private PhysicianCalendar pc;
-    private int empID;
+    private PhysicianCalendar pcCal;
+    private static int empID;
+
     public PhysicianWindow() {
-        
     }
-    
-    public int getEmployeeID()
-    {
+
+    public int getEmployeeID() {
         return empID;
     }
-    
+
     public JPanel createPhysicianWindow() {
         // offset window by 10 pixels all around      //top,left,bottom,right
         Border paneEdge = BorderFactory.createEmptyBorder(10, 10, 10, 10);
@@ -347,7 +347,7 @@ public class PhysicianWindow extends JPanel {
         /*
          * *******************************************************************
          */
-        
+
         /**
          * ** Address ********************************************************
          */
@@ -372,7 +372,6 @@ public class PhysicianWindow extends JPanel {
         /**
          * *******************************************************************
          */
-        
         /*
          * ** Birth Date *****************************************************
          */
@@ -384,9 +383,9 @@ public class PhysicianWindow extends JPanel {
         c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelBdate, c);
-        
-        
-        textFieldBdate = new JTextField(10);              
+
+
+        textFieldBdate = new JTextField(10);
         c.gridx = 0;
         c.gridy = 5;
         //    c.gridwidth = 1;
@@ -398,8 +397,7 @@ public class PhysicianWindow extends JPanel {
         /**
          * *******************************************************************
          */
-        
-         /**
+        /**
          * ** Phone **********************************************************
          */
         labelPhone = new JLabel("Phone ((###) ###-####): ");
@@ -409,7 +407,7 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelPhone, c);
 
-        textFieldPhone = new JTextField(14);         
+        textFieldPhone = new JTextField(14);
         c.gridx = 1;
         c.gridy = 5;
         c.gridwidth = 1;
@@ -419,7 +417,6 @@ public class PhysicianWindow extends JPanel {
         /**
          * *******************************************************************
          */
-        
         /**
          * ** Start Date *****************************************************
          */
@@ -432,7 +429,7 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelSdate, c);
 
-        textFieldSdate = new JTextField(10);                
+        textFieldSdate = new JTextField(10);
         c.gridx = 0;
         c.gridy = 7;
         //   c.gridwidth = 1;
@@ -456,7 +453,7 @@ public class PhysicianWindow extends JPanel {
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(labelEdate, c);
 
-        textFieldEdate = new JTextField(10);                
+        textFieldEdate = new JTextField(10);
         c.gridx = 1;
         c.gridy = 7;
         c.gridwidth = 1;
@@ -468,63 +465,60 @@ public class PhysicianWindow extends JPanel {
         /**
          * *******************************************************************
          */
-        
-       
-        
         JPanel WeekPanel = new JPanel(new GridBagLayout());
-        
+
         labelWeekday = new JLabel("Weekday:");
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
-        WeekPanel.add(labelWeekday,c);
-        
-        textFieldWeekday = new JTextField(3);         
+        WeekPanel.add(labelWeekday, c);
+
+        textFieldWeekday = new JTextField(3);
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldWeekday);
         WeekPanel.add(textFieldWeekday, c);
-        
+
         labelWeekend = new JLabel("Weekend:");
         c.gridx = 1;
         c.gridy = 0;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
-        WeekPanel.add(labelWeekend,c);
-        
-        textFieldWeekend = new JTextField(3);         
+        WeekPanel.add(labelWeekend, c);
+
+        textFieldWeekend = new JTextField(3);
         c.gridx = 1;
         c.gridy = 1;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldWeekend);
         WeekPanel.add(textFieldWeekend, c);
-        
+
         labelHolidays = new JLabel("Holidays:");
         c.gridx = 2;
         c.gridy = 0;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
-        WeekPanel.add(labelHolidays,c);
-        
-        textFieldHolidays = new JTextField(3);         
+        WeekPanel.add(labelHolidays, c);
+
+        textFieldHolidays = new JTextField(3);
         c.gridx = 2;
         c.gridy = 1;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         allTextFields.add(textFieldHolidays);
         WeekPanel.add(textFieldHolidays, c);
-        
-        
+
+
         c.gridx = 0;
         c.gridy = 8;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.NONE;
         fieldPanel.add(WeekPanel, c);
-        
+
         c.gridx = 0;
         c.gridy = 12;
         c.gridwidth = 2;
@@ -604,37 +598,37 @@ public class PhysicianWindow extends JPanel {
     }
 
     private JPanel daysOffPanel(Border border) {
-        
-        pc = new PhysicianCalendar(2,2013);
-        dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
+
+        pcCal = new PhysicianCalendar(2, 2013);
+        dPanel.add(pcCal.calendarPanel(null), BorderLayout.CENTER);
         JPanel showOff = new JPanel(new FlowLayout());
         dPanel.setBorder(border);
 
         daysOffLabel = new JLabel("Days Off: ");
 
-     //   CalendarController cc = new CalendarController(3,2013,"Days Off", "small");
+        //   CalendarController cc = new CalendarController(3,2013,"Days Off", "small");
       /*  daysOffLabel = new JLabel("Days Off: ");
->>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
+         >>>>>>> d7e1befbc85fc582da80be16563589a4c2a2b2cc
 
-        showOff.add(daysOffLabel);
+         showOff.add(daysOffLabel);
 
-        textFieldDaysOff = new JTextField(16);
+         textFieldDaysOff = new JTextField(16);
 
-        showOff.add(textFieldDaysOff);
+         showOff.add(textFieldDaysOff);
 
-<<<<<<< HEAD
-        JButton addOff = new JButton("Save");
-        showOff.add(addOff);
-
-        
-        dPanel.add(showOff, BorderLayout.SOUTH);
+         <<<<<<< HEAD
+         JButton addOff = new JButton("Save");
+         showOff.add(addOff);
 
         
-=======
-        JButton addOff = new JButton("Add");
-        dPanel.add(addOff);
-*/
-     //siema zi   dPanel.add(cc.calendarPanel(null));
+         dPanel.add(showOff, BorderLayout.SOUTH);
+
+        
+         =======
+         JButton addOff = new JButton("Add");
+         dPanel.add(addOff);
+         */
+        //siema zi   dPanel.add(cc.calendarPanel(null));
 
         return dPanel;
     }
@@ -642,65 +636,71 @@ public class PhysicianWindow extends JPanel {
     private class MouseListen extends MouseAdapter {
 
         public void mouseClicked(MouseEvent e) {
-            
+
             selectedRowIndex = table.getSelectedRow();
-            
-            
+
             int columnCount = table.getColumnCount();
-         //   System.out.println(columnCount);
-           /* for (int i = 0; i < columnCount - 1; i++) {
-                allTextFields.get(i).setText(model.getValueAt(selectedRowIndex, i + 1).toString());
-            }*/
+            
             clearAllFields();
-                
+
             textFieldFname.setText(model.getValueAt(selectedRowIndex, 1).toString());
             textFieldLname.setText(model.getValueAt(selectedRowIndex, 2).toString());
             textFieldBdate.setText(model.getValueAt(selectedRowIndex, 3).toString());
             textFieldSdate.setText(model.getValueAt(selectedRowIndex, 4).toString());
             String edate;
-            try 
-            {
+            try {
                 edate = model.getValueAt(selectedRowIndex, 5).toString();
                 textFieldEdate.setText(edate);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("End Employment Date exception handled.");
             }
             textFieldAddress.setText(model.getValueAt(selectedRowIndex, 6).toString());
             textFieldPhone.setText(model.getValueAt(selectedRowIndex, 7).toString());
-            
-         //   System.out.println(table.getValueAt(selectedRowIndex, 0).toString());
 
             allButtons.get(0).setEnabled(false);
             allButtons.get(1).setEnabled(true);
             allButtons.get(2).setEnabled(true);
             allButtons.get(3).setEnabled(true);
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             
-         //   pc = new PhysicianCalendar(2,2013);
-           // dPanel.add(pc.calendarPanel(null), BorderLayout.CENTER);
-           // dPanel.repaint();
             empID = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
-            System.out.println(empID);
-            PhysicianController pc = new PhysicianController();
-            ArrayList<Date> daysOff = new ArrayList();
-            daysOff = pc.daysOff(empID);
+          
+            displayDaysOff();
         }
     }
-    
-    private void clearAllFields()
-    {        
-            textFieldFname.setText(null);
-            textFieldLname.setText(null);
-            textFieldAddress.setText(null);
-            textFieldBdate.setText(null);
-            textFieldEdate.setText(null);
-            textFieldPhone.setText(null);
-            textFieldSdate.setText(null);
-    }
-    
-    private void setAllButtons()
+
+    public void displayDaysOff() 
     {
+        PhysicianController pc = new PhysicianController();
+        ArrayList<DaysOff> daysOffDates = new ArrayList();
+        daysOffDates = pc.daysOff(empID);
+        pcCal.clearLabelsForMonth();
+        pcCal.addLabelsForMonth();
+        if (daysOffDates.size() > 0)
+        {
+            for (int i = 0; i < daysOffDates.size(); i++) {
+                
+                SimpleDateFormat sdf = new SimpleDateFormat("MMMM, YYYY");
+                if (pcCal.getMonth().equals(sdf.format(daysOffDates.get(i).getDayOff().getTime()))) {
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("d");
+                    int day = Integer.parseInt(sdf1.format(daysOffDates.get(i).getDayOff().getTime()));
+                    pcCal.getDayList().get(day + pcCal.getGapMonth() - 1).setBackground(Color.blue);
+                    pcCal.getDayList().get(day + pcCal.getGapMonth() - 1).repaint();
+                }                
+            }
+        }               
+    }
+
+    private void clearAllFields() {
+        textFieldFname.setText(null);
+        textFieldLname.setText(null);
+        textFieldAddress.setText(null);
+        textFieldBdate.setText(null);
+        textFieldEdate.setText(null);
+        textFieldPhone.setText(null);
+        textFieldSdate.setText(null);
+    }
+
+    private void setAllButtons() {
         allButtons.get(0).setEnabled(true);
         allButtons.get(1).setEnabled(false);
         allButtons.get(2).setEnabled(false);
@@ -758,7 +758,7 @@ public class PhysicianWindow extends JPanel {
                         "Quit");
                 if (resp == 0) {
                     done = phys.workPhysician(choice, Integer.parseInt(id));
-                    clearAllFields();                    
+                    clearAllFields();
                     setAllButtons();
                 } else {
                     done = "Cancelled";
@@ -796,7 +796,7 @@ public class PhysicianWindow extends JPanel {
             scrollPane = new JScrollPane(table);
             // set the size of the scroll pane
 
-          //  scrollPane.setPreferredSize(new Dimension(720, 150));
+            //  scrollPane.setPreferredSize(new Dimension(720, 150));
             tablePanel.add(scrollPane);
             tablePanel.validate();
             tablePanel.repaint();

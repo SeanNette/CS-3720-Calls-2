@@ -5,6 +5,7 @@
 package Controller;
 
 import Broker.*;
+import Container.DaysOff;
 import Container.Physician;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -150,17 +151,32 @@ public class PhysicianController
         return dtm;
     }
 
-    public ArrayList<Date> daysOff(int employeeID)
+    public ArrayList<DaysOff> daysOff(int employeeID)
     {
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
-        ArrayList<java.sql.Date> dOff = pBroker.getDaysOff(employeeID);
+        ArrayList<DaysOff> dOff = pBroker.getDaysOff(employeeID);
 
         return dOff;
     }
     
-    public void addDaysOff(ArrayList<String> offList)
+    public boolean addDaysOff(int employeeID, ArrayList<String> offDates)
     {
+        boolean success = false;
         PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+        success = pBroker.addDaysOffToDB(employeeID, offDates);
+       
+        return success;
+        
+    }
+    
+    public boolean delDaysOff(int dayID)
+    {
+        boolean success = false;
+      //  DaysOff dOff = new DaysOff(dayID, null, null);
+        PhysicianBroker pBroker = PhysicianBroker.getPhysicianBroker();
+        success = pBroker.delDaysOffFromDB(dayID);
+       
+        return success;
         
     }
             
