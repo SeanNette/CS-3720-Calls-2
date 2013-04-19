@@ -98,10 +98,7 @@ public class CalendarWindow
         buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBorder(blackline);
 
-        legendPanel = new JPanel();
-        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
-        legendPanel.setBorder(legendBorder);
-        legendPanel.setPreferredSize(new Dimension(250, 500));
+        
 
         // cd = new CalendarController(2, 2013, "Scheduling Calendar", "normal");
         c = new GridBagConstraints();
@@ -274,7 +271,9 @@ public class CalendarWindow
             dayList.get(i + gapMonth).setBorder(BorderFactory.createRaisedBevelBorder());
             if(!shiftList.isEmpty()){
                 if(shiftList.get(i).getType() == 2){
-                    dayList.get(i + gapMonth).setBackground(new Color(173, 216, 230));
+                   // dayList.get(i + gapMonth).setBackground(new Color(173, 216, 230));
+                    dayList.get(i + gapMonth).setBorder(BorderFactory.createLineBorder(Color.red, 2));
+  
                 }
                 else{
                     dayList.get(i + gapMonth).setBackground(Color.white);
@@ -435,29 +434,46 @@ public class CalendarWindow
         ShiftController sc = new ShiftController();
 
         physicianList = pc.getFirstAndLastname();
-        JLabel legendLabel = new JLabel("Name                   "
-                + ": Week   Wknd   Holiday");
-
-
+        
+        legendPanel = new JPanel(new GridLayout(0,4,0,0));
+        
         legendPanel.removeAll();
-
-        legendPanel.add(legendLabel);
-
+        
+        legendPanel.setBorder(legendBorder);
+        legendPanel.setPreferredSize(new Dimension(250, 500));
+      
+        legendPanel.add(new JLabel("Name"));
+        legendPanel.add(new JLabel("Weekday"));
+        legendPanel.add(new JLabel("Weekend"));
+        legendPanel.add(new JLabel("Holiday"));
+        
         Random rand = new Random(22);
         for (int i = 0; i < physicianList.size(); i++)
         {
+            String s = "";
             int r = rand.nextInt(100);
             r += 135;
             int g = rand.nextInt(100);
             g += 135;
             int b = rand.nextInt(100);
             b += 135;
-            legendLabels = new JLabel(physicianList.get(i).getFirstName() + " "
-                    + physicianList.get(i).getLastName() + " ---- "
-                    + sc.numberOfDaysWorked(physicianList.get(i).getEmployeeId(), monthText));
-            legendLabels.setOpaque(true);
-            legendLabels.setBackground(new Color(r, g, b));
-            legendPanel.add(legendLabels);
+                  
+            JLabel n = new JLabel(physicianList.get(i).getFirstName() + " " + physicianList.get(i).getLastName());
+            n.setBackground(new Color(r,g,b));
+            n.setOpaque(true);
+            legendPanel.add(n);
+            s = sc.numberOfDaysWorked(physicianList.get(i).getEmployeeId(), monthText);
+            String delims = ", ";
+            String[] tokens = s.split(delims);
+            
+            JLabel t0 = new JLabel(tokens[0]);           
+            JLabel t1= new JLabel(tokens[1]);
+            JLabel t2 = new JLabel(tokens[2]);
+            
+            legendPanel.add(t0);
+            legendPanel.add(t1);
+            legendPanel.add(t2);
+            
         }
         legendPanel.revalidate();
         legendPanel.validate();
