@@ -24,6 +24,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -48,12 +49,12 @@ public class PdfCreator
             Font.NORMAL);
 
 // generateReports function
-    public void generateReports()
+    public void generateReports(File file)
     {
         try
         {
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(FILE));
+            PdfWriter.getInstance(document, new FileOutputStream(file));
             document.open();
             internalReportPage(document);
             document.newPage();
