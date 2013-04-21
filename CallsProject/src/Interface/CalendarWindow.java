@@ -98,7 +98,9 @@ public class CalendarWindow
         buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBorder(blackline);
 
-        
+        legendPanel = new JPanel(new GridLayout(0,4,0,0));
+        legendPanel.setBorder(legendBorder);
+        legendPanel.setPreferredSize(new Dimension(250, 500));        
 
         // cd = new CalendarController(2, 2013, "Scheduling Calendar", "normal");
         c = new GridBagConstraints();
@@ -435,7 +437,7 @@ public class CalendarWindow
 
         physicianList = pc.getFirstAndLastname();
         
-        legendPanel = new JPanel(new GridLayout(0,4,0,0));
+        
         
         legendPanel.removeAll();
         
@@ -463,6 +465,7 @@ public class CalendarWindow
             n.setOpaque(true);
             legendPanel.add(n);
             s = sc.numberOfDaysWorked(physicianList.get(i).getEmployeeId(), monthText);
+            
             String delims = ", ";
             String[] tokens = s.split(delims);
             
